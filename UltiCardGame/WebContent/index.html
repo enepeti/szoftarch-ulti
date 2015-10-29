@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ulti</title>
+<script type="text/javascript">
+			var socket = new WebSocket(getWsUrl());
+			socket.onopen = onOpen;
+			socket.onclose = onClose;
+			socket.onmessage = onMessage;
+
+			function onOpen() {
+				console.log("Socket Opened.")
+
+			}
+			function onClose() {
+				console.log("Socket Closed.")
+
+			}
+			function onMessage(msg) {
+				console.log("Message: " + msg.data	)
+			}
+
+			function send() {
+				socket.send("dafaq");
+			}
+
+			function getWsUrl()  {
+	            if (window.location.protocol == 'http:') {
+	                return 'ws://' + window.location.host + '/UltiCardGame/websocket/try';
+	            } else {
+	                return 'wss://' + window.location.host + '/UltiCardGame/websocket/try';
+	            }
+	        };
+		</script>
+</head>
+<body>
+	<div>MUKODIK! Press f12 to instant chat service</div>
+	<button onclick="send()">Send</button>
+</body>
+</html>
