@@ -3,39 +3,35 @@
 <head>
 <meta charset="utf-8" />
 <title>Ulti</title>
-<script type="text/javascript">
-			var socket = new WebSocket(getWsUrl());
-			socket.onopen = onOpen;
-			socket.onclose = onClose;
-			socket.onmessage = onMessage;
-
-			function onOpen() {
-				console.log("Socket Opened.")
-
-			}
-			function onClose() {
-				console.log("Socket Closed.")
-
-			}
-			function onMessage(msg) {
-				console.log("Message: " + msg.data	)
-			}
-
-			function send() {
-				socket.send("dafaq");
-			}
-
-			function getWsUrl()  {
-	            if (window.location.protocol == 'http:') {
-	                return 'ws://' + window.location.host + '/UltiCardGame/websocket/try';
-	            } else {
-	                return 'wss://' + window.location.host + '/UltiCardGame/websocket/try';
-	            }
-	        };
-		</script>
+<link rel="stylesheet" href="bootstrap.min.css" />
+<link rel="stylesheet" href="ulti_index.css" />
+<script src="jquery.min.js"></script>
+<script src="ulti_index.js"></script>
 </head>
 <body>
-	<div>MUKODIK! Press f12 to instant chat service</div>
-	<button onclick="send()">Send</button>
+	<div id="loginpage" class="screen-center pagecontent">
+		<form id="loginform" action="javascript:alert('beléptél');">
+			<input id="name" type="text" class="form-control hor-sep" placeholder="Neved"/>
+			<input id="password" type="password" class="form-control hor-sep" placeholder="Jelszavad"/>
+			<input id="login" type="submit" class="btn btn-success vertical-center hor-sep" value="Bejelentkezés"/>
+		</form>
+		<p class="font">
+			Még nem <a href="javascript:showPage('registrationpage')">regisztráltál</a>?<br>
+			<a href="javascript:alert('vendég')">Lépj be vendégként!</a>
+		</p>
+	</div>
+	<div id="registrationpage" class="screen-center pagecontent">
+		<form id="registrationform" action="javascript:alert('regisztráltál');">
+			<input id="name" type="text" class="form-control hor-sep" placeholder="Név"/>
+			<input id="email" type="text" class="form-control hor-sep" placeholder="e-mail"/>
+			<input id="password" type="password" class="form-control hor-sep" placeholder="Jelszó"/>
+			<input id="passwordretype" type="password" class="form-control hor-sep" placeholder="Jelszó még egyszer"/>
+			<input id="registrate" type="submit" class="btn btn-success vertical-center hor-sep" value="Regisztrálok!"/>
+		</form>
+		<p class="font">
+			Már regisztráltál? <a href="javascript:showPage('loginpage')">Lépj be!</a><br>
+			Nem szeretnél regisztálni? <a href="javascript:alert('vendég')">Lépj be vendégként!</a>
+		</p>
+	</div>
 </body>
 </html>
