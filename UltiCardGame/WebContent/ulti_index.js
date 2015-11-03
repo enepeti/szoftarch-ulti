@@ -36,11 +36,10 @@ function login() {
 	var password = passwordtb.val();
 	nametb.val('');
 	passwordtb.val('');
-	login(name, password);
 	var loginmsg = {};
 	loginmsg.type = "login";
 	loginmsg.name = name;
-	loginmsg.password = pw;
+	loginmsg.password = password;
 	send(loginmsg);
 }
 
