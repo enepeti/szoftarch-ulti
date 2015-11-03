@@ -21,10 +21,38 @@
 	margin-bottom: 5px;
 }
 
+#loginpage {
+	
+}
+
 #registrationpage {
 	display: none;
 }
 
 input[type=text] {
 	min-width: 280px;
+}
+
+.pagegoaway {
+	animation-name: anim-pagegoaway;
+	animation-duration: 2s;
+	animation-timing-function: ease-in;
+}
+
+.pagecomein {
+	animation-name: anim-pagecomein;
+	animation-duration: 2s;
+	animation-timing-function: ease-out;
+}
+
+@keyframes anim-pagegoaway {
+	0% {left:50%; opacity: 100}
+	85% {opacity: 0}
+	100% {left: 100%;}
+}
+
+@keyframes anim-pagecomein {
+	0% {left: 0%; opacity: 0}
+	85% {opacity: 100}
+	100% {left:50%; opacity: 100}
 }

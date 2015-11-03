@@ -10,27 +10,30 @@
 </head>
 <body>
 	<div id="loginpage" class="screen-center pagecontent">
-		<form id="loginform" action="javascript:alert('beléptél');">
-			<input id="name" type="text" class="form-control hor-sep" placeholder="Neved"/>
-			<input id="password" type="password" class="form-control hor-sep" placeholder="Jelszavad"/>
+		<form id="loginform" action="javascript:loginNormal();">
+			<input id="login_name" type="text" class="form-control hor-sep" placeholder="Neved" required/>
+			<input id="login_password" type="password" class="form-control hor-sep" placeholder="Jelszavad" required/>
 			<input id="login" type="submit" class="btn btn-success vertical-center hor-sep" value="Bejelentkezés"/>
 		</form>
 		<p class="font">
 			Még nem <a href="javascript:showPage('registrationpage')">regisztráltál</a>?<br>
-			<a href="javascript:alert('vendég')">Lépj be vendégként!</a>
+			<a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
 	<div id="registrationpage" class="screen-center pagecontent">
-		<form id="registrationform" action="javascript:alert('regisztráltál');">
-			<input id="name" type="text" class="form-control hor-sep" placeholder="Név"/>
-			<input id="email" type="text" class="form-control hor-sep" placeholder="e-mail"/>
-			<input id="password" type="password" class="form-control hor-sep" placeholder="Jelszó"/>
-			<input id="passwordretype" type="password" class="form-control hor-sep" placeholder="Jelszó még egyszer"/>
+		<form id="registrationform" action="javascript:register();">
+			<input id="register_name" type="text" class="form-control hor-sep" placeholder="Név" required/>
+			<input id="email" type="email" class="form-control hor-sep" placeholder="e-mail" required/>
+			<input id="register_password" type="password" class="form-control hor-sep" placeholder="Jelszó"
+				required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="validatePw()"
+				title="A jelszó legalább 6 karakter hosszú kell legyen, szerepelnie kell benne kis és nagybetűnek és számnak is kell benne lenni!"/>
+			<input id="confirmpw" type="password" class="form-control hor-sep" placeholder="Jelszó még egyszer"
+				required pattern="" title="Meg kell egyezzen a felette beírt jelszóval!"/>
 			<input id="registrate" type="submit" class="btn btn-success vertical-center hor-sep" value="Regisztrálok!"/>
 		</form>
 		<p class="font">
 			Már regisztráltál? <a href="javascript:showPage('loginpage')">Lépj be!</a><br>
-			Nem szeretnél regisztálni? <a href="javascript:alert('vendég')">Lépj be vendégként!</a>
+			Nem szeretnél regisztálni? <a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
 </body>
