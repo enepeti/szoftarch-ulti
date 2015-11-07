@@ -10,14 +10,14 @@ import javax.websocket.Session;
 public class FakeSessionRepository implements ISessionRepository {
 
 	private static Set<Session> sessions = new HashSet<Session>();
-	
+
 	@Override
-	public void add(Session session) {
+	public void add(final Session session) {
 		sessions.add(session);
 	}
 
 	@Override
-	public void remove(Session session) {
+	public void remove(final Session session) {
 		sessions.remove(session);
 	}
 

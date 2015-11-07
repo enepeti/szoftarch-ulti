@@ -13,23 +13,26 @@ import model.Player;
 
 public class PlayerManager implements IPlayerManager {
 
-	private IPlayerRepository playerRepository;
-	private IMessageHandler messageHandler;
-	private IPasswordHasher passwordHasher;
-	
+	private final IPlayerRepository playerRepository;
+	private final IMessageHandler messageHandler;
+	private final IPasswordHasher passwordHasher;
+
 	private static List<Player> activePlayers;
-	
-	public PlayerManager(IPlayerRepository playerRepository, IMessageHandler messageHandler, IPasswordHasher passwordHasher) {
+
+	public PlayerManager(final IPlayerRepository playerRepository,
+			final IMessageHandler messageHandler,
+			final IPasswordHasher passwordHasher) {
 		this.playerRepository = playerRepository;
 		this.messageHandler = messageHandler;
 		this.passwordHasher = passwordHasher;
 	}
-	
+
 	@Override
-	public boolean login(String name, String pass, Session session) {
-		Player player = playerRepository.get(name);
-		if(player != null) {
-			if(passwordHasher.areEqual(pass, player.getPassword())) {
+	public boolean login(final String name, final String pass,
+			final Session session) {
+		final Player player = playerRepository.get(name);
+		if (player != null) {
+			if (passwordHasher.areEqual(pass, player.getPassword())) {
 				player.setCurrentSession(session);
 				activePlayers.add(player);
 				return true;
@@ -39,15 +42,17 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	@Override
-	public boolean register(String name, String email, String pass) {
-		if(playerRepository.get(name) == null) {
-			Player player = new Player();
+	public boolean register(final String name, final String email,
+			final String pass) {
+		if (playerRepository.get(name) == null) {
+			final Player player = new Player();
 			player.setName(name);
 			player.setEmail(email);
 			player.setPassword(passwordHasher.hash(pass));
-			playerRepository.add(player);	
+			playerRepository.add(player);
 			return true;
 		}
+
 		return false;
 	}
 
