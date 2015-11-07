@@ -25,8 +25,8 @@ function onError (error) {
 
 function send(data) {
 	var msg = JSON.stringify(data);
-	alert(msg);
-	//socket.send(msg);
+	//alert(msg);
+	socket.send(msg);
 }
 
 function login() {
@@ -71,9 +71,9 @@ function register() {
 
 function getWsUrl() {
 	if (window.location.protocol == 'http:') {
-		return 'ws://' + window.location.host + '/UltiCardGame/websocket/try';
+		return 'ws://' + window.location.host + '/UltiCardGame/websocket/ulti';
 	} else {
-		return 'wss://' + window.location.host + '/UltiCardGame/websocket/try';
+		return 'wss://' + window.location.host + '/UltiCardGame/websocket/ulti';
 	}
 };
 
