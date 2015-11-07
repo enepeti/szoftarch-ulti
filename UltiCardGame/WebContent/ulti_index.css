@@ -22,11 +22,15 @@
 }
 
 #loginpage {
-	
+	display: none;
 }
 
 #registrationpage {
 	display: none;
+}
+
+#chatpage {
+	/*display: none;*/
 }
 
 input[type=text] {
@@ -43,6 +47,12 @@ input[type=text] {
 	animation-name: anim-pagecomein;
 	animation-duration: 2s;
 	animation-timing-function: ease-out;
+}
+
+.scrollable-text {
+	width: 280px;
+	height: 200px;
+	overflow: auto;
 }
 
 @keyframes anim-pagegoaway {

@@ -1,26 +1,77 @@
 var socket = new WebSocket(getWsUrl());
 var onpagename = "loginpage"
 
+var chat = {};
+
+chat.messages = [];
+chat.newLine = (function(msg, sender) {
+	this.messages.push(sender + ": " + msg);
+	this.refreshHistory();
+
+});
+chat.refreshHistory = (function() {
+	var chatbox = $('#chat_history');
+	chatbox.html("");
+	for (msg of this.messages) {
+		chatbox.html(chatbox.html() + "<br>" + msg);
+	}
+});
+
 socket.onopen = onOpen;
 socket.onclose = onClose;
 socket.onmessage = onMessage;
 socket.onerror = onError;
 
+function log(msg) {
+	console.log(msg);
+}
 
 function onOpen() {
-	console.log("Socket Opened.")
+	log("Socket Opened.")
 
 }
 function onClose() {
-	console.log("Socket Closed.")
+	log("Socket Closed.")
 
 }
 function onMessage(msg) {
-	console.log("Message: " + msg.data	)
+	log("Message: " + msg.data	)
+	handleMessage(JSON.jsonify(msg.data));
 }
 
 function onError (error) {
-	console.log("ERROR: " + error);
+	log("ERROR: " + error);
+}
+
+function handleMessage (msg) {
+	switch (msg.type) {
+		case "login":
+			if(msg.success) {
+				showPage("chatpage");
+				log("sikeres bejelentkezés");
+			} else {
+				alert("Hibás bejelentkezési adatok!");
+				log("sikertelen bejelentkezés");
+			}
+			break;
+		case "register":
+			if(msg.success) {
+				showPage("loginpage");
+				alert("Sikeres regisztráció, most már beléphetsz!");
+				log("sikeres regisztráció");
+			} else {
+				alert("Sikertelen regisztráció " + msg.fault);
+				log("sikertelen regisztráció");
+			}
+			break;
+		case "chat":
+			chat.newLine(msg.message, msg.from);
+			break;
+		case "error":
+			log("Error: " + msg.message);
+		default:
+			log("Unkonwn message!");
+	}
 }
 
 function send(data) {
@@ -69,6 +120,16 @@ function register() {
 	send(registermsg);
 }
 
+function sendChat() {
+	var msgtb = $('#chat_msg');
+	var msg = msgtb.val();
+	msgtb.val('');
+	var chatmsg = {};
+	chatmsg.type = "chat";
+	chatmsg.message = msg;
+	send(chatmsg);
+}
+
 function getWsUrl() {
 	if (window.location.protocol == 'http:') {
 		return 'ws://' + window.location.host + '/UltiCardGame/websocket/ulti';
@@ -98,5 +159,5 @@ function validatePw() {
 }
 
 $(document).ready(function () {
-	
+
 });

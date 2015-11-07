@@ -13,12 +13,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import dal.FakePlayerRepository;
+import dal.PlayerRepository;
 
 public class MessageHandler implements IMessageHandler {
 
 	private static IPlayerManager playerManager = new PlayerManager(
-			new FakePlayerRepository(), null, new PlainPasswordHasher());
+			new PlayerRepository(), null, new PlainPasswordHasher());
 
 	@Override
 	public void handle(final String message, final Session session) {
