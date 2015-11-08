@@ -1,7 +1,7 @@
-package messageHandlers.util;
+package messagers.util;
 
 public class MessageType {
 	public static enum Type {
-		REGISTER, LOGIN, GUESTLOGIN
+		REGISTER, LOGIN, GUESTLOGIN, CHAT
 	}
 }

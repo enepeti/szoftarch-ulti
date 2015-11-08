@@ -22,7 +22,7 @@
 }
 
 #loginpage {
-	display: none;
+	/*display: none;*/
 }
 
 #registrationpage {
@@ -30,7 +30,7 @@
 }
 
 #chatpage {
-	/*display: none;*/
+	display: none;
 }
 
 input[type=text] {

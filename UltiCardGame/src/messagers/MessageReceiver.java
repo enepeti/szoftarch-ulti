@@ -1,4 +1,4 @@
-package messageHandlers;
+package messagers;
 
 import interfaces.IMessageHandler;
 import interfaces.IMessageReceiver;
