@@ -13,6 +13,10 @@ public interface IPlayerRepository {
 	public Player get(int id);
 
 	public Player get(String name);
+	
+	public boolean isUniqueName(String name);
+	
+	public boolean isUniqueEmail(String email);
 
 	public void update(Player player);
 

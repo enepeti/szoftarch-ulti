@@ -45,6 +45,7 @@ public class MessageReceiver implements IMessageReceiver {
 	@Override
 	@OnMessage
 	public void handleMessage(final String message, final Session session) {
+		System.out.println(message);
 		messageHandler.handle(message, session);
 	}
 

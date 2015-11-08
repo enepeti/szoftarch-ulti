@@ -9,6 +9,7 @@ public class Player {
 	private String email;
 	private String password;
 	private Session currentSession;
+	private PlayerType type;
 	
 	public int getId() {
 		return id;
@@ -48,5 +49,13 @@ public class Player {
 	
 	public void setCurrentSession(Session currentSession) {
 		this.currentSession = currentSession;
+	}
+
+	public PlayerType getType() {
+		return type;
+	}
+
+	public void setType(PlayerType type) {
+		this.type = type;
 	}
 }

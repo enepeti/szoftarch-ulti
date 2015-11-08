@@ -84,8 +84,6 @@ public class MessageHandler implements IMessageHandler {
 		
 		if ((jsonObject.get("name") != null)
 				&& !jsonObject.get("name").isJsonNull()
-				&& (jsonObject.get("email") != null)
-				&& !jsonObject.get("email").isJsonNull()
 				&& (jsonObject.get("password") != null)
 				&& !jsonObject.get("password").isJsonNull()) {
 			
@@ -98,12 +96,8 @@ public class MessageHandler implements IMessageHandler {
 	private void chatMessage(JsonObject jsonObject, Session session) {
 		String message = "";
 		
-		if ((jsonObject.get("name") != null)
-				&& !jsonObject.get("name").isJsonNull()
-				&& (jsonObject.get("email") != null)
-				&& !jsonObject.get("email").isJsonNull()
-				&& (jsonObject.get("password") != null)
-				&& !jsonObject.get("password").isJsonNull()) {
+		if ((jsonObject.get("message") != null)
+				&& !jsonObject.get("message").isJsonNull()){
 			
 			message = jsonObject.get("message").getAsString();
 			

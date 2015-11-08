@@ -90,4 +90,16 @@ public class PlayerRepository implements IPlayerRepository {
 		return null;
 	}
 
+	@Override
+	public boolean isUniqueName(String name) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	@Override
+	public boolean isUniqueEmail(String email) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

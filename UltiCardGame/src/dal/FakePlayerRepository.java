@@ -53,4 +53,24 @@ public class FakePlayerRepository implements IPlayerRepository {
 		return players;
 	}
 
+	@Override
+	public boolean isUniqueName(String name) {
+		for (Player player : players) {
+			if (player.getName().equals(name)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean isUniqueEmail(String email) {
+		for (Player player : players) {
+			if (player.getName().equals(email)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
