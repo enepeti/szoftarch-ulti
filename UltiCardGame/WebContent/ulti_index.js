@@ -35,8 +35,8 @@ function onClose() {
 
 }
 function onMessage(msg) {
-	log("Message: " + msg.data	)
-	handleMessage(JSON.jsonify(msg.data));
+	log("Message: " + msg.data);
+	handleMessage(JSON.parse(msg.data));
 }
 
 function onError (error) {
