@@ -2,7 +2,7 @@ package messagers;
 
 import interfaces.IMessageHandler;
 import interfaces.IMessageReceiver;
-import interfaces.ISessionRepository;
+import interfaces.ISessionManager;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -11,16 +11,16 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import dal.FakeSessionRepository;
+import managers.SessionManager;
 
 @ServerEndpoint("/websocket/ulti")
 public class MessageReceiver implements IMessageReceiver {
 
-	private final ISessionRepository sessionRepository;
+	private final ISessionManager sessionRepository;
 	private final IMessageHandler messageHandler = new MessageHandler();
 
 	public MessageReceiver() {
-		sessionRepository = new FakeSessionRepository();
+		sessionRepository = new SessionManager();
 	}
 
 	@Override

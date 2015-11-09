@@ -4,6 +4,7 @@ import interfaces.IMessageHandler;
 import interfaces.IPasswordHasher;
 import interfaces.IPlayerManager;
 import interfaces.IPlayerRepository;
+import interfaces.ISessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,9 @@ public class PlayerManager implements IPlayerManager {
 	private final IPlayerRepository playerRepository = new FakePlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler(); 
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
+	private final ISessionManager sessionManager = new SessionManager();
 
-	private static List<Player> activePlayers = new ArrayList<Player>();
+	//private static List<Player> activePlayers = new ArrayList<Player>();
 	private static int guestNumber = 0;
 
 //	public PlayerManager(final IPlayerRepository playerRepository,
@@ -41,8 +43,8 @@ public class PlayerManager implements IPlayerManager {
 		final Player player = playerRepository.get(name);
 		if (player != null) {
 			if (passwordHasher.areEqual(pass, player.getPassword())) {
-				player.setCurrentSession(session);
-				activePlayers.add(player);
+				this.sessionManager.setPlayer(session, player);
+				//activePlayers.add(player);
 				this.messageHandler.send(new LoginAnswer(true), session);
 				return;
 			}
@@ -78,10 +80,9 @@ public class PlayerManager implements IPlayerManager {
 		player.setName(name);
 		player.setPassword(pass);
 		player.setType(PlayerType.GUEST);
-		player.setCurrentSession(session);
+		this.sessionManager.setPlayer(session, player);
 		guestNumber++;
-		//KELLE? playerRepository.add(player);
-		activePlayers.add(player);
+		//activePlayers.add(player);
 		this.messageHandler.send(new LoginAnswer(true), session);
 	}
 

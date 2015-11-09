@@ -1,6 +1,5 @@
 package model;
 
-import javax.websocket.Session;
 
 public class Player {
 	
@@ -8,7 +7,6 @@ public class Player {
 	private String name;
 	private String email;
 	private String password;
-	private Session currentSession;
 	private PlayerType type;
 	
 	public int getId() {
@@ -41,14 +39,6 @@ public class Player {
 	
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
 	}
 
 	public PlayerType getType() {

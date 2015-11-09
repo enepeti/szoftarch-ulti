@@ -1,15 +1,15 @@
 package interfaces;
 
-import java.util.Set;
-
 import javax.websocket.Session;
 
-public interface ISessionRepository {
+import model.Player;
+
+public interface ISessionManager {
 	
 	public void add(Session session);
 	
 	public void remove(Session session);
 	
-	public Set<Session> list();
+	public void setPlayer(Session session, Player player);
 	
 }
