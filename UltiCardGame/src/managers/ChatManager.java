@@ -8,6 +8,7 @@ import javax.websocket.Session;
 
 import managers.util.ChatRoom;
 import messagers.MessageHandler;
+import messagers.util.ErrorAnswer;
 import model.Player;
 
 public class ChatManager implements IChatManager {
@@ -20,7 +21,11 @@ public class ChatManager implements IChatManager {
 	@Override
 	public void Send(String message, Session session) {
 		Player sender = sessionManager.getPlayer(session);
-		sender.getChatRoom().sendMessageToAll(message, sender.getName(), messageHandler);
+		if(sender != null) {
+			sender.getChatRoom().sendMessageToAll(message, sender.getName(), messageHandler);
+		} else {
+			messageHandler.send(new ErrorAnswer("Ismeretlen vagy számomra! Nem felejtettél belépni?"), session);
+		}
 	}
 
 	public static ChatRoom getGlobalChat() {

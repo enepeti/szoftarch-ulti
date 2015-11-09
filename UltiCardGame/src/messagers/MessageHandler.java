@@ -46,8 +46,6 @@ public class MessageHandler implements IMessageHandler {
 				}
 			}
 		}
-
-		
 	}
 
 	@Override
