@@ -12,8 +12,8 @@ chat.newLine = (function(msg, sender) {
 chat.refreshHistory = (function() {
 	var chatbox = $('#chat_history');
 	chatbox.html("");
-	for (msg of this.messages) {
-		chatbox.html(chatbox.html() + "<br>" + msg);
+	for (var i = 0; i < this.messages.length; i++) {
+		chatbox.html(chatbox.html() + "<br>" + this.messages[i]);
 	}
 });
 
