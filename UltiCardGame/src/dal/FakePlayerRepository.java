@@ -45,7 +45,6 @@ public class FakePlayerRepository implements IPlayerRepository {
 		playerToUpdate.setName(player.getName());
 		playerToUpdate.setEmail(player.getEmail());
 		playerToUpdate.setPassword(player.getPassword());
-		playerToUpdate.setCurrentSession(player.getCurrentSession());
 	}
 
 	@Override

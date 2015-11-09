@@ -6,9 +6,6 @@ import interfaces.IPlayerManager;
 import interfaces.IPlayerRepository;
 import interfaces.ISessionManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.websocket.Session;
 
 import messagers.MessageHandler;
