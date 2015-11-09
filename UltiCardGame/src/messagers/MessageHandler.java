@@ -1,5 +1,6 @@
 package messagers;
 
+import interfaces.IChatManager;
 import interfaces.IMessageHandler;
 import interfaces.IPlayerManager;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 
 import javax.websocket.Session;
 
+import managers.ChatManager;
 import managers.PlayerManager;
 import messagers.util.AnswerMessage;
 import messagers.util.MessageType.Type;
@@ -19,6 +21,7 @@ import com.google.gson.JsonParser;
 public class MessageHandler implements IMessageHandler {
 
 	private static IPlayerManager playerManager = new PlayerManager();
+	private static IChatManager chatManager = new ChatManager();
 			//new PlayerRepository(), null, new PlainPasswordHasher());
 
 	@Override
@@ -100,7 +103,7 @@ public class MessageHandler implements IMessageHandler {
 				&& !jsonObject.get("message").isJsonNull()){
 			
 			message = jsonObject.get("message").getAsString();
-			
+			chatManager.Send(message, session);
 		}
 	}
 	

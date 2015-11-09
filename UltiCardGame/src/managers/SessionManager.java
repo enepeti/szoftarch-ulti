@@ -4,6 +4,7 @@ import interfaces.ISessionManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.websocket.Session;
 
@@ -27,6 +28,16 @@ public class SessionManager implements ISessionManager {
 	public void setPlayer(Session session, Player player) {
 		sessions.put(session, player);
 		
+	}
+
+	@Override
+	public Set<Session> getAllSession() {
+		return sessions.keySet();
+	}
+
+	@Override
+	public Player getPlayer(Session session) {
+		return sessions.get(session);
 	}
 
 }
