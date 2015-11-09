@@ -21,6 +21,10 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public void remove(final Session session) {
+		Player player = sessions.get(session);
+		if(player != null) {
+			player.getChatRoom().remove(session);
+		}
 		sessions.remove(session);
 	}
 

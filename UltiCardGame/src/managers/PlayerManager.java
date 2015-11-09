@@ -22,6 +22,7 @@ public class PlayerManager implements IPlayerManager {
 	private final IMessageHandler messageHandler = new MessageHandler(); 
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
 	private final ISessionManager sessionManager = new SessionManager();
+//	private final IChatManager chatManager = new ChatManager();
 
 	//private static List<Player> activePlayers = new ArrayList<Player>();
 	private static int guestNumber = 0;
@@ -38,15 +39,11 @@ public class PlayerManager implements IPlayerManager {
 	public void login(final String name, final String pass,
 			final Session session) {
 		final Player player = playerRepository.get(name);
-		if (player != null) {
-			if (passwordHasher.areEqual(pass, player.getPassword())) {
-				this.sessionManager.setPlayer(session, player);
-				//activePlayers.add(player);
-				this.messageHandler.send(new LoginAnswer(true), session);
-				return;
-			}
+		if (player != null && passwordHasher.areEqual(pass, player.getPassword())) {
+			loginSuccess(player, session);
+		} else {
+			this.messageHandler.send(new LoginAnswer(false), session);
 		}
-		this.messageHandler.send(new LoginAnswer(false), session);
 	}
 
 	@Override
@@ -77,10 +74,15 @@ public class PlayerManager implements IPlayerManager {
 		player.setName(name);
 		player.setPassword(pass);
 		player.setType(PlayerType.GUEST);
-		this.sessionManager.setPlayer(session, player);
 		guestNumber++;
-		//activePlayers.add(player);
-		this.messageHandler.send(new LoginAnswer(true), session);
+		loginSuccess(player, session);
 	}
 
+	private void loginSuccess(Player player, Session session) {
+		this.sessionManager.setPlayer(session, player);
+		//activePlayers.add(player);
+		ChatManager.getGlobalChat().add(session, player);
+		this.messageHandler.send(new LoginAnswer(true), session);
+	}
+	
 }

@@ -6,23 +6,27 @@ import interfaces.ISessionManager;
 
 import javax.websocket.Session;
 
+import managers.util.ChatRoom;
 import messagers.MessageHandler;
-import messagers.util.ChatAnswer;
 import model.Player;
 
 public class ChatManager implements IChatManager {
 
 	private ISessionManager sessionManager = new SessionManager();
 	private IMessageHandler messageHandler = new MessageHandler();
+	//private static List<ChatRoom> chatRooms = new ArrayList<ChatRoom>();
+	private static ChatRoom globalChat;
 	
 	@Override
 	public void Send(String message, Session session) {
 		Player sender = sessionManager.getPlayer(session);
-		for (Session toSession : sessionManager.getAllSession()) {
-			if(sessionManager.getPlayer(toSession) != null) {
-				messageHandler.send(new ChatAnswer(message, sender.getName()), toSession);
-			}
-		}
+		sender.getChatRoom().sendMessageToAll(message, sender.getName(), messageHandler);
+	}
+
+	public static ChatRoom getGlobalChat() {
+		if(globalChat == null)
+			globalChat = new ChatRoom("global", -1);
+		return globalChat;
 	}
 
 }

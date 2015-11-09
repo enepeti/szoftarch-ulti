@@ -1,5 +1,7 @@
 package model;
 
+import managers.util.ChatRoom;
+
 
 public class Player {
 	
@@ -8,6 +10,7 @@ public class Player {
 	private String email;
 	private String password;
 	private PlayerType type;
+	private ChatRoom chatRoom;
 	
 	public int getId() {
 		return id;
@@ -47,5 +50,13 @@ public class Player {
 
 	public void setType(PlayerType type) {
 		this.type = type;
+	}
+
+	public ChatRoom getChatRoom() {
+		return chatRoom;
+	}
+
+	public void setChatRoom(ChatRoom chatRoom) {
+		this.chatRoom = chatRoom;
 	}
 }
