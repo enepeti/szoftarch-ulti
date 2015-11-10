@@ -7,6 +7,9 @@
 - Regisztráció: {"type":"register", "email:<string>" "name":<string>, "password":<string>}
 - Vendég bejelentkezés: {"type":"guestlogin"}
 - Chat üzenet: {"type":"chat", "message":<string>}
+- Chat szoba létrehozása: {"type":"newchat", "name":<string>, "maxmembers":<int>}
+- Chat szoba váltása: {"type":"tochat", "name":<string>}
+- Chat szoba elhagyása: {"type":"leavechat"}
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: {"type":"login", "success":<boolean>}

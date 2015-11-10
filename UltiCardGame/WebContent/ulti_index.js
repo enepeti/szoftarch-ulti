@@ -11,10 +11,12 @@ chat.newLine = (function(msg, sender) {
 });
 chat.refreshHistory = (function() {
 	var chatbox = $('#chat_history');
+	var scrollContainer = $('#chat_container');
 	chatbox.html("");
 	for (var i = 0; i < this.messages.length; i++) {
 		chatbox.html(chatbox.html() + "<br>" + this.messages[i]);
 	}
+	scrollContainer.scrollTop(function () {return this.scrollHeight;});
 });
 
 socket.onopen = onOpen;
@@ -47,7 +49,7 @@ function handleMessage (msg) {
 	switch (msg.type) {
 		case "login":
 			if(msg.success) {
-				showPage("chatpage");
+				showPage("mainpage");
 				log("sikeres bejelentkezés");
 			} else {
 				alert("Hibás bejelentkezési adatok!");
@@ -124,6 +126,7 @@ function sendChat() {
 	var msgtb = $('#chat_msg');
 	var msg = msgtb.val();
 	msgtb.val('');
+	msgtb.focus();
 	var chatmsg = {};
 	chatmsg.type = "chat";
 	chatmsg.message = msg;
@@ -146,7 +149,7 @@ function showPage(nextpagename) {
 	setTimeout(function() {
 		onpage.css("display", "none")
 		onpagename = nextpagename;
-	}, 1700);
+	}, 2000);
 	nextpage.css("display", "block");
 }
 
@@ -159,5 +162,6 @@ function validatePw() {
 }
 
 $(document).ready(function () {
-
+	onpage = $('#' + onpagename);
+	onpage.css("display", "block");
 });

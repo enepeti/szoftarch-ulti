@@ -13,7 +13,7 @@
 		<form id="loginform" action="javascript:login();">
 			<input id="login_name" type="text" class="form-control hor-sep" placeholder="Neved" required/>
 			<input id="login_password" type="password" class="form-control hor-sep" placeholder="Jelszavad" required/>
-			<input id="login" type="submit" class="btn btn-success vertical-center hor-sep" value="Bejelentkezés"/>
+			<input id="login_button" type="submit" class="btn btn-success vertical-center hor-sep" value="Bejelentkezés"/>
 		</form>
 		<p class="font">
 			Még nem <a href="javascript:showPage('registrationpage')">regisztráltál</a>?<br>
@@ -29,22 +29,46 @@
 				title="A jelszó legalább 6 karakter hosszú kell legyen, szerepelnie kell benne kis és nagybetűnek és számnak is kell benne lenni!"/>
 			<input id="confirmpw" type="password" class="form-control hor-sep" placeholder="Jelszó még egyszer"
 				required pattern="" title="Meg kell egyezzen a felette beírt jelszóval!"/>
-			<input id="registrate" type="submit" class="btn btn-success vertical-center hor-sep" value="Regisztrálok!"/>
+			<input id="register_button" type="submit" class="btn btn-success vertical-center hor-sep" value="Regisztrálok!"/>
 		</form>
 		<p class="font">
 			Már regisztráltál? <a href="javascript:showPage('loginpage')">Lépj be!</a><br>
 			Nem szeretnél regisztálni? <a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
-	<div id="chatpage" class="screen-center pagecontent">
-		<div id="chat_container" class="scrollable-text hor-sep vertical-center">
-			<p id="chat_history">
-			</p>
+	<div id="mainpage" class="pagecontent">
+		<div id="ultipage">
+
 		</div>
-		<form id="chatform" action="javascript:sendChat()">
-			<input id="chat_msg" type="text" class="form-control hor-sep" placeholder="Írd ide az üzenetedet" required/>
-			<input id="chat_send" type="submit" class="btn btn-success vertical-center hor-sep" value="Küldés">
-		</form>
+		<div id="chatpage">
+			<div id="chat_buttoncontainer" class="chatcontainer">
+				<div>
+					<button class="btn btn-primary cbtn">Szoba készítése</button>
+				</div>
+				<div>
+					<button class="btn btn-warning cbtn">Szobába csatlakozás</button>
+				</div>
+				<div>
+					<button class="btn btn-danger cbtn">Szoba elhagyása</button>
+				</div>
+			</div>
+			<div id="chat_container" class="chatcontainer">
+				<div id="chat_historycontainer" class="scrollable-text hor-sep vertical-center">
+					<p id="chat_history">
+					</p>
+				</div>
+				<form id="chatform" action="javascript:sendChat()">
+					<div id="chat_formcontainer">
+						<div id="chat_msgcontainer">
+							<input id="chat_msg" type="text" class="form-control hor-sep" placeholder="Írd ide az üzenetedet" autocomplete="off"/>
+						</div>
+						<div id="chat_sendcontainer">
+							<input id="chat_send" type="submit" class="btn btn-success hor-sep" value="Küldés">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
