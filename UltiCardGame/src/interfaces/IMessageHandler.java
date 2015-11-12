@@ -1,13 +1,12 @@
 package interfaces;
 
-import javax.websocket.Session;
-
 import messagers.util.AnswerMessage;
+import model.Player;
 
 public interface IMessageHandler {
 
-	public void handle(String message, Session session);
+	public void handle(String message, Player player);
 	
-	public <T extends AnswerMessage> void send(T messageObject, Session session);
+	public <T extends AnswerMessage> void send(T messageObject, Player player);
 	
 }

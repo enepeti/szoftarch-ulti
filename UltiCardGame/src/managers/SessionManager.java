@@ -16,23 +16,27 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public void add(final Session session) {
-		sessions.put(session, null);
+		Player player = new Player();
+		player.setCurrentSession(session);
+		player.setLoggedIn(false);
+		sessions.put(session, player);
 	}
 
 	@Override
 	public void remove(final Session session) {
 		Player player = sessions.get(session);
 		if(player != null) {
-			player.getChatRoom().remove(session);
+			player.setLoggedIn(false);
+			player.getChatRoom().remove(player);
 		}
 		sessions.remove(session);
 	}
 
-	@Override
-	public void setPlayer(Session session, Player player) {
-		sessions.put(session, player);
-		
-	}
+//	@Override
+//	public void setPlayer(Session session, Player player) {
+//		sessions.put(session, player);
+//		
+//	}
 
 	@Override
 	public Set<Session> getAllSession() {

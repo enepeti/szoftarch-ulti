@@ -2,16 +2,13 @@ package messagers;
 
 import interfaces.IChatManager;
 import interfaces.IMessageHandler;
+import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
-
-import java.io.IOException;
-
-import javax.websocket.Session;
-
 import managers.ChatManager;
 import managers.PlayerManager;
 import messagers.util.AnswerMessage;
 import messagers.util.MessageType.Type;
+import model.Player;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -22,10 +19,11 @@ public class MessageHandler implements IMessageHandler {
 
 	private static IPlayerManager playerManager = new PlayerManager();
 	private static IChatManager chatManager = new ChatManager();
+	private IMessageSender messageSender = new MessageSender();
 			//new PlayerRepository(), null, new PlainPasswordHasher());
 
 	@Override
-	public void handle(final String message, final Session session) {
+	public void handle(final String message, final Player player) {
 		String type = "";
 
 		final JsonElement jelement = new JsonParser().parse(message);
@@ -36,31 +34,27 @@ public class MessageHandler implements IMessageHandler {
 				
 				type = jsonObject.get("type").getAsString();
 				if (type.toUpperCase().equals(Type.REGISTER.toString())) {
-					registerMessage(jsonObject, session);
+					this.registerMessage(jsonObject, player);
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())){
-					loginMessage(jsonObject, session);
+					this.loginMessage(jsonObject, player);
 				} else if (type.toUpperCase().equals(Type.GUESTLOGIN.toString())){
-					playerManager.guestLogin(session);
+					this.playerManager.guestLogin(player);
 				} else if (type.toUpperCase().equals(Type.CHAT.toString())){
-					chatMessage(jsonObject, session);
+					this.chatMessage(jsonObject, player);
 				}
 			}
 		}
 	}
 
 	@Override
-	public <T extends AnswerMessage> void send(final T messageObject, final Session session) {
+	public <T extends AnswerMessage> void send(final T messageObject, final Player player) {
 		Gson gson = new Gson();
 		String json = gson.toJson(messageObject);
-		try {
-			session.getBasicRemote().sendText(json);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.messageSender.sendMessage(json, player);
+		
 	}
 
-	private void registerMessage(JsonObject jsonObject, Session session) {
+	private void registerMessage(JsonObject jsonObject, Player player) {
 		String name = "";
 		String email = "";
 		String password = "";
@@ -75,11 +69,11 @@ public class MessageHandler implements IMessageHandler {
 			name = jsonObject.get("name").getAsString();
 			email = jsonObject.get("email").getAsString();
 			password = jsonObject.get("password").getAsString();
-			playerManager.register(name, email, password, session);
+			playerManager.register(name, email, password, player);
 		}
 	}
 	
-	private void loginMessage(JsonObject jsonObject, Session session) {
+	private void loginMessage(JsonObject jsonObject, Player player) {
 		String name = "";
 		String password = "";
 		
@@ -90,18 +84,18 @@ public class MessageHandler implements IMessageHandler {
 			
 			name = jsonObject.get("name").getAsString();
 			password = jsonObject.get("password").getAsString();
-			playerManager.login(name, password, session);
+			playerManager.login(name, password, player);
 		}
 	}
 	
-	private void chatMessage(JsonObject jsonObject, Session session) {
+	private void chatMessage(JsonObject jsonObject, Player player) {
 		String message = "";
 		
 		if ((jsonObject.get("message") != null)
 				&& !jsonObject.get("message").isJsonNull()){
 			
 			message = jsonObject.get("message").getAsString();
-			chatManager.Send(message, session);
+			chatManager.Send(message, player);
 		}
 	}
 	

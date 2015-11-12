@@ -15,8 +15,8 @@ public class ChatRoom extends Room {
 	}
 	
 	@Override
-	public boolean add(Session session, Player player) {
-		boolean inRoom = super.add(session, player);
+	public boolean add(Player player) {
+		boolean inRoom = super.add(player);
 		if(inRoom) {
 			player.setChatRoom(this);
 		}

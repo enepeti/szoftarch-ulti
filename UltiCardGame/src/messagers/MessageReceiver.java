@@ -12,6 +12,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import managers.SessionManager;
+import model.Player;
 
 @ServerEndpoint("/websocket/ulti")
 public class MessageReceiver implements IMessageReceiver {
@@ -46,7 +47,8 @@ public class MessageReceiver implements IMessageReceiver {
 	@OnMessage
 	public void handleMessage(final String message, final Session session) {
 		System.out.println(message);
-		messageHandler.handle(message, session);
+		Player player = this.sessionRepository.getPlayer(session);
+		messageHandler.handle(message, player);
 	}
 
 }

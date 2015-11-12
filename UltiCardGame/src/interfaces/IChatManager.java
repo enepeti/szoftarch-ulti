@@ -1,9 +1,9 @@
 package interfaces;
 
-import javax.websocket.Session;
+import model.Player;
 
 public interface IChatManager {
 
-	public void Send(String message, Session session);
+	public void Send(String message, Player player);
 	
 }

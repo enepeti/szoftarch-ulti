@@ -1,13 +1,13 @@
 package interfaces;
 
-import javax.websocket.Session;
+import model.Player;
 
 public interface IPlayerManager {
 
-	public void login(String name, String pass, Session session);
+	public void login(String name, String pass, Player player);
 	
-	public void guestLogin(Session session);
+	public void guestLogin(Player player);
 	
-	public void register(String name, String email, String pass, final Session session);
+	public void register(String name, String email, String pass, final Player player);
 	
 }

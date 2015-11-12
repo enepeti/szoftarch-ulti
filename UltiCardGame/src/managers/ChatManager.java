@@ -19,12 +19,11 @@ public class ChatManager implements IChatManager {
 	private static ChatRoom globalChat;
 	
 	@Override
-	public void Send(String message, Session session) {
-		Player sender = sessionManager.getPlayer(session);
-		if(sender != null) {
+	public void Send(String message, Player sender) {
+		if(sender.isLoggedIn()) {
 			sender.getChatRoom().sendMessageToAll(message, sender.getName(), messageHandler);
 		} else {
-			messageHandler.send(new ErrorAnswer("Ismeretlen vagy számomra! Nem felejtettél belépni?"), session);
+			messageHandler.send(new ErrorAnswer("Ismeretlen vagy számomra! Nem felejtettél belépni?"), sender);
 		}
 	}
 

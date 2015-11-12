@@ -12,7 +12,7 @@ public interface ISessionManager {
 	
 	public void remove(Session session);
 	
-	public void setPlayer(Session session, Player player);
+//	public void setPlayer(Session session, Player player);
 	
 	public Player getPlayer(Session session);
 	
