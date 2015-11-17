@@ -5,6 +5,8 @@ import interfaces.IPlayerRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Player;
@@ -13,6 +15,7 @@ public class PlayerRepository implements IPlayerRepository {
 
 	private static ConnectionBuilder connectionBuilder;
 	private PreparedStatement preparedStatement;
+	private Statement statement;
 	private ResultSet resultSet;
 
 	public PlayerRepository() {
@@ -25,7 +28,7 @@ public class PlayerRepository implements IPlayerRepository {
 			preparedStatement = connectionBuilder
 					.getConnection()
 					.prepareStatement(
-							"INSERT INTO player (name, email, password, sessionid) VALUES (?, ?, ?, null)");
+							"INSERT INTO player (name, email, password) VALUES (?, ?, ?)");
 			preparedStatement.setString(1, player.getName());
 			preparedStatement.setString(2, player.getEmail());
 			preparedStatement.setString(3, player.getPassword());
@@ -40,6 +43,16 @@ public class PlayerRepository implements IPlayerRepository {
 
 	@Override
 	public void remove(final Player player) {
+		try {
+			preparedStatement = connectionBuilder.getConnection()
+					.prepareStatement("DELETE FROM player WHERE name = ?");
+			preparedStatement.setString(1, player.getName());
+			preparedStatement.execute();
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -59,7 +72,6 @@ public class PlayerRepository implements IPlayerRepository {
 				final String nameInDb = resultSet.getString("name");
 				if (nameInDb != null) {
 					final Player player = new Player();
-					player.setId(resultSet.getInt("id"));
 					player.setName(resultSet.getString("name"));
 					player.setEmail(resultSet.getString("email"));
 					player.setPassword(resultSet.getString("password"));
@@ -78,25 +90,59 @@ public class PlayerRepository implements IPlayerRepository {
 
 	@Override
 	public void update(final Player player) {
-		final Player playerToUpdate = this.get(player.getId());
-		playerToUpdate.setName(player.getName());
-		playerToUpdate.setEmail(player.getEmail());
-		playerToUpdate.setPassword(player.getPassword());
+		try {
+			preparedStatement = connectionBuilder
+					.getConnection()
+					.prepareStatement(
+							"UPDATE player SET email = ?, password = ? where name = ?");
+			preparedStatement.setString(1, player.getEmail());
+			preparedStatement.setString(2, player.getPassword());
+			preparedStatement.setString(3, player.getName());
+			preparedStatement.execute();
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public List<Player> list() {
+		final ArrayList<Player> playerList = new ArrayList<Player>();
+		try {
+			statement = connectionBuilder.getConnection().createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM player");
+
+			while (resultSet.next()) {
+				final String nameInDb = resultSet.getString("name");
+				if (nameInDb != null) {
+					final Player player = new Player();
+					player.setName(resultSet.getString("name"));
+					player.setEmail(resultSet.getString("email"));
+					player.setPassword(resultSet.getString("password"));
+
+					playerList.add(player);
+				}
+			}
+
+			return playerList;
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 
 	@Override
-	public boolean isUniqueName(String name) {
+	public boolean isUniqueName(final String name) {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
+
 	@Override
-	public boolean isUniqueEmail(String email) {
+	public boolean isUniqueEmail(final String email) {
 		// TODO Auto-generated method stub
 		return true;
 	}
