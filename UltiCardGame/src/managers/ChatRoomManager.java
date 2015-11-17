@@ -10,7 +10,6 @@ import model.ActivePlayer;
 public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 
 	private final IMessageHandler messageHandler = new MessageHandler();
-	// private static List<ChatRoom> chatRooms = new ArrayList<ChatRoom>();
 	private static ChatRoom globalChat;
 
 	@Override

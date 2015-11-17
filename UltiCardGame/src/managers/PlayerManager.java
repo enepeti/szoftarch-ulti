@@ -16,11 +16,7 @@ import dal.PlayerRepository;
 public class PlayerManager implements IPlayerManager {
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
-<<<<<<< Updated upstream
-	private final IMessageHandler messageHandler = new MessageHandler(); 
-=======
 	private final IMessageHandler messageHandler = new MessageHandler();
->>>>>>> Stashed changes
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
 
 	private static int guestNumber = 0;

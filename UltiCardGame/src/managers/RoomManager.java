@@ -5,12 +5,11 @@ import interfaces.IRoomManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import managers.util.ChatRoom;
 import managers.util.Room;
 import model.ActivePlayer;
 
 public abstract class RoomManager implements IRoomManager {
-	private final Map<String, Room> roomMap;
+	protected Map<String, Room> roomMap;
 
 	public RoomManager() {
 		roomMap = new HashMap<String, Room>();
@@ -39,7 +38,7 @@ public abstract class RoomManager implements IRoomManager {
 		if (room != null) {
 			room.add(activePlayer);
 			// TODO: ne kaszttal
-			activePlayer.setChatRoom((ChatRoom) room);
+			// activePlayer.setChatRoom((ChatRoom) room);
 		}
 	}
 
