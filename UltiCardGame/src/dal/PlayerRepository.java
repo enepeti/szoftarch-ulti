@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Player;
+import model.PlayerType;
 
 public class PlayerRepository implements IPlayerRepository {
 
@@ -28,7 +29,7 @@ public class PlayerRepository implements IPlayerRepository {
 			preparedStatement = connectionBuilder
 					.getConnection()
 					.prepareStatement(
-							"INSERT INTO player (name, email, password) VALUES (?, ?, ?)");
+							"INSERT INTO player (name, email, password, isadmin) VALUES (?, ?, ?, 0)");
 			preparedStatement.setString(1, player.getName());
 			preparedStatement.setString(2, player.getEmail());
 			preparedStatement.setString(3, player.getPassword());
@@ -75,6 +76,12 @@ public class PlayerRepository implements IPlayerRepository {
 					player.setName(resultSet.getString("name"));
 					player.setEmail(resultSet.getString("email"));
 					player.setPassword(resultSet.getString("password"));
+					final int isAdmin = resultSet.getInt("isadmin");
+					if (isAdmin == 1) {
+						player.setType(PlayerType.ADMIN);
+					} else if (isAdmin == 0) {
+						player.setType(PlayerType.NORMAL);
+					}
 
 					return player;
 				}
@@ -120,6 +127,12 @@ public class PlayerRepository implements IPlayerRepository {
 					player.setName(resultSet.getString("name"));
 					player.setEmail(resultSet.getString("email"));
 					player.setPassword(resultSet.getString("password"));
+					final int isAdmin = resultSet.getInt("isadmin");
+					if (isAdmin == 1) {
+						player.setType(PlayerType.ADMIN);
+					} else if (isAdmin == 0) {
+						player.setType(PlayerType.NORMAL);
+					}
 
 					playerList.add(player);
 				}
