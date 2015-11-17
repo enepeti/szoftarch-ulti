@@ -8,7 +8,7 @@ import managers.ChatManager;
 import managers.PlayerManager;
 import messagers.util.AnswerMessage;
 import messagers.util.MessageType.Type;
-import model.Player;
+import model.ActivePlayer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -20,10 +20,9 @@ public class MessageHandler implements IMessageHandler {
 	private static IPlayerManager playerManager = new PlayerManager();
 	private static IChatManager chatManager = new ChatManager();
 	private IMessageSender messageSender = new MessageSender();
-			//new PlayerRepository(), null, new PlainPasswordHasher());
 
 	@Override
-	public void handle(final String message, final Player player) {
+	public void handle(final String message, final ActivePlayer activePlayer) {
 		String type = "";
 
 		final JsonElement jelement = new JsonParser().parse(message);
@@ -34,27 +33,27 @@ public class MessageHandler implements IMessageHandler {
 				
 				type = jsonObject.get("type").getAsString();
 				if (type.toUpperCase().equals(Type.REGISTER.toString())) {
-					this.registerMessage(jsonObject, player);
+					this.registerMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())){
-					this.loginMessage(jsonObject, player);
+					this.loginMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.GUESTLOGIN.toString())){
-					this.playerManager.guestLogin(player);
+					playerManager.guestLogin(activePlayer);
 				} else if (type.toUpperCase().equals(Type.CHAT.toString())){
-					this.chatMessage(jsonObject, player);
+					this.chatMessage(jsonObject, activePlayer);
 				}
 			}
 		}
 	}
 
 	@Override
-	public <T extends AnswerMessage> void send(final T messageObject, final Player player) {
+	public <T extends AnswerMessage> void send(final T messageObject, final ActivePlayer activePlayer) {
 		Gson gson = new Gson();
 		String json = gson.toJson(messageObject);
-		this.messageSender.sendMessage(json, player);
+		this.messageSender.sendMessage(json, activePlayer);
 		
 	}
 
-	private void registerMessage(JsonObject jsonObject, Player player) {
+	private void registerMessage(JsonObject jsonObject, ActivePlayer activePlayer) {
 		String name = "";
 		String email = "";
 		String password = "";
@@ -69,11 +68,11 @@ public class MessageHandler implements IMessageHandler {
 			name = jsonObject.get("name").getAsString();
 			email = jsonObject.get("email").getAsString();
 			password = jsonObject.get("password").getAsString();
-			playerManager.register(name, email, password, player);
+			playerManager.register(name, email, password, activePlayer);
 		}
 	}
 	
-	private void loginMessage(JsonObject jsonObject, Player player) {
+	private void loginMessage(JsonObject jsonObject, ActivePlayer activePlayer) {
 		String name = "";
 		String password = "";
 		
@@ -84,18 +83,18 @@ public class MessageHandler implements IMessageHandler {
 			
 			name = jsonObject.get("name").getAsString();
 			password = jsonObject.get("password").getAsString();
-			playerManager.login(name, password, player);
+			playerManager.login(name, password, activePlayer);
 		}
 	}
 	
-	private void chatMessage(JsonObject jsonObject, Player player) {
+	private void chatMessage(JsonObject jsonObject, ActivePlayer activePlayer) {
 		String message = "";
 		
 		if ((jsonObject.get("message") != null)
 				&& !jsonObject.get("message").isJsonNull()){
 			
 			message = jsonObject.get("message").getAsString();
-			chatManager.Send(message, player);
+			chatManager.Send(message, activePlayer);
 		}
 	}
 	

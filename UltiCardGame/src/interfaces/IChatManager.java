@@ -1,9 +1,9 @@
 package interfaces;
 
-import model.Player;
+import model.ActivePlayer;
 
 public interface IChatManager {
 
-	public void Send(String message, Player player);
+	public void Send(String message, ActivePlayer activePlayer);
 	
 }

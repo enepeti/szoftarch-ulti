@@ -1,22 +1,18 @@
 package messagers;
 
-import java.io.IOException;
-
 import interfaces.IMessageSender;
-import interfaces.ISessionManager;
+
+import java.io.IOException;
 
 import javax.websocket.Session;
 
-import managers.SessionManager;
-import model.Player;
+import model.ActivePlayer;
 
 public class MessageSender implements IMessageSender {
-
-	private final ISessionManager sessionManager = new SessionManager();
 	
 	@Override
-	public void sendMessage(String message, Player player) {
-		Session session = player.getCurrentSession();
+	public void sendMessage(String message, ActivePlayer activePlayer) {
+		Session session = activePlayer.getSession();
 		
 		try {
 			session.getBasicRemote().sendText(message);

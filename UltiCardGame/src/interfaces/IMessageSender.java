@@ -1,9 +1,9 @@
 package interfaces;
 
-import model.Player;
+import model.ActivePlayer;
 
 public interface IMessageSender {
 
-	public void sendMessage(String message, Player player);
+	public void sendMessage(String message, ActivePlayer activePlayer);
 	
 }

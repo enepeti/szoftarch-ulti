@@ -3,18 +3,14 @@ package managers.util;
 import interfaces.IMessageHandler;
 
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.websocket.Session;
-
 import messagers.util.AnswerMessage;
-import model.Player;
+import model.ActivePlayer;
 
 public abstract class Room {
 
-	private Set <Player> playersInRoom;
+	private Set <ActivePlayer> activePlayersInRoom;
 	private int maxSize;
 	private String name;
 	private boolean active;
@@ -22,34 +18,32 @@ public abstract class Room {
 	public Room(String name, int maxSize) {
 		this.setName(name);
 		this.maxSize = maxSize;
-		this.playersInRoom = new HashSet<Player>();
+		this.activePlayersInRoom = new HashSet<ActivePlayer>();
 		this.active = true;
 	}
 	
-	public boolean add(Player player) {
-		if(playersInRoom.size() < maxSize || maxSize == -1) {
-			playersInRoom.add(player);
+	public boolean add(ActivePlayer activePlayer) {
+		if(activePlayersInRoom.size() < maxSize || maxSize == -1) {
+			activePlayersInRoom.add(activePlayer);
 			return true;
 		}
 		return false;
 	}
 	
-	public void remove(Player player) {
-		playersInRoom.remove(player);
-		active = false;
+	public void remove(ActivePlayer activePlayer) {
+		activePlayersInRoom.remove(activePlayer);
+		if(activePlayersInRoom.size() == 0) {
+			active = false;
+		}
 	}
 	
 	protected void sendToAll(IMessageHandler messageHandler, AnswerMessage message) {
-		for (Player player : this.playersInRoom) {
-			if(player.isLoggedIn()) {
-				messageHandler.send(message, player);
+		for (ActivePlayer activePlayer : this.activePlayersInRoom) {
+			if(activePlayer.isLoggedIn()) {
+				messageHandler.send(message, activePlayer);
 			}
 		}
 	}
-
-//	public Map<Session, Player> getSessionsInRoom() {
-//		return playersInRoom;
-//	}
 	
 	public String getName() {
 		return name;

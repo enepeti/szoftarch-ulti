@@ -1,12 +1,12 @@
 package interfaces;
 
 import messagers.util.AnswerMessage;
-import model.Player;
+import model.ActivePlayer;
 
 public interface IMessageHandler {
 
-	public void handle(String message, Player player);
+	public void handle(String message, ActivePlayer activePlayer);
 	
-	public <T extends AnswerMessage> void send(T messageObject, Player player);
+	public <T extends AnswerMessage> void send(T messageObject, ActivePlayer activePlayer);
 	
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.websocket.Session;
 
-import model.Player;
+import model.ActivePlayer;
 
 public interface ISessionManager {
 	
@@ -12,9 +12,7 @@ public interface ISessionManager {
 	
 	public void remove(Session session);
 	
-//	public void setPlayer(Session session, Player player);
-	
-	public Player getPlayer(Session session);
+	public ActivePlayer getActivePlayer(Session session);
 	
 	public Set<Session> getAllSession();
 	

@@ -1,11 +1,8 @@
 package managers.util;
 
 import interfaces.IMessageHandler;
-
-import javax.websocket.Session;
-
 import messagers.util.ChatAnswer;
-import model.Player;
+import model.ActivePlayer;
 
 
 public class ChatRoom extends Room {
@@ -15,10 +12,10 @@ public class ChatRoom extends Room {
 	}
 	
 	@Override
-	public boolean add(Player player) {
-		boolean inRoom = super.add(player);
+	public boolean add(ActivePlayer activePlayer) {
+		boolean inRoom = super.add(activePlayer);
 		if(inRoom) {
-			player.setChatRoom(this);
+			activePlayer.setChatRoom(this);
 		}
 		return inRoom;
 	}
