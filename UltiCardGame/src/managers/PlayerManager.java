@@ -16,7 +16,11 @@ import dal.PlayerRepository;
 public class PlayerManager implements IPlayerManager {
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
+<<<<<<< Updated upstream
 	private final IMessageHandler messageHandler = new MessageHandler(); 
+=======
+	private final IMessageHandler messageHandler = new MessageHandler();
+>>>>>>> Stashed changes
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
 
 	private static int guestNumber = 0;
@@ -35,48 +39,50 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public void register(final String name, final String email,
-			final String pass, ActivePlayer activePlayer) {
-		
+			final String pass, final ActivePlayer activePlayer) {
+
 		if (playerRepository.isUniqueName(name)) {
-			if(playerRepository.isUniqueEmail(email)) {
+			if (playerRepository.isUniqueEmail(email)) {
 				final Player player = new Player();
-				
-				
+
 				player.setName(name);
 				player.setEmail(email);
 				player.setPassword(passwordHasher.hash(pass));
 				player.setType(PlayerType.NORMAL);
 				playerRepository.add(player);
-				this.messageHandler.send(new RegisterAnswer(true, ""), activePlayer);
+				this.messageHandler.send(new RegisterAnswer(true, ""),
+						activePlayer);
 			} else {
-				this.messageHandler.send(new RegisterAnswer(false, "Ezzel az emaillel már regisztráltak!"), activePlayer);
+				this.messageHandler.send(new RegisterAnswer(false,
+						"Ezzel az emaillel már regisztráltak!"), activePlayer);
 			}
 		} else {
-			this.messageHandler.send(new RegisterAnswer(false, "Ezzel a névvel már regisztráltak!"), activePlayer);
+			this.messageHandler.send(new RegisterAnswer(false,
+					"Ezzel a névvel már regisztráltak!"), activePlayer);
 		}
 	}
 
 	@Override
-	public void guestLogin(ActivePlayer activePlayer) {
+	public void guestLogin(final ActivePlayer activePlayer) {
 		final Player player = new Player();
 		final String name = "Vendég#" + guestNumber;
 		final String pass = passwordHasher.hash(name);
-		
+
 		player.setName(name);
 		player.setPassword(pass);
 		player.setType(PlayerType.GUEST);
 		activePlayer.setPlayer(player);
-		
+
 		guestNumber++;
-		
+
 		loginSuccess(activePlayer);
 	}
 
-	private void loginSuccess(ActivePlayer activePlayer) {
-		ChatManager.getGlobalChat().add(activePlayer);
+	private void loginSuccess(final ActivePlayer activePlayer) {
+		ChatRoomManager.getGlobalChat().add(activePlayer);
 		activePlayer.setLoggedIn(true);
-		
+
 		this.messageHandler.send(new LoginAnswer(true), activePlayer);
 	}
-	
+
 }

@@ -8,48 +8,49 @@ import java.util.Set;
 import messagers.util.AnswerMessage;
 import model.ActivePlayer;
 
-public abstract class Room {
+public class Room {
 
-	private Set <ActivePlayer> activePlayersInRoom;
-	private int maxSize;
+	private final Set<ActivePlayer> activePlayersInRoom;
+	private final int maxSize;
 	private String name;
 	private boolean active;
-	
-	public Room(String name, int maxSize) {
+
+	public Room(final String name, final int maxSize) {
 		this.setName(name);
 		this.maxSize = maxSize;
 		this.activePlayersInRoom = new HashSet<ActivePlayer>();
 		this.active = true;
 	}
-	
-	public boolean add(ActivePlayer activePlayer) {
-		if(activePlayersInRoom.size() < maxSize || maxSize == -1) {
+
+	public boolean add(final ActivePlayer activePlayer) {
+		if ((activePlayersInRoom.size() < maxSize) || (maxSize == -1)) {
 			activePlayersInRoom.add(activePlayer);
 			return true;
 		}
 		return false;
 	}
-	
-	public void remove(ActivePlayer activePlayer) {
+
+	public void remove(final ActivePlayer activePlayer) {
 		activePlayersInRoom.remove(activePlayer);
-		if(activePlayersInRoom.size() == 0) {
+		if (activePlayersInRoom.size() == 0) {
 			active = false;
 		}
 	}
-	
-	protected void sendToAll(IMessageHandler messageHandler, AnswerMessage message) {
-		for (ActivePlayer activePlayer : this.activePlayersInRoom) {
-			if(activePlayer.isLoggedIn()) {
+
+	protected void sendToAll(final IMessageHandler messageHandler,
+			final AnswerMessage message) {
+		for (final ActivePlayer activePlayer : this.activePlayersInRoom) {
+			if (activePlayer.isLoggedIn()) {
 				messageHandler.send(message, activePlayer);
 			}
 		}
 	}
-	
+
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
