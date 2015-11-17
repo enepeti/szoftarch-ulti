@@ -11,11 +11,11 @@ import model.ActivePlayer;
 import model.Player;
 import model.PlayerType;
 import tryPackage.PlainPasswordHasher;
-import dal.FakePlayerRepository;
+import dal.PlayerRepository;
 
 public class PlayerManager implements IPlayerManager {
 
-	private final IPlayerRepository playerRepository = new FakePlayerRepository();
+	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler(); 
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
 

@@ -1,5 +1,6 @@
 var socket = new WebSocket(getWsUrl());
 var onpagename = "loginpage"
+//var onpagename = "mainpage"
 
 var chat = {};
 
@@ -11,10 +12,10 @@ chat.newLine = (function(msg, sender) {
 });
 chat.refreshHistory = (function() {
 	var chatbox = $('#chat_history');
-	var scrollContainer = $('#chat_container');
+	var scrollContainer = $('#chat_historycontainer');
 	chatbox.html("");
 	for (var i = 0; i < this.messages.length; i++) {
-		chatbox.html(chatbox.html() + "<br>" + this.messages[i]);
+		chatbox.html(chatbox.html() + this.messages[i] + "<br>");
 	}
 	scrollContainer.scrollTop(function () {return this.scrollHeight;});
 });
@@ -78,7 +79,7 @@ function handleMessage (msg) {
 
 function send(data) {
 	var msg = JSON.stringify(data);
-	//alert(msg);
+	log(msg);
 	socket.send(msg);
 }
 
@@ -127,10 +128,35 @@ function sendChat() {
 	var msg = msgtb.val();
 	msgtb.val('');
 	msgtb.focus();
-	var chatmsg = {};
-	chatmsg.type = "chat";
-	chatmsg.message = msg;
-	send(chatmsg);
+	if(msg != "") {
+		var chatmsg = {};
+		chatmsg.type = "chat";
+		chatmsg.message = msg;
+		send(chatmsg);
+	}
+}
+
+function newChatRoom () {
+	
+	var newchatroommsg = {};
+	newchatroommsg.type = "newchat";
+	newchatroommsg.name = "NemGlobalSzoba";
+	newchatroommsg.maxmembers = -1;
+	send(newchatroommsg);
+}
+
+function joinChatRoom () {
+
+	var joinchatroommsg = {};
+	joinchatroommsg.type = "tochat";
+	joinchatroommsg.name = "NemGlobalSzoba";
+	send(joinchatroommsg);
+}
+
+function leaveChatRoom () {
+	var leavechatroommsg = {};
+	leavechatroommsg.type = "leavechat";
+	send(leavechatroommsg);
 }
 
 function getWsUrl() {

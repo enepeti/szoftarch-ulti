@@ -9,7 +9,7 @@
 <script src="ulti_index.js"></script>
 </head>
 <body>
-	<div id="loginpage" class="screen-center pagecontent">
+	<div id="loginpage" class="screen-center">
 		<form id="loginform" action="javascript:login();">
 			<input id="login_name" type="text" class="form-control hor-sep" placeholder="Neved" required/>
 			<input id="login_password" type="password" class="form-control hor-sep" placeholder="Jelszavad" required/>
@@ -20,7 +20,7 @@
 			<a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
-	<div id="registrationpage" class="screen-center pagecontent">
+	<div id="registrationpage" class="screen-center">
 		<form id="registrationform" action="javascript:register();">
 			<input id="register_name" type="text" class="form-control hor-sep" placeholder="Név" required/>
 			<input id="email" type="email" class="form-control hor-sep" placeholder="e-mail" required/>
@@ -36,20 +36,20 @@
 			Nem szeretnél regisztálni? <a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
-	<div id="mainpage" class="pagecontent">
+	<div id="mainpage">
 		<div id="ultipage">
 
 		</div>
 		<div id="chatpage">
 			<div id="chat_buttoncontainer" class="chatcontainer">
 				<div>
-					<button class="btn btn-primary cbtn">Szoba készítése</button>
+					<button class="btn btn-primary cbtn" onclick="newChatRoom()">Szoba készítése</button>
 				</div>
 				<div>
-					<button class="btn btn-warning cbtn">Szobába csatlakozás</button>
+					<button class="btn btn-warning cbtn" onclick="joinChatRoom()">Szobába csatlakozás</button>
 				</div>
 				<div>
-					<button class="btn btn-danger cbtn">Szoba elhagyása</button>
+					<button class="btn btn-danger cbtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
 				</div>
 			</div>
 			<div id="chat_container" class="chatcontainer">
