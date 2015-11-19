@@ -6,8 +6,11 @@ import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
 import managers.ChatRoomManager;
 import managers.PlayerManager;
+import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.MessageType.Type;
+import messagers.util.NewChatAnswer;
+import messagers.util.ToChatAnswer;
 import model.ActivePlayer;
 
 import com.google.gson.Gson;
@@ -47,6 +50,9 @@ public class MessageHandler implements IMessageHandler {
 					this.toChatMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LEAVECHAT.toString())) {
 					chatRoomManager.deletePlayerFromRoom(activePlayer);
+				} else if (type.toUpperCase()
+						.equals(Type.GETALLCHAT.toString())) {
+					allChatMessage(activePlayer);
 				}
 			}
 		}
@@ -118,10 +124,14 @@ public class MessageHandler implements IMessageHandler {
 				.isJsonNull())) {
 			roomName = jsonObject.get("name").getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
-			if(chatRoomManager.newRoom(roomName, maxSize)) {
+			if (chatRoomManager.newRoom(roomName, maxSize)) {
 				chatRoomManager.changePlayerRoom(activePlayer, roomName);
+				send(new NewChatAnswer(true), activePlayer);
+				return;
 			}
 		}
+
+		send(new NewChatAnswer(false), activePlayer);
 	}
 
 	private void toChatMessage(final JsonObject jsonObject,
@@ -132,6 +142,15 @@ public class MessageHandler implements IMessageHandler {
 				.isJsonNull())) {
 			toRoomName = jsonObject.get("name").getAsString();
 			chatRoomManager.changePlayerRoom(activePlayer, toRoomName);
+			send(new ToChatAnswer(true), activePlayer);
+			return;
 		}
+
+		send(new ToChatAnswer(false), activePlayer);
+	}
+
+	private void allChatMessage(final ActivePlayer activePlayer) {
+		final String[] allRoomNames = chatRoomManager.getAllRoomNames();
+		send(new AllChatAnswer(allRoomNames), activePlayer);
 	}
 }

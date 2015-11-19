@@ -4,9 +4,11 @@ import managers.util.Room;
 import model.ActivePlayer;
 
 public interface IRoomManager {
-	
+
+	public String[] getAllRoomNames();
+
 	public boolean addRoom(Room room);
-	
+
 	public boolean newRoom(final String roomName, final int maxSize);
 
 	public void deleteRoom(final String roomName);
