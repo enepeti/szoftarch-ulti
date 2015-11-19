@@ -1,7 +1,7 @@
 package interfaces;
 
+import domain.ActivePlayer;
 import messagers.util.AnswerMessage;
-import model.ActivePlayer;
 
 public interface IMessageHandler {
 

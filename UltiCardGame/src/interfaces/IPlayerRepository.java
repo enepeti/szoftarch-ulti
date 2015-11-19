@@ -2,7 +2,7 @@ package interfaces;
 
 import java.util.List;
 
-import model.Player;
+import domain.Player;
 
 public interface IPlayerRepository {
 

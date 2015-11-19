@@ -3,7 +3,7 @@ package dal;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Player;
+import domain.Player;
 import interfaces.IPlayerRepository;
 
 public class FakePlayerRepository implements IPlayerRepository {

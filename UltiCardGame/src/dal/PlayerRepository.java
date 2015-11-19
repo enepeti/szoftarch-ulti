@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Player;
-import model.PlayerType;
+import domain.Player;
+import domain.PlayerType;
 
 public class PlayerRepository implements IPlayerRepository {
 

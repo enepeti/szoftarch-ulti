@@ -8,11 +8,11 @@ import interfaces.IPlayerRepository;
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
 import messagers.util.RegisterAnswer;
-import model.ActivePlayer;
-import model.Player;
-import model.PlayerType;
-import tryPackage.PlainPasswordHasher;
+import util.PlainPasswordHasher;
 import dal.PlayerRepository;
+import domain.ActivePlayer;
+import domain.Player;
+import domain.PlayerType;
 
 public class PlayerManager implements IPlayerManager {
 

@@ -5,10 +5,10 @@ import interfaces.IMessageHandler;
 
 import java.util.HashMap;
 
+import domain.ActivePlayer;
 import managers.util.ChatRoom;
 import messagers.MessageHandler;
 import messagers.util.ErrorAnswer;
-import model.ActivePlayer;
 
 public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 

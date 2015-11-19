@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import domain.ActivePlayer;
 import managers.util.Room;
-import model.ActivePlayer;
 
 public abstract class RoomManager implements IRoomManager {
 	protected static Map<String, ? extends Room> roomMap;

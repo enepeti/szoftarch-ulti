@@ -15,12 +15,13 @@ import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
 import messagers.util.NewChatAnswer;
 import messagers.util.ToChatAnswer;
-import model.ActivePlayer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import domain.ActivePlayer;
 
 public class MessageHandler implements IMessageHandler {
 

@@ -1,4 +1,4 @@
-package tryPackage;
+package util;
 
 import interfaces.IPasswordHasher;
 

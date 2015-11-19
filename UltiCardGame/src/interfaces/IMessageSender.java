@@ -1,6 +1,6 @@
 package interfaces;
 
-import model.ActivePlayer;
+import domain.ActivePlayer;
 
 public interface IMessageSender {
 

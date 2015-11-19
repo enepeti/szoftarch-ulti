@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.websocket.Session;
 
-import model.ActivePlayer;
+import domain.ActivePlayer;
 
 public interface ISessionManager {
 	

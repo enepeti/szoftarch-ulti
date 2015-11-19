@@ -11,8 +11,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import domain.ActivePlayer;
 import managers.SessionManager;
-import model.ActivePlayer;
 
 @ServerEndpoint("/websocket/ulti")
 public class MessageReceiver implements IMessageReceiver {
