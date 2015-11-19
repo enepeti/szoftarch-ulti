@@ -8,7 +8,7 @@ import java.util.Set;
 import messagers.util.AnswerMessage;
 import model.ActivePlayer;
 
-public class Room {
+public abstract class Room {
 
 	private final Set<ActivePlayer> activePlayersInRoom;
 	private final int maxSize;

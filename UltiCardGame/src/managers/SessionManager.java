@@ -27,7 +27,9 @@ public class SessionManager implements ISessionManager {
 		ActivePlayer activePlayer = sessions.get(session);
 		if(activePlayer != null) {
 			activePlayer.setLoggedIn(false);
-			activePlayer.getChatRoom().remove(activePlayer);
+			if(activePlayer.getChatRoom() != null) {
+				activePlayer.getChatRoom().remove(activePlayer);
+			}
 		}
 		sessions.remove(session);
 	}

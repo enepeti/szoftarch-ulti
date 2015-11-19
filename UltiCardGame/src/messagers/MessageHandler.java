@@ -118,7 +118,9 @@ public class MessageHandler implements IMessageHandler {
 				.isJsonNull())) {
 			roomName = jsonObject.get("name").getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
-			chatRoomManager.addRoom(roomName, maxSize);
+			if(chatRoomManager.newRoom(roomName, maxSize)) {
+				chatRoomManager.changePlayerRoom(activePlayer, roomName);
+			}
 		}
 	}
 

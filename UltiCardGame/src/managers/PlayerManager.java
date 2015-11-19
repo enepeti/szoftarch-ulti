@@ -1,5 +1,6 @@
 package managers;
 
+import interfaces.IChatRoomManager;
 import interfaces.IMessageHandler;
 import interfaces.IPasswordHasher;
 import interfaces.IPlayerManager;
@@ -18,6 +19,7 @@ public class PlayerManager implements IPlayerManager {
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler();
 	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
+	private final IChatRoomManager chatRoomManager = new ChatRoomManager();
 
 	private static int guestNumber = 0;
 
@@ -75,7 +77,7 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	private void loginSuccess(final ActivePlayer activePlayer) {
-		ChatRoomManager.getGlobalChat().add(activePlayer);
+		chatRoomManager.addPlayerToRoom(activePlayer, ChatRoomManager.globalChatName);
 		activePlayer.setLoggedIn(true);
 
 		this.messageHandler.send(new LoginAnswer(true), activePlayer);
