@@ -70,11 +70,26 @@ function handleMessage (msg) {
 		case "chat":
 			chat.newLine(msg.message, msg.from);
 			break;
+		case "allchat":
+			refreshChatRoomNames(msg.rooms);
+			break;
+		case "newchat":
+			newChat(msg.success);
+			break;
+		case "tochat":
+			chat.newLine("Mostantól a " + msg.name + " szobában vagy!", "Szerver üzenet");
+			break;
 		case "error":
+			showError(msg.message);
 			log("Error: " + msg.message);
+			break;
 		default:
 			log("Unkonwn message!");
 	}
+}
+
+function showError (errormsg) {
+	alert(errormsg);
 }
 
 function send(data) {
@@ -136,27 +151,93 @@ function sendChat() {
 	}
 }
 
-function newChatRoom () {
+function newChatRoom () {	
+	var roomnametb = $('#chat_roomname');
+	var playernumbertb = $('#chat_playernumber');
+	var infiniteplayercb = $('#chat_infiniteplayer');
+	var newroomerror = $('#chat_newroomerror');
 	
+	var roomname = roomnametb.val();
+	var playernumber = playernumbertb.val();
+
+	
+	if(infiniteplayercb.prop('checked')) {
+		playernumber = -1;
+	}
+
 	var newchatroommsg = {};
 	newchatroommsg.type = "newchat";
-	newchatroommsg.name = "NemGlobalSzoba";
-	newchatroommsg.maxmembers = -1;
+	newchatroommsg.name = roomname;
+	newchatroommsg.maxmembers = playernumber;
 	send(newchatroommsg);
+}
+
+function newChat(isDone) {
+	var roomnametb = $('#chat_roomname');
+	var playernumbertb = $('#chat_playernumber');
+	var infiniteplayercb = $('#chat_infiniteplayer');
+	var newroomerror = $('#chat_newroomerror');
+	var playernumbertb = $('#chat_playernumber');
+	
+	if(isDone) {
+		window.location.href = '#close'
+		newroomerror.html('');
+		roomnametb.val('');
+		playernumbertb.val('');
+		infiniteplayercb.prop('checked', false);
+		playernumbertb.prop('disabled', false);
+	} else {
+		newroomerror.html('Ez a szobanév már foglalt!');
+	}
+}
+
+function getAllChatRoom () {
+	var getallchatmsg = {}
+	getallchatmsg.type = "getallchat";
+	send(getallchatmsg);
+}
+
+function refreshChatRoomNames (names) {
+
+	var roomselector = $('#chat_roomselector');
+	roomselector.html("");
+	var newoption = $('<option>');
+	newoption.val(0);
+	newoption.html("Válassz szobát");
+	roomselector.append(newoption);
+	for (var i = 0; i < names.length; i++) {
+		newoption = $('<option>');
+		newoption.val(names[i]);
+		newoption.html(names[i]);
+		roomselector.append(newoption);
+	}
 }
 
 function joinChatRoom () {
 
-	var joinchatroommsg = {};
-	joinchatroommsg.type = "tochat";
-	joinchatroommsg.name = "NemGlobalSzoba";
-	send(joinchatroommsg);
+	var roomselector = $('#chat_roomselector');
+	var selectedRoom = roomselector.val();
+
+	if(selectedRoom != 0) {
+		window.location.href = '#close';
+		var joinchatroommsg = {};
+		joinchatroommsg.type = "tochat";
+		joinchatroommsg.name = selectedRoom;
+		send(joinchatroommsg);
+	} else {
+		showError("Nem választottál szobát!");
+	}
 }
 
 function leaveChatRoom () {
 	var leavechatroommsg = {};
 	leavechatroommsg.type = "leavechat";
 	send(leavechatroommsg);
+}
+
+function togglechatplayernumber(to) {
+	var playernumbertb = $('#chat_playernumber');
+	playernumbertb.prop('disabled', to);
 }
 
 function getWsUrl() {

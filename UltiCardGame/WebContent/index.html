@@ -43,10 +43,10 @@
 		<div id="chatpage">
 			<div id="chat_buttoncontainer" class="chatcontainer">
 				<div>
-					<button class="btn btn-primary cbtn" onclick="newChatRoom()">Szoba készítése</button>
+					<a href="#opennewchatroommodal"><button class="btn btn-primary cbtn">Szoba készítése</button></a>
 				</div>
 				<div>
-					<button class="btn btn-warning cbtn" onclick="joinChatRoom()">Szobába csatlakozás</button>
+					<a href="#openswitchchatroommodal"><button class="btn btn-warning cbtn" onclick="getAllChatRoom()">Szobába csatlakozás</button></a>
 				</div>
 				<div>
 					<button class="btn btn-danger cbtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
@@ -63,11 +63,35 @@
 							<input id="chat_msg" type="text" class="form-control hor-sep" placeholder="Írd ide az üzenetedet" autocomplete="off"/>
 						</div>
 						<div id="chat_sendcontainer">
-							<input id="chat_send" type="submit" class="btn btn-success hor-sep" value="Küldés">
+							<input id="chat_send" type="submit" class="btn btn-success hor-sep" value="Küldés"/>
 						</div>
 					</div>
 				</form>
 			</div>
+		</div>
+	</div>
+	<div id="opennewchatroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Chat szoba készítése</h2>
+			<form id="chat_newroomform" action="javascript:newChatRoom()">
+				<p id="chat_newroomerror"></p>
+				<input id="chat_roomname" type="text" class="form-control hor-sep" placeholder="Szoba neve" autocomplete="off" required/>
+				<input id="chat_playernumber" type="number" class="hor-sep"placeholder="Szoba létszáma" autocomplete="off" min="1" required/>
+				<input id="chat_infiniteplayer" type="checkbox" onchange="togglechatplayernumber(this.checked)"/> Végtelen.
+				<input id="chat_newroom_submit" type="submit" class="btn btn-succes hor-sep vertical-center" value="Szoba létrehozása"/>
+			</form>
+		</div>
+	</div>
+	<div id="openswitchchatroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Chat szoba váltása</h2>
+			<form id="chat_newroomform" action="javascript:joinChatRoom()">
+				<select id="chat_roomselector" class="hor-sep"><option value="0">Válassz szobát</option></select><br>
+				<button type="button" class="btn btn-primary hor-sep" onclick="getAllChatRoom()">Frissítés</button>
+				<input id="chat_newroom_submit" type="submit" class="btn btn-succes hor-sep vertical-center" value="Belépés"/>
+			</form>
 		</div>
 	</div>
 </body>
