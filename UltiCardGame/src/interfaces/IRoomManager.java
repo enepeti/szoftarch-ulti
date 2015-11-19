@@ -1,11 +1,13 @@
 package interfaces;
 
+import java.util.List;
+
 import managers.util.Room;
 import model.ActivePlayer;
 
 public interface IRoomManager {
 
-	public String[] getAllRoomNames();
+	public List<String> getAllRoomNames();
 
 	public boolean addRoom(Room room);
 
@@ -18,7 +20,7 @@ public interface IRoomManager {
 
 	public void deletePlayerFromRoom(final ActivePlayer activePlayer);
 
-	public void changePlayerRoom(final ActivePlayer activePlayer,
+	public boolean changePlayerRoom(final ActivePlayer activePlayer,
 			final String toRoomName);
 
 	public <T extends Room> T getRoom(String roomName);

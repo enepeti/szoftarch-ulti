@@ -3,6 +3,7 @@ package managers;
 import interfaces.IRoomManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import managers.util.Room;
@@ -17,13 +18,13 @@ public abstract class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public String[] getAllRoomNames() {
+	public List<String> getAllRoomNames() {
 		final ArrayList<String> roomNames = new ArrayList<String>();
 		for (final Room room : roomMap.values()) {
 			roomNames.add(room.getName());
 		}
 
-		return (String[]) roomNames.toArray();
+		return roomNames;
 	}
 
 	@Override
@@ -49,9 +50,14 @@ public abstract class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public void changePlayerRoom(final ActivePlayer activePlayer,
+	public boolean changePlayerRoom(final ActivePlayer activePlayer,
 			final String toRoomName) {
-		deletePlayerFromRoom(activePlayer);
-		addPlayerToRoom(activePlayer, toRoomName);
+		if(getRoomMap().containsKey(toRoomName)) {
+			deletePlayerFromRoom(activePlayer);
+			addPlayerToRoom(activePlayer, toRoomName);
+			return true;
+		}
+		
+		return false;
 	}
 }

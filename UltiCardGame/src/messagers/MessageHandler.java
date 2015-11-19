@@ -4,10 +4,14 @@ import interfaces.IChatRoomManager;
 import interfaces.IMessageHandler;
 import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
+
+import java.util.List;
+
 import managers.ChatRoomManager;
 import managers.PlayerManager;
 import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
+import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
 import messagers.util.NewChatAnswer;
 import messagers.util.ToChatAnswer;
@@ -127,11 +131,11 @@ public class MessageHandler implements IMessageHandler {
 			if (chatRoomManager.newRoom(roomName, maxSize)) {
 				chatRoomManager.changePlayerRoom(activePlayer, roomName);
 				send(new NewChatAnswer(true), activePlayer);
-				return;
+			} else {
+				send(new NewChatAnswer(false), activePlayer);
 			}
 		}
 
-		send(new NewChatAnswer(false), activePlayer);
 	}
 
 	private void toChatMessage(final JsonObject jsonObject,
@@ -141,16 +145,17 @@ public class MessageHandler implements IMessageHandler {
 		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
 				.isJsonNull())) {
 			toRoomName = jsonObject.get("name").getAsString();
-			chatRoomManager.changePlayerRoom(activePlayer, toRoomName);
-			send(new ToChatAnswer(true), activePlayer);
-			return;
+			if(chatRoomManager.changePlayerRoom(activePlayer, toRoomName)) {
+				send(new ToChatAnswer(toRoomName), activePlayer);
+			} else {
+				send(new ErrorAnswer("Nincs ilyen nevû szoba!"), activePlayer);
+			}
 		}
 
-		send(new ToChatAnswer(false), activePlayer);
 	}
 
 	private void allChatMessage(final ActivePlayer activePlayer) {
-		final String[] allRoomNames = chatRoomManager.getAllRoomNames();
+		final List<String> allRoomNames = chatRoomManager.getAllRoomNames();
 		send(new AllChatAnswer(allRoomNames), activePlayer);
 	}
 }

@@ -1,19 +1,21 @@
 package messagers.util;
 
+import java.util.List;
+
 public class AllChatAnswer extends AnswerMessage {
 
-	private String[] allRoomNames;
+	private List<String> rooms;
 
-	public AllChatAnswer(final String[] allRoomNames) {
+	public AllChatAnswer(final List<String> allRoomNames) {
 		super("allchat");
 		this.setAllRoomNames(allRoomNames);
 	}
 
-	public String[] getAllRoomNames() {
-		return allRoomNames;
+	public List<String> getAllRoomNames() {
+		return rooms;
 	}
 
-	public void setAllRoomNames(final String[] allRoomNames) {
-		this.allRoomNames = allRoomNames;
+	public void setAllRoomNames(List<String> allRoomNames) {
+		this.rooms = allRoomNames;
 	}
 }

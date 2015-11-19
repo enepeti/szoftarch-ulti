@@ -2,15 +2,15 @@ package messagers.util;
 
 public class ToChatAnswer extends AnswerMessage {
 
-	private final boolean success;
+	private final String name;
 
-	public ToChatAnswer(final boolean success) {
+	public ToChatAnswer(final String name) {
 		super("tochat");
-		this.success = success;
+		this.name = name;
 	}
 
-	public boolean isSuccess() {
-		return success;
+	public String getName() {
+		return name;
 	}
 
 }
