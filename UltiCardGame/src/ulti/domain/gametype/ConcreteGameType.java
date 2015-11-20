@@ -13,10 +13,12 @@ public class ConcreteGameType {
 	private final boolean isTenUp;
 	private final boolean isThereTrump;
 	private final boolean isItRed;
+	private final boolean isThereParty;
 
 	public ConcreteGameType(final String name, final int value,
 			final int partyValue, final boolean isTenUp,
-			final boolean isThereTrump, final boolean isItRed) {
+			final boolean isThereTrump, final boolean isItRed,
+			final boolean isThereParty) {
 		super();
 		this.name = name;
 		this.value = value;
@@ -24,6 +26,7 @@ public class ConcreteGameType {
 		this.isTenUp = isTenUp;
 		this.isThereTrump = isThereTrump;
 		this.isItRed = isItRed;
+		this.isThereParty = isThereParty;
 	}
 
 	public List<GameType> getGameTypeList() {
@@ -52,6 +55,10 @@ public class ConcreteGameType {
 
 	public boolean isItRed() {
 		return isItRed;
+	}
+
+	public boolean isThereParty() {
+		return isThereParty;
 	}
 
 }

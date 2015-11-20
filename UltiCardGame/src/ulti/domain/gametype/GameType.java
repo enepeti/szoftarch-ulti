@@ -7,15 +7,18 @@ public abstract class GameType {
 	private final int partyValue;
 	private final boolean isTenUp;
 	private final boolean isThereTrump;
+	private final boolean isThereParty;
 
 	public GameType(final String name, final int value, final int partyValue,
-			final boolean isTenUp, final boolean isThereTrump) {
+			final boolean isTenUp, final boolean isThereTrump,
+			final boolean isThereParty) {
 		super();
 		this.name = name;
 		this.value = value;
 		this.partyValue = partyValue;
 		this.isTenUp = isTenUp;
 		this.isThereTrump = isThereTrump;
+		this.isThereParty = isThereParty;
 	}
 
 	public int getAllValue() {
@@ -40,5 +43,9 @@ public abstract class GameType {
 
 	public boolean isThereTrump() {
 		return isThereTrump;
+	}
+
+	public boolean isThereParty() {
+		return isThereParty;
 	}
 }
