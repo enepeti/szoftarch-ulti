@@ -16,7 +16,7 @@ import util.PasswordHasher;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
 import domain.Player;
-import domain.PlayerType;
+import domain.PlayerTypeClass.PlayerType;
 
 public class PlayerManager implements IPlayerManager {
 
@@ -40,9 +40,13 @@ public class PlayerManager implements IPlayerManager {
 		}
 		if (arePasswordsEqual) {
 			activePlayer.setPlayer(player);
-			loginSuccess(activePlayer);
+			if (player.getType().compareTo(PlayerType.ADMIN) == 0) {
+				loginSuccess(activePlayer);
+			} else {
+				loginSuccess(activePlayer);
+			}
 		} else {
-			this.messageHandler.send(new LoginAnswer(false), activePlayer);
+			this.messageHandler.send(new LoginAnswer(false, ""), activePlayer);
 		}
 	}
 
@@ -108,7 +112,8 @@ public class PlayerManager implements IPlayerManager {
 				ChatRoomManager.globalChatName);
 		activePlayer.setLoggedIn(true);
 
-		this.messageHandler.send(new LoginAnswer(true), activePlayer);
+		this.messageHandler.send(new LoginAnswer(true, activePlayer.getPlayer()
+				.getType().toString().toLowerCase()), activePlayer);
 	}
 
 	private void logoutSuccess(final ActivePlayer activePlayer) {

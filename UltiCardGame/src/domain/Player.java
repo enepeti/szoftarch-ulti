@@ -1,5 +1,7 @@
 package domain;
 
+import domain.PlayerTypeClass.PlayerType;
+
 public class Player {
 
 	private int id;

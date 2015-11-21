@@ -14,7 +14,7 @@
 - Összes chat szoba lekérése: `{"type":"getallchat"}`
 
 #### Szerver - Kliens
-- Bejelentkezés válasz: `{"type":"login", "success":<boolean>}`
+- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
 - Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}`
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`

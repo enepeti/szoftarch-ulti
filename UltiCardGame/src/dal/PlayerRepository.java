@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain.Player;
-import domain.PlayerType;
+import domain.PlayerTypeClass.PlayerType;
 
 public class PlayerRepository implements IPlayerRepository {
 
