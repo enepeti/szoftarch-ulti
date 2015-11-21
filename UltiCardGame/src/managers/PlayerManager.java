@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
+import messagers.util.LogoutAnswer;
 import messagers.util.RegisterAnswer;
 import util.PasswordHasher;
 import dal.PlayerRepository;
@@ -43,6 +44,13 @@ public class PlayerManager implements IPlayerManager {
 		} else {
 			this.messageHandler.send(new LoginAnswer(false), activePlayer);
 		}
+	}
+
+	@Override
+	public void logout(final ActivePlayer activePlayer) {
+		activePlayer.setPlayer(null);
+		logoutSuccess(activePlayer);
+
 	}
 
 	@Override
@@ -101,6 +109,13 @@ public class PlayerManager implements IPlayerManager {
 		activePlayer.setLoggedIn(true);
 
 		this.messageHandler.send(new LoginAnswer(true), activePlayer);
+	}
+
+	private void logoutSuccess(final ActivePlayer activePlayer) {
+		chatRoomManager.deletePlayerFromRoom(activePlayer);
+		activePlayer.setLoggedIn(false);
+
+		this.messageHandler.send(new LogoutAnswer(true), activePlayer);
 	}
 
 }

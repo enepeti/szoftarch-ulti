@@ -44,6 +44,8 @@ public class MessageHandler implements IMessageHandler {
 					this.registerMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())) {
 					this.loginMessage(jsonObject, activePlayer);
+				} else if (type.toUpperCase().equals(Type.LOGOUT.toString())) {
+					playerManager.logout(activePlayer);
 				} else if (type.toUpperCase()
 						.equals(Type.GUESTLOGIN.toString())) {
 					playerManager.guestLogin(activePlayer);
@@ -69,7 +71,6 @@ public class MessageHandler implements IMessageHandler {
 		final Gson gson = new Gson();
 		final String json = gson.toJson(messageObject);
 		this.messageSender.sendMessage(json, activePlayer);
-
 	}
 
 	private void registerMessage(final JsonObject jsonObject,
@@ -146,7 +147,7 @@ public class MessageHandler implements IMessageHandler {
 		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
 				.isJsonNull())) {
 			toRoomName = jsonObject.get("name").getAsString();
-			if(chatRoomManager.changePlayerRoom(activePlayer, toRoomName)) {
+			if (chatRoomManager.changePlayerRoom(activePlayer, toRoomName)) {
 				send(new ToChatAnswer(toRoomName), activePlayer);
 			} else {
 				send(new ErrorAnswer("Nincs ilyen nevû szoba!"), activePlayer);
