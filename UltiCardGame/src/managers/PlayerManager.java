@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
 import messagers.util.RegisterAnswer;
-import util.PlainPasswordHasher;
+import util.PasswordHasher;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
 import domain.Player;
@@ -21,7 +21,7 @@ public class PlayerManager implements IPlayerManager {
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler();
-	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
+	private final IPasswordHasher passwordHasher = new PasswordHasher();
 	private final IChatRoomManager chatRoomManager = new ChatRoomManager();
 
 	private static int guestNumber = 0;
@@ -30,7 +30,14 @@ public class PlayerManager implements IPlayerManager {
 	public void login(final String name, final String pass,
 			final ActivePlayer activePlayer) {
 		final Player player = playerRepository.get(name);
-		if (passwordHasher.areEqual(pass, player.getPassword())) {
+		boolean arePasswordsEqual = false;
+		try {
+			arePasswordsEqual = passwordHasher
+					.check(pass, player.getPassword());
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		if (arePasswordsEqual) {
 			activePlayer.setPlayer(player);
 			loginSuccess(activePlayer);
 		} else {
@@ -46,12 +53,16 @@ public class PlayerManager implements IPlayerManager {
 
 		player.setName(name);
 		player.setEmail(email);
-		player.setPassword(passwordHasher.hash(pass));
+		try {
+			player.setPassword(passwordHasher.getSaltedHash(pass));
+		} catch (final Exception e1) {
+			e1.printStackTrace();
+		}
 		player.setType(PlayerType.NORMAL);
 		try {
 			playerRepository.add(player);
 			this.messageHandler
-					.send(new RegisterAnswer(true, ""), activePlayer);
+			.send(new RegisterAnswer(true, ""), activePlayer);
 		} catch (final SQLException e) {
 			if (e.getErrorCode() == 1062) {
 				if (e.getMessage().contains("name")) {
@@ -62,6 +73,8 @@ public class PlayerManager implements IPlayerManager {
 							"Ezzel az emaillel már regisztráltak!"),
 							activePlayer);
 				}
+			} else {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -70,7 +83,7 @@ public class PlayerManager implements IPlayerManager {
 	public void guestLogin(final ActivePlayer activePlayer) {
 		final Player player = new Player();
 		final String name = "Vendég#" + guestNumber;
-		final String pass = passwordHasher.hash(name);
+		final String pass = "";
 
 		player.setName(name);
 		player.setPassword(pass);
