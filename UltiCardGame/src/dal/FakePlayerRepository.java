@@ -36,7 +36,7 @@ public class FakePlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void update(final Player player) {
+	public void updatePoint(final Player player) {
 		final Player playerToUpdate = this.get(player.getName());
 		playerToUpdate.setName(player.getName());
 		playerToUpdate.setEmail(player.getEmail());
@@ -46,6 +46,18 @@ public class FakePlayerRepository implements IPlayerRepository {
 	@Override
 	public List<Player> list() {
 		return players;
+	}
+
+	@Override
+	public List<Player> listOrderedByPoint() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPoint(final String name) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

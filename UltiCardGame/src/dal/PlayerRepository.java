@@ -29,7 +29,7 @@ public class PlayerRepository implements IPlayerRepository {
 			preparedStatement = connectionBuilder
 					.getConnection()
 					.prepareStatement(
-							"INSERT INTO player (name, email, password, isadmin) VALUES (?, ?, ?, 0)");
+							"INSERT INTO player (name, email, password, isadmin, point) VALUES (?, ?, ?, 0, 0)");
 			preparedStatement.setString(1, player.getName());
 			preparedStatement.setString(2, player.getEmail());
 			preparedStatement.setString(3, player.getPassword());
@@ -75,6 +75,7 @@ public class PlayerRepository implements IPlayerRepository {
 					} else if (isAdmin == 0) {
 						player.setType(PlayerType.NORMAL);
 					}
+					player.setPoint(resultSet.getInt("point"));
 
 					return player;
 				}
@@ -89,15 +90,36 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void update(final Player player) {
+	public int getPoint(final String name) {
 		try {
 			preparedStatement = connectionBuilder
 					.getConnection()
+					.prepareStatement("SELECT point FROM player WHERE name = ?");
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				final int point = resultSet.getInt("point");
+
+				return point;
+			}
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public void updatePoint(final Player player) {
+		try {
+			preparedStatement = connectionBuilder.getConnection()
 					.prepareStatement(
-							"UPDATE player SET email = ?, password = ? where name = ?");
-			preparedStatement.setString(1, player.getEmail());
-			preparedStatement.setString(2, player.getPassword());
-			preparedStatement.setString(3, player.getName());
+							"UPDATE player SET point = ? where name = ?");
+			preparedStatement.setInt(1, player.getPoint());
+			preparedStatement.setString(2, player.getName());
 			preparedStatement.execute();
 		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
@@ -126,6 +148,44 @@ public class PlayerRepository implements IPlayerRepository {
 					} else if (isAdmin == 0) {
 						player.setType(PlayerType.NORMAL);
 					}
+					player.setPoint(resultSet.getInt("point"));
+
+					playerList.add(player);
+				}
+			}
+
+			return playerList;
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Player> listOrderedByPoint() {
+		final ArrayList<Player> playerList = new ArrayList<Player>();
+		try {
+			statement = connectionBuilder.getConnection().createStatement();
+			resultSet = statement
+					.executeQuery("SELECT * FROM player ORDER BY point DESC");
+
+			while (resultSet.next()) {
+				final String nameInDb = resultSet.getString("name");
+				if (nameInDb != null) {
+					final Player player = new Player();
+					player.setName(resultSet.getString("name"));
+					player.setEmail(resultSet.getString("email"));
+					player.setPassword(resultSet.getString("password"));
+					final int isAdmin = resultSet.getInt("isadmin");
+					if (isAdmin == 1) {
+						player.setType(PlayerType.ADMIN);
+					} else if (isAdmin == 0) {
+						player.setType(PlayerType.NORMAL);
+					}
+					player.setPoint(resultSet.getInt("point"));
 
 					playerList.add(player);
 				}

@@ -13,8 +13,12 @@ public interface IPlayerRepository {
 
 	public Player get(String name);
 
-	public void update(Player player);
+	public int getPoint(String name);
+
+	public void updatePoint(Player player);
 
 	public List<Player> list();
+
+	public List<Player> listOrderedByPoint();
 
 }

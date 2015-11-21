@@ -1,6 +1,6 @@
 package ulti;
 
-import interfaces.IPlayerStatisticRepository;
+import interfaces.IPlayerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import messagers.util.MessageType.Type;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.gametype.ConcreteGameType;
-import dal.PlayerStatisticRepository;
+import dal.PlayerRepository;
 import domain.ActivePlayer;
 import domain.Player;
 
@@ -26,7 +26,7 @@ public class UltiGame {
 	private ConcreteGameType concreteGameType;
 	private DeckOfCards deckOfCards;
 
-	private final IPlayerStatisticRepository playerStatisticRepository = new PlayerStatisticRepository();
+	private final IPlayerRepository playerRepository = new PlayerRepository();
 
 	public UltiGame(final ArrayList<ActivePlayer> activePlayerList,
 			final int starterActivePlayer, final int activePlayerOnTurn,
@@ -246,21 +246,28 @@ public class UltiGame {
 		}
 
 		final Player player1 = activePlayerList.get(0).getPlayer();
+		player1.addPoint(sumForPlayer1);
 		if (player1.getType().toString().toUpperCase() != Type.GUESTLOGIN
 				.toString()) {
-			playerStatisticRepository.savePoints(player1, sumForPlayer1);
+			savePoints(player1);
 		}
 		final Player player2 = activePlayerList.get(1).getPlayer();
+		player2.addPoint(sumForPlayer2);
 		if (player2.getType().toString().toUpperCase() != Type.GUESTLOGIN
 				.toString()) {
-			playerStatisticRepository.savePoints(player2, sumForPlayer2);
+			savePoints(player2);
 		}
 		final Player player3 = activePlayerList.get(2).getPlayer();
+		player3.addPoint(sumForPlayer3);
 		if (player3.getType().toString().toUpperCase() != Type.GUESTLOGIN
 				.toString()) {
-			playerStatisticRepository.savePoints(player3, sumForPlayer3);
+			savePoints(player3);
 		}
 
 		nextGame();
+	}
+
+	private void savePoints(final Player player) {
+		playerRepository.updatePoint(player);
 	}
 }
