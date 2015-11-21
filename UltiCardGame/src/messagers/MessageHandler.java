@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import domain.ActivePlayer;
+import domain.PlayerTypeClass.PlayerType;
 
 public class MessageHandler implements IMessageHandler {
 
@@ -52,7 +53,14 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase().equals(Type.CHAT.toString())) {
 					this.chatMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.NEWCHAT.toString())) {
-					this.newChatMessage(jsonObject, activePlayer);
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.GUEST) == 0) {
+						send(new ErrorAnswer(
+								"Vendégként nem tudsz létrehozni szobát, ha akarsz, jelentkezz be!"),
+								activePlayer);
+					} else {
+						this.newChatMessage(jsonObject, activePlayer);
+					}
 				} else if (type.toUpperCase().equals(Type.TOCHAT.toString())) {
 					this.toChatMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LEAVECHAT.toString())) {
