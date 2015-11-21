@@ -1,37 +1,33 @@
 package dal;
 
+import interfaces.IPlayerRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import domain.Player;
-import interfaces.IPlayerRepository;
 
 public class FakePlayerRepository implements IPlayerRepository {
 
 	private static List<Player> players = new ArrayList<Player>();
 	private static int lastId = 0;
-	
+
 	@Override
-	public void add(Player player) {
+	public void add(final Player player) {
 		lastId++;
 		player.setId(lastId);
 		players.add(player);
 	}
 
 	@Override
-	public void remove(Player player) {
+	public void remove(final Player player) {
 		players.remove(player);
 
 	}
 
 	@Override
-	public Player get(int id) {
-		return players.get(id);
-	}
-	
-	@Override
-	public Player get(String name) {
-		for (Player player : players) {
+	public Player get(final String name) {
+		for (final Player player : players) {
 			if (player.getName().equals(name)) {
 				return player;
 			}
@@ -40,8 +36,8 @@ public class FakePlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void update(Player player) {
-		Player playerToUpdate = this.get(player.getId());
+	public void update(final Player player) {
+		final Player playerToUpdate = this.get(player.getName());
 		playerToUpdate.setName(player.getName());
 		playerToUpdate.setEmail(player.getEmail());
 		playerToUpdate.setPassword(player.getPassword());
@@ -50,26 +46,6 @@ public class FakePlayerRepository implements IPlayerRepository {
 	@Override
 	public List<Player> list() {
 		return players;
-	}
-
-	@Override
-	public boolean isUniqueName(String name) {
-		for (Player player : players) {
-			if (player.getName().equals(name)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean isUniqueEmail(String email) {
-		for (Player player : players) {
-			if (player.getName().equals(email)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 }

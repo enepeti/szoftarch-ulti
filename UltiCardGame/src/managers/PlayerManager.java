@@ -5,6 +5,9 @@ import interfaces.IMessageHandler;
 import interfaces.IPasswordHasher;
 import interfaces.IPlayerManager;
 import interfaces.IPlayerRepository;
+
+import java.sql.SQLException;
+
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
 import messagers.util.RegisterAnswer;
@@ -39,24 +42,27 @@ public class PlayerManager implements IPlayerManager {
 	public void register(final String name, final String email,
 			final String pass, final ActivePlayer activePlayer) {
 
-		if (playerRepository.isUniqueName(name)) {
-			if (playerRepository.isUniqueEmail(email)) {
-				final Player player = new Player();
+		final Player player = new Player();
 
-				player.setName(name);
-				player.setEmail(email);
-				player.setPassword(passwordHasher.hash(pass));
-				player.setType(PlayerType.NORMAL);
-				playerRepository.add(player);
-				this.messageHandler.send(new RegisterAnswer(true, ""),
-						activePlayer);
-			} else {
-				this.messageHandler.send(new RegisterAnswer(false,
-						"Ezzel az emaillel már regisztráltak!"), activePlayer);
+		player.setName(name);
+		player.setEmail(email);
+		player.setPassword(passwordHasher.hash(pass));
+		player.setType(PlayerType.NORMAL);
+		try {
+			playerRepository.add(player);
+			this.messageHandler
+					.send(new RegisterAnswer(true, ""), activePlayer);
+		} catch (final SQLException e) {
+			if (e.getErrorCode() == 1062) {
+				if (e.getMessage().contains("name")) {
+					messageHandler.send(new RegisterAnswer(false,
+							"Ezzel a névvel már regisztráltak!"), activePlayer);
+				} else if (e.getMessage().contains("email")) {
+					messageHandler.send(new RegisterAnswer(false,
+							"Ezzel az emaillel már regisztráltak!"),
+							activePlayer);
+				}
 			}
-		} else {
-			this.messageHandler.send(new RegisterAnswer(false,
-					"Ezzel a névvel már regisztráltak!"), activePlayer);
 		}
 	}
 
@@ -77,7 +83,8 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	private void loginSuccess(final ActivePlayer activePlayer) {
-		chatRoomManager.addPlayerToRoom(activePlayer, ChatRoomManager.globalChatName);
+		chatRoomManager.addPlayerToRoom(activePlayer,
+				ChatRoomManager.globalChatName);
 		activePlayer.setLoggedIn(true);
 
 		this.messageHandler.send(new LoginAnswer(true), activePlayer);

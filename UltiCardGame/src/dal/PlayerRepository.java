@@ -24,7 +24,7 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void add(final Player player) {
+	public void add(final Player player) throws SQLException {
 		try {
 			preparedStatement = connectionBuilder
 					.getConnection()
@@ -36,9 +36,7 @@ public class PlayerRepository implements IPlayerRepository {
 
 			preparedStatement.execute();
 		} catch (final SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -54,11 +52,6 @@ public class PlayerRepository implements IPlayerRepository {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public Player get(final int id) {
-		return null;
 	}
 
 	@Override
@@ -146,18 +139,6 @@ public class PlayerRepository implements IPlayerRepository {
 		}
 
 		return null;
-	}
-
-	@Override
-	public boolean isUniqueName(final String name) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isUniqueEmail(final String email) {
-		// TODO Auto-generated method stub
-		return true;
 	}
 
 }
