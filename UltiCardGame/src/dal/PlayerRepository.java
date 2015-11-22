@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import domain.Player;
@@ -165,33 +166,24 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public List<Player> listOrderedByPoint() {
-		final ArrayList<Player> playerList = new ArrayList<Player>();
+	public ArrayList<HashMap<String, Integer>> listOrderedByPoint() {
+		final ArrayList<HashMap<String, Integer>> topList = new ArrayList<HashMap<String, Integer>>();
 		try {
 			statement = connectionBuilder.getConnection().createStatement();
 			resultSet = statement
-					.executeQuery("SELECT * FROM player ORDER BY point DESC");
+					.executeQuery("SELECT name, point FROM player ORDER BY point DESC");
 
 			while (resultSet.next()) {
 				final String nameInDb = resultSet.getString("name");
 				if (nameInDb != null) {
-					final Player player = new Player();
-					player.setName(resultSet.getString("name"));
-					player.setEmail(resultSet.getString("email"));
-					player.setPassword(resultSet.getString("password"));
-					final int isAdmin = resultSet.getInt("isadmin");
-					if (isAdmin == 1) {
-						player.setType(PlayerType.ADMIN);
-					} else if (isAdmin == 0) {
-						player.setType(PlayerType.NORMAL);
-					}
-					player.setPoint(resultSet.getInt("point"));
-
-					playerList.add(player);
+					final int point = resultSet.getInt("point");
+					final HashMap<String, Integer> map = new HashMap<String, Integer>();
+					map.put(nameInDb, point);
+					topList.add(map);
 				}
 			}
 
-			return playerList;
+			return topList;
 		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -200,5 +192,4 @@ public class PlayerRepository implements IPlayerRepository {
 
 		return null;
 	}
-
 }

@@ -3,6 +3,7 @@ package dal;
 import interfaces.IPlayerRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import domain.Player;
@@ -46,15 +47,15 @@ public class FakePlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public List<Player> listOrderedByPoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int getPoint(final String name) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Integer>> listOrderedByPoint() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -13,4 +13,6 @@ public interface IPlayerManager {
 	public void register(String name, String email, String pass,
 			final ActivePlayer activePlayer);
 
+	public void getTopList(ActivePlayer activePlayer);
+
 }

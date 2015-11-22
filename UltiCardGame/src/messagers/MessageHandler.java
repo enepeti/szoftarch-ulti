@@ -98,6 +98,9 @@ public class MessageHandler implements IMessageHandler {
 								"Nem adminként nem lehet kidobni játékost."),
 								activePlayer);
 					}
+				} else if (type.toUpperCase()
+						.equals(Type.GETTOPLIST.toString())) {
+					playerManager.getTopList(activePlayer);
 				}
 			}
 		}

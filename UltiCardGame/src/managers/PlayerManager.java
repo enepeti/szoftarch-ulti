@@ -7,11 +7,14 @@ import interfaces.IPlayerManager;
 import interfaces.IPlayerRepository;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
 import messagers.util.LogoutAnswer;
 import messagers.util.RegisterAnswer;
+import messagers.util.TopListAnswer;
 import util.PasswordHasher;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
@@ -104,6 +107,13 @@ public class PlayerManager implements IPlayerManager {
 		guestNumber++;
 
 		loginSuccess(activePlayer);
+	}
+
+	@Override
+	public void getTopList(final ActivePlayer activePlayer) {
+		final List<HashMap<String, Integer>> topList = playerRepository
+				.listOrderedByPoint();
+		messageHandler.send(new TopListAnswer(topList), activePlayer);
 	}
 
 	private void loginSuccess(final ActivePlayer activePlayer) {

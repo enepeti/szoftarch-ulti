@@ -14,6 +14,7 @@
 - Összes chat szoba lekérése: `{"type":"getallchat"}`
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
+- Toplista lekérés: `{"type":"gettoplist"}`
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
@@ -27,3 +28,4 @@
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`
+- Toplista válasz: `{"type":"toplist", "toplist":[<string, int>]}`
