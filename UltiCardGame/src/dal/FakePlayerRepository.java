@@ -10,12 +10,9 @@ import domain.Player;
 public class FakePlayerRepository implements IPlayerRepository {
 
 	private static List<Player> players = new ArrayList<Player>();
-	private static int lastId = 0;
 
 	@Override
 	public void add(final Player player) {
-		lastId++;
-		player.setId(lastId);
 		players.add(player);
 	}
 

@@ -12,6 +12,7 @@
 - Chat szoba váltása: `{"type":"tochat", "name":<string>}`
 - Chat szoba elhagyása: `{"type":"leavechat"}`
 - Összes chat szoba lekérése: `{"type":"getallchat"}`
+- Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
@@ -21,4 +22,5 @@
 - Hiba üzenet: `{"type":"error", "message":<string>}`
 - Chat szoba elkészülése: `{"type":"newchat", "succes":<bool>}`
 - Chat szoba váltása: `{"type":"tochat", "name":<string>}`
-- Chat szoba nevek leküldése: `{"type":"allchat" "names":[<string>]}`
+- Chat szoba nevek leküldése: `{"type":"allchat", "names":[<string>]}`
+- Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`

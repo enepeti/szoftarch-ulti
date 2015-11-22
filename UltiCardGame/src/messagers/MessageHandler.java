@@ -4,11 +4,14 @@ import interfaces.IChatRoomManager;
 import interfaces.IMessageHandler;
 import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
+import interfaces.ISessionManager;
 
 import java.util.List;
 
 import managers.ChatRoomManager;
 import managers.PlayerManager;
+import managers.SessionManager;
+import messagers.util.ActivePlayerListAnswer;
 import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.ErrorAnswer;
@@ -27,6 +30,7 @@ import domain.PlayerTypeClass.PlayerType;
 public class MessageHandler implements IMessageHandler {
 
 	private static IPlayerManager playerManager = new PlayerManager();
+	private static ISessionManager sessionManager = new SessionManager();
 	private static IChatRoomManager chatRoomManager = new ChatRoomManager();
 	private final IMessageSender messageSender = new MessageSender();
 
@@ -68,6 +72,9 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase()
 						.equals(Type.GETALLCHAT.toString())) {
 					allChatMessage(activePlayer);
+				} else if (type.toUpperCase().equals(
+						Type.LISTACTIVEPLAYERS.toString())) {
+					activePlayerListMessage(activePlayer);
 				}
 			}
 		}
@@ -168,4 +175,10 @@ public class MessageHandler implements IMessageHandler {
 		final List<String> allRoomNames = chatRoomManager.getAllRoomNames();
 		send(new AllChatAnswer(allRoomNames), activePlayer);
 	}
+
+	private void activePlayerListMessage(final ActivePlayer activePlayer) {
+		final List<String> nameList = sessionManager.getAllActivePlayerNames();
+		send(new ActivePlayerListAnswer(nameList), activePlayer);
+	}
+
 }
