@@ -50,7 +50,14 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())) {
 					this.loginMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LOGOUT.toString())) {
-					playerManager.logout(activePlayer);
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.GUEST) != 0) {
+						playerManager.logout(activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Vendégként nem tudsz kijelentkezni."),
+								activePlayer);
+					}
 				} else if (type.toUpperCase()
 						.equals(Type.GUESTLOGIN.toString())) {
 					playerManager.guestLogin(activePlayer);
@@ -74,7 +81,23 @@ public class MessageHandler implements IMessageHandler {
 					allChatMessage(activePlayer);
 				} else if (type.toUpperCase().equals(
 						Type.LISTACTIVEPLAYERS.toString())) {
-					activePlayerListMessage(activePlayer);
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.ADMIN) == 0) {
+						activePlayerListMessage(activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Nem adminként nem lehet listázni a játékosokat."),
+								activePlayer);
+					}
+				} else if (type.toUpperCase().equals(Type.KICK.toString())) {
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.ADMIN) == 0) {
+						kickMessage(jsonObject, activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Nem adminként nem lehet kidobni játékost."),
+								activePlayer);
+					}
 				}
 			}
 		}
@@ -179,6 +202,17 @@ public class MessageHandler implements IMessageHandler {
 	private void activePlayerListMessage(final ActivePlayer activePlayer) {
 		final List<String> nameList = sessionManager.getAllActivePlayerNames();
 		send(new ActivePlayerListAnswer(nameList), activePlayer);
+	}
+
+	private void kickMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String name = "";
+
+		if ((jsonObject.get("name") != null)
+				&& !jsonObject.get("name").isJsonNull()) {
+			name = jsonObject.get("name").getAsString();
+			sessionManager.kickPlayer(name, activePlayer);
+		}
 	}
 
 }

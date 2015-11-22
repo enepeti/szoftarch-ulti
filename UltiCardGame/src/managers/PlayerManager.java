@@ -54,7 +54,6 @@ public class PlayerManager implements IPlayerManager {
 	public void logout(final ActivePlayer activePlayer) {
 		activePlayer.setPlayer(null);
 		logoutSuccess(activePlayer);
-
 	}
 
 	@Override

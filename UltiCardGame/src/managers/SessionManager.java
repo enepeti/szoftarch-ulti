@@ -1,5 +1,7 @@
 package managers;
 
+import interfaces.IMessageHandler;
+import interfaces.IPlayerManager;
 import interfaces.ISessionManager;
 
 import java.util.ArrayList;
@@ -10,10 +12,16 @@ import java.util.Set;
 
 import javax.websocket.Session;
 
+import messagers.MessageHandler;
+import messagers.util.KickAnswer;
+import messagers.util.KickPlayerAnswer;
 import domain.ActivePlayer;
+import domain.PlayerTypeClass.PlayerType;
 
 public class SessionManager implements ISessionManager {
 
+	private final IPlayerManager playerManager = new PlayerManager();
+	private final IMessageHandler messageHandler = new MessageHandler();
 	private static Map<Session, ActivePlayer> sessions = new HashMap<Session, ActivePlayer>();
 
 	@Override
@@ -36,12 +44,6 @@ public class SessionManager implements ISessionManager {
 		sessions.remove(session);
 	}
 
-	// @Override
-	// public void setPlayer(Session session, Player player) {
-	// sessions.put(session, player);
-	//
-	// }
-
 	@Override
 	public Set<Session> getAllSession() {
 		return sessions.keySet();
@@ -60,6 +62,34 @@ public class SessionManager implements ISessionManager {
 	@Override
 	public ActivePlayer getActivePlayer(final Session session) {
 		return sessions.get(session);
+	}
+
+	@Override
+	public void kickPlayer(final String name, final ActivePlayer admin) {
+		final ActivePlayer activePlayerToKick = getActivePlayerForPlayerName(name);
+		if ((activePlayerToKick != null)
+				&& (activePlayerToKick.getPlayer() != null)) {
+			if (activePlayerToKick.getPlayer().getType()
+					.compareTo(PlayerType.GUEST) != 0) {
+				playerManager.logout(activePlayerToKick);
+			}
+
+			messageHandler.send(new KickPlayerAnswer(), activePlayerToKick);
+			messageHandler.send(new KickAnswer(true), admin);
+		} else {
+			messageHandler.send(new KickAnswer(false), admin);
+		}
+	}
+
+	@Override
+	public ActivePlayer getActivePlayerForPlayerName(final String name) {
+		for (final ActivePlayer activePlayer : sessions.values()) {
+			if (activePlayer.getPlayer().getName().equals(name)) {
+				return activePlayer;
+			}
+		}
+
+		return null;
 	}
 
 }

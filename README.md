@@ -13,6 +13,7 @@
 - Chat szoba elhagyása: `{"type":"leavechat"}`
 - Összes chat szoba lekérése: `{"type":"getallchat"}`
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
+- Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
@@ -24,3 +25,5 @@
 - Chat szoba váltása: `{"type":"tochat", "name":<string>}`
 - Chat szoba nevek leküldése: `{"type":"allchat", "names":[<string>]}`
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
+- Kidobás játákost: `{"type":"kickplayer"}`
+- Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`

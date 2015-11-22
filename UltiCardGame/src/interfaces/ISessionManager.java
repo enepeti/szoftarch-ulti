@@ -18,4 +18,9 @@ public interface ISessionManager {
 	public Set<Session> getAllSession();
 
 	public List<String> getAllActivePlayerNames();
+
+	public void kickPlayer(String name, ActivePlayer admin);
+
+	public ActivePlayer getActivePlayerForPlayerName(String name);
+
 }
