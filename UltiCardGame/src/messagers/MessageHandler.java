@@ -11,10 +11,7 @@ import managers.ChatRoomManager;
 import managers.PlayerManager;
 import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
-import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
-import messagers.util.NewChatAnswer;
-import messagers.util.ToChatAnswer;
 import model.ActivePlayer;
 
 import com.google.gson.Gson;
@@ -65,10 +62,11 @@ public class MessageHandler implements IMessageHandler {
 	@Override
 	public <T extends AnswerMessage> void send(final T messageObject,
 			final ActivePlayer activePlayer) {
-		final Gson gson = new Gson();
-		final String json = gson.toJson(messageObject);
-		this.messageSender.sendMessage(json, activePlayer);
-
+		if(activePlayer != null) {
+			final Gson gson = new Gson();
+			final String json = gson.toJson(messageObject);
+			this.messageSender.sendMessage(json, activePlayer);
+		}
 	}
 
 	private void registerMessage(final JsonObject jsonObject,
@@ -128,11 +126,8 @@ public class MessageHandler implements IMessageHandler {
 				.isJsonNull())) {
 			roomName = jsonObject.get("name").getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
-			if (chatRoomManager.newRoom(roomName, maxSize)) {
-				chatRoomManager.changePlayerRoom(activePlayer, roomName);
-				send(new NewChatAnswer(true), activePlayer);
-			} else {
-				send(new NewChatAnswer(false), activePlayer);
+			if (chatRoomManager.newRoom(roomName, maxSize, activePlayer)) {
+				chatRoomManager.changePlayerRoom(activePlayer, roomName);	
 			}
 		}
 
@@ -145,11 +140,7 @@ public class MessageHandler implements IMessageHandler {
 		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
 				.isJsonNull())) {
 			toRoomName = jsonObject.get("name").getAsString();
-			if(chatRoomManager.changePlayerRoom(activePlayer, toRoomName)) {
-				send(new ToChatAnswer(toRoomName), activePlayer);
-			} else {
-				send(new ErrorAnswer("Nincs ilyen nevû szoba!"), activePlayer);
-			}
+			chatRoomManager.changePlayerRoom(activePlayer, toRoomName);
 		}
 
 	}

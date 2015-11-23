@@ -8,6 +8,8 @@ import java.util.HashMap;
 import managers.util.ChatRoom;
 import messagers.MessageHandler;
 import messagers.util.ErrorAnswer;
+import messagers.util.NewChatAnswer;
+import messagers.util.ToChatAnswer;
 import model.ActivePlayer;
 
 public class ChatRoomManager extends RoomManager implements IChatRoomManager {
@@ -38,10 +40,16 @@ public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 	}
 
 	@Override
-	public boolean newRoom(String roomName, int maxSize) {
+	public boolean newRoom(String roomName, int maxSize, ActivePlayer activePlayer) {
 		ChatRoom room = new ChatRoom(roomName, maxSize);
 
-		return super.addRoom(room);
+		if(super.addRoom(room)) {
+			messageHandler.send(new NewChatAnswer(true), activePlayer);
+			return true;
+		}
+		
+		messageHandler.send(new NewChatAnswer(false), activePlayer);
+		return false;
 	}
 
 	@Override
@@ -59,15 +67,19 @@ public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 		ChatRoom room = super.getRoom(toRoomName);
 		
 		if(toRoomName.equals(globalChatName) && room == null) {
-			newRoom(globalChatName, -1);
+			newRoom(globalChatName, -1, null);
 			room = super.getRoom(globalChatName);
 		}
 		
 		if(room != null) {
-			room.add(activePlayer);
-			//siker
+			if(room.add(activePlayer)) {
+				messageHandler.send(new ToChatAnswer(toRoomName, true), activePlayer);
+			} else {
+				messageHandler.send(new ToChatAnswer("Tele van a szoba!", false), activePlayer);
+			}
+		} else {
+			messageHandler.send(new ToChatAnswer("Ilyen nevû szoba nem létezik!", false), activePlayer);
 		}
-		//fail
 		
 	}
 	

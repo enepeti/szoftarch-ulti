@@ -17,6 +17,6 @@
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`
 - Hiba üzenet: `{"type":"error", "message":<string>}`
-- Chat szoba elkészülése: `{"type":"newchat", "succes":<bool>}`
-- Chat szoba váltása: `{"type":"tochat", "name":<string>}`
-- Chat szoba nevek leküldése: `{"type":"allchat" "names":[<string>]}`
+- Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}`
+- Chat szoba váltása: `{"type":"tochat", "success":<bool> "message":<string>}`
+- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`

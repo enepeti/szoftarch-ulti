@@ -50,14 +50,11 @@ public abstract class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public boolean changePlayerRoom(final ActivePlayer activePlayer,
+	public void changePlayerRoom(final ActivePlayer activePlayer,
 			final String toRoomName) {
 		if(getRoomMap().containsKey(toRoomName)) {
 			deletePlayerFromRoom(activePlayer);
-			addPlayerToRoom(activePlayer, toRoomName);
-			return true;
 		}
-		
-		return false;
+		addPlayerToRoom(activePlayer, toRoomName);
 	}
 }
