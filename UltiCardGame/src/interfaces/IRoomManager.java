@@ -3,7 +3,7 @@ package interfaces;
 import java.util.List;
 
 import managers.util.Room;
-import model.ActivePlayer;
+import domain.ActivePlayer;
 
 public interface IRoomManager {
 

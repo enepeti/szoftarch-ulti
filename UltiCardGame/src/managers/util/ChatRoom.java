@@ -1,8 +1,8 @@
 package managers.util;
 
+import domain.ActivePlayer;
 import interfaces.IMessageHandler;
 import messagers.util.ChatAnswer;
-import model.ActivePlayer;
 
 public class ChatRoom extends Room {
 

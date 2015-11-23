@@ -5,6 +5,7 @@ import interfaces.IMessageHandler;
 
 import java.util.HashMap;
 
+import domain.ActivePlayer;
 import managers.util.ChatRoom;
 import messagers.MessageHandler;
 import messagers.util.ErrorAnswer;

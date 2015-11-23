@@ -4,24 +4,30 @@ import interfaces.IChatRoomManager;
 import interfaces.IMessageHandler;
 import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
+import interfaces.ISessionManager;
 
 import java.util.List;
 
 import managers.ChatRoomManager;
 import managers.PlayerManager;
+import managers.SessionManager;
+import messagers.util.ActivePlayerListAnswer;
 import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.MessageType.Type;
-import model.ActivePlayer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import domain.ActivePlayer;
+import domain.PlayerTypeClass.PlayerType;
+
 public class MessageHandler implements IMessageHandler {
 
 	private static IPlayerManager playerManager = new PlayerManager();
+	private static ISessionManager sessionManager = new SessionManager();
 	private static IChatRoomManager chatRoomManager = new ChatRoomManager();
 	private final IMessageSender messageSender = new MessageSender();
 
@@ -40,13 +46,29 @@ public class MessageHandler implements IMessageHandler {
 					this.registerMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())) {
 					this.loginMessage(jsonObject, activePlayer);
+				} else if (type.toUpperCase().equals(Type.LOGOUT.toString())) {
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.GUEST) != 0) {
+						playerManager.logout(activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Vendégként nem tudsz kijelentkezni."),
+								activePlayer);
+					}
 				} else if (type.toUpperCase()
 						.equals(Type.GUESTLOGIN.toString())) {
 					playerManager.guestLogin(activePlayer);
 				} else if (type.toUpperCase().equals(Type.CHAT.toString())) {
 					this.chatMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.NEWCHAT.toString())) {
-					this.newChatMessage(jsonObject, activePlayer);
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.GUEST) == 0) {
+						send(new ErrorAnswer(
+								"Vendégként nem tudsz létrehozni szobát, ha akarsz, jelentkezz be!"),
+								activePlayer);
+					} else {
+						this.newChatMessage(jsonObject, activePlayer);
+					}
 				} else if (type.toUpperCase().equals(Type.TOCHAT.toString())) {
 					this.toChatMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LEAVECHAT.toString())) {
@@ -54,6 +76,28 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase()
 						.equals(Type.GETALLCHAT.toString())) {
 					allChatMessage(activePlayer);
+				} else if (type.toUpperCase().equals(
+						Type.LISTACTIVEPLAYERS.toString())) {
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.ADMIN) == 0) {
+						activePlayerListMessage(activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Nem adminként nem lehet listázni a játékosokat."),
+								activePlayer);
+					}
+				} else if (type.toUpperCase().equals(Type.KICK.toString())) {
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.ADMIN) == 0) {
+						kickMessage(jsonObject, activePlayer);
+					} else {
+						send(new ErrorAnswer(
+								"Nem adminként nem lehet kidobni játékost."),
+								activePlayer);
+					}
+				} else if (type.toUpperCase()
+						.equals(Type.GETTOPLIST.toString())) {
+					playerManager.getTopList(activePlayer);
 				}
 			}
 		}
@@ -149,4 +193,21 @@ public class MessageHandler implements IMessageHandler {
 		final List<String> allRoomNames = chatRoomManager.getAllRoomNames();
 		send(new AllChatAnswer(allRoomNames), activePlayer);
 	}
+
+	private void activePlayerListMessage(final ActivePlayer activePlayer) {
+		final List<String> nameList = sessionManager.getAllActivePlayerNames();
+		send(new ActivePlayerListAnswer(nameList), activePlayer);
+	}
+
+	private void kickMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String name = "";
+
+		if ((jsonObject.get("name") != null)
+				&& !jsonObject.get("name").isJsonNull()) {
+			name = jsonObject.get("name").getAsString();
+			sessionManager.kickPlayer(name, activePlayer);
+		}
+	}
+
 }

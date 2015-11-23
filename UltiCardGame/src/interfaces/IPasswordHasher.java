@@ -1,8 +1,12 @@
 package interfaces;
 
 public interface IPasswordHasher {
-	
-	public String hash(String plain);
-	
-	public boolean areEqual(String plain, String hash);
+
+	public String getSaltedHash(final String password) throws Exception;
+
+	public String hash(final String password, final byte[] salt)
+			throws Exception;
+
+	public boolean check(final String password, final String stored)
+			throws Exception;
 }

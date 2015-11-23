@@ -7,10 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import model.Player;
-import model.PlayerType;
+import domain.Player;
+import domain.PlayerTypeClass.PlayerType;
 
 public class PlayerRepository implements IPlayerRepository {
 
@@ -24,21 +25,19 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void add(final Player player) {
+	public void add(final Player player) throws SQLException {
 		try {
 			preparedStatement = connectionBuilder
 					.getConnection()
 					.prepareStatement(
-							"INSERT INTO player (name, email, password, isadmin) VALUES (?, ?, ?, 0)");
+							"INSERT INTO player (name, email, password, isadmin, point) VALUES (?, ?, ?, 0, 0)");
 			preparedStatement.setString(1, player.getName());
 			preparedStatement.setString(2, player.getEmail());
 			preparedStatement.setString(3, player.getPassword());
 
 			preparedStatement.execute();
 		} catch (final SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -54,11 +53,6 @@ public class PlayerRepository implements IPlayerRepository {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public Player get(final int id) {
-		return null;
 	}
 
 	@Override
@@ -82,6 +76,7 @@ public class PlayerRepository implements IPlayerRepository {
 					} else if (isAdmin == 0) {
 						player.setType(PlayerType.NORMAL);
 					}
+					player.setPoint(resultSet.getInt("point"));
 
 					return player;
 				}
@@ -96,15 +91,36 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public void update(final Player player) {
+	public int getPoint(final String name) {
 		try {
 			preparedStatement = connectionBuilder
 					.getConnection()
+					.prepareStatement("SELECT point FROM player WHERE name = ?");
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				final int point = resultSet.getInt("point");
+
+				return point;
+			}
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	@Override
+	public void updatePoint(final Player player) {
+		try {
+			preparedStatement = connectionBuilder.getConnection()
 					.prepareStatement(
-							"UPDATE player SET email = ?, password = ? where name = ?");
-			preparedStatement.setString(1, player.getEmail());
-			preparedStatement.setString(2, player.getPassword());
-			preparedStatement.setString(3, player.getName());
+							"UPDATE player SET point = ? where name = ?");
+			preparedStatement.setInt(1, player.getPoint());
+			preparedStatement.setString(2, player.getName());
 			preparedStatement.execute();
 		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
@@ -133,6 +149,7 @@ public class PlayerRepository implements IPlayerRepository {
 					} else if (isAdmin == 0) {
 						player.setType(PlayerType.NORMAL);
 					}
+					player.setPoint(resultSet.getInt("point"));
 
 					playerList.add(player);
 				}
@@ -149,15 +166,30 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public boolean isUniqueName(final String name) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	public ArrayList<HashMap<String, Integer>> listOrderedByPoint() {
+		final ArrayList<HashMap<String, Integer>> topList = new ArrayList<HashMap<String, Integer>>();
+		try {
+			statement = connectionBuilder.getConnection().createStatement();
+			resultSet = statement
+					.executeQuery("SELECT name, point FROM player ORDER BY point DESC");
 
-	@Override
-	public boolean isUniqueEmail(final String email) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+			while (resultSet.next()) {
+				final String nameInDb = resultSet.getString("name");
+				if (nameInDb != null) {
+					final int point = resultSet.getInt("point");
+					final HashMap<String, Integer> map = new HashMap<String, Integer>();
+					map.put(nameInDb, point);
+					topList.add(map);
+				}
+			}
 
+			return topList;
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }

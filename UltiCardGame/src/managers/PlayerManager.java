@@ -5,20 +5,27 @@ import interfaces.IMessageHandler;
 import interfaces.IPasswordHasher;
 import interfaces.IPlayerManager;
 import interfaces.IPlayerRepository;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+
 import messagers.MessageHandler;
 import messagers.util.LoginAnswer;
+import messagers.util.LogoutAnswer;
 import messagers.util.RegisterAnswer;
-import model.ActivePlayer;
-import model.Player;
-import model.PlayerType;
-import tryPackage.PlainPasswordHasher;
+import messagers.util.TopListAnswer;
+import util.PasswordHasher;
 import dal.PlayerRepository;
+import domain.ActivePlayer;
+import domain.Player;
+import domain.PlayerTypeClass.PlayerType;
 
 public class PlayerManager implements IPlayerManager {
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler();
-	private final IPasswordHasher passwordHasher = new PlainPasswordHasher();
+	private final IPasswordHasher passwordHasher = new PasswordHasher();
 	private final IChatRoomManager chatRoomManager = new ChatRoomManager();
 
 	private static int guestNumber = 0;
@@ -27,36 +34,62 @@ public class PlayerManager implements IPlayerManager {
 	public void login(final String name, final String pass,
 			final ActivePlayer activePlayer) {
 		final Player player = playerRepository.get(name);
-		if (passwordHasher.areEqual(pass, player.getPassword())) {
-			activePlayer.setPlayer(player);
-			loginSuccess(activePlayer);
-		} else {
-			this.messageHandler.send(new LoginAnswer(false), activePlayer);
+		boolean arePasswordsEqual = false;
+		try {
+			arePasswordsEqual = passwordHasher
+					.check(pass, player.getPassword());
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
+		if (arePasswordsEqual) {
+			activePlayer.setPlayer(player);
+			if (player.getType().compareTo(PlayerType.ADMIN) == 0) {
+				loginSuccess(activePlayer);
+			} else {
+				loginSuccess(activePlayer);
+			}
+		} else {
+			this.messageHandler.send(new LoginAnswer(false, ""), activePlayer);
+		}
+	}
+
+	@Override
+	public void logout(final ActivePlayer activePlayer) {
+		activePlayer.setPlayer(null);
+		logoutSuccess(activePlayer);
 	}
 
 	@Override
 	public void register(final String name, final String email,
 			final String pass, final ActivePlayer activePlayer) {
 
-		if (playerRepository.isUniqueName(name)) {
-			if (playerRepository.isUniqueEmail(email)) {
-				final Player player = new Player();
+		final Player player = new Player();
 
-				player.setName(name);
-				player.setEmail(email);
-				player.setPassword(passwordHasher.hash(pass));
-				player.setType(PlayerType.NORMAL);
-				playerRepository.add(player);
-				this.messageHandler.send(new RegisterAnswer(true, ""),
-						activePlayer);
+		player.setName(name);
+		player.setEmail(email);
+		try {
+			player.setPassword(passwordHasher.getSaltedHash(pass));
+		} catch (final Exception e1) {
+			e1.printStackTrace();
+		}
+		player.setType(PlayerType.NORMAL);
+		try {
+			playerRepository.add(player);
+			this.messageHandler
+			.send(new RegisterAnswer(true, ""), activePlayer);
+		} catch (final SQLException e) {
+			if (e.getErrorCode() == 1062) {
+				if (e.getMessage().contains("name")) {
+					messageHandler.send(new RegisterAnswer(false,
+							"Ezzel a névvel már regisztráltak!"), activePlayer);
+				} else if (e.getMessage().contains("email")) {
+					messageHandler.send(new RegisterAnswer(false,
+							"Ezzel az emaillel már regisztráltak!"),
+							activePlayer);
+				}
 			} else {
-				this.messageHandler.send(new RegisterAnswer(false,
-						"Ezzel az emaillel már regisztráltak!"), activePlayer);
+				e.printStackTrace();
 			}
-		} else {
-			this.messageHandler.send(new RegisterAnswer(false,
-					"Ezzel a névvel már regisztráltak!"), activePlayer);
 		}
 	}
 
@@ -64,7 +97,7 @@ public class PlayerManager implements IPlayerManager {
 	public void guestLogin(final ActivePlayer activePlayer) {
 		final Player player = new Player();
 		final String name = "Vendég#" + guestNumber;
-		final String pass = passwordHasher.hash(name);
+		final String pass = "";
 
 		player.setName(name);
 		player.setPassword(pass);
@@ -76,11 +109,27 @@ public class PlayerManager implements IPlayerManager {
 		loginSuccess(activePlayer);
 	}
 
+	@Override
+	public void getTopList(final ActivePlayer activePlayer) {
+		final List<HashMap<String, Integer>> topList = playerRepository
+				.listOrderedByPoint();
+		messageHandler.send(new TopListAnswer(topList), activePlayer);
+	}
+
 	private void loginSuccess(final ActivePlayer activePlayer) {
-		chatRoomManager.addPlayerToRoom(activePlayer, ChatRoomManager.globalChatName);
+		chatRoomManager.addPlayerToRoom(activePlayer,
+				ChatRoomManager.globalChatName);
 		activePlayer.setLoggedIn(true);
 
-		this.messageHandler.send(new LoginAnswer(true), activePlayer);
+		this.messageHandler.send(new LoginAnswer(true, activePlayer.getPlayer()
+				.getType().toString().toLowerCase()), activePlayer);
+	}
+
+	private void logoutSuccess(final ActivePlayer activePlayer) {
+		chatRoomManager.deletePlayerFromRoom(activePlayer);
+		activePlayer.setLoggedIn(false);
+
+		this.messageHandler.send(new LogoutAnswer(true), activePlayer);
 	}
 
 }

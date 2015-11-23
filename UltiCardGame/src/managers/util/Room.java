@@ -5,8 +5,8 @@ import interfaces.IMessageHandler;
 import java.util.HashSet;
 import java.util.Set;
 
+import domain.ActivePlayer;
 import messagers.util.AnswerMessage;
-import model.ActivePlayer;
 
 public abstract class Room {
 

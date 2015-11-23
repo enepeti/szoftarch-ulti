@@ -1,22 +1,32 @@
 package managers;
 
+import interfaces.IMessageHandler;
+import interfaces.IPlayerManager;
 import interfaces.ISessionManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.Session;
 
-import model.ActivePlayer;
+import messagers.MessageHandler;
+import messagers.util.KickAnswer;
+import messagers.util.KickPlayerAnswer;
+import domain.ActivePlayer;
+import domain.PlayerTypeClass.PlayerType;
 
 public class SessionManager implements ISessionManager {
 
+	private final IPlayerManager playerManager = new PlayerManager();
+	private final IMessageHandler messageHandler = new MessageHandler();
 	private static Map<Session, ActivePlayer> sessions = new HashMap<Session, ActivePlayer>();
 
 	@Override
 	public void add(final Session session) {
-		ActivePlayer activePlayer = new ActivePlayer();
+		final ActivePlayer activePlayer = new ActivePlayer();
 		activePlayer.setSession(session);
 		activePlayer.setLoggedIn(false);
 		sessions.put(session, activePlayer);
@@ -24,21 +34,15 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public void remove(final Session session) {
-		ActivePlayer activePlayer = sessions.get(session);
-		if(activePlayer != null) {
+		final ActivePlayer activePlayer = sessions.get(session);
+		if (activePlayer != null) {
 			activePlayer.setLoggedIn(false);
-			if(activePlayer.getChatRoom() != null) {
+			if (activePlayer.getChatRoom() != null) {
 				activePlayer.getChatRoom().remove(activePlayer);
 			}
 		}
 		sessions.remove(session);
 	}
-
-//	@Override
-//	public void setPlayer(Session session, Player player) {
-//		sessions.put(session, player);
-//		
-//	}
 
 	@Override
 	public Set<Session> getAllSession() {
@@ -46,8 +50,46 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public ActivePlayer getActivePlayer(Session session) {
+	public List<String> getAllActivePlayerNames() {
+		final List<String> nameList = new ArrayList<String>();
+		for (final ActivePlayer activePlayer : sessions.values()) {
+			nameList.add(activePlayer.getPlayer().getName());
+		}
+
+		return nameList;
+	}
+
+	@Override
+	public ActivePlayer getActivePlayer(final Session session) {
 		return sessions.get(session);
+	}
+
+	@Override
+	public void kickPlayer(final String name, final ActivePlayer admin) {
+		final ActivePlayer activePlayerToKick = getActivePlayerForPlayerName(name);
+		if ((activePlayerToKick != null)
+				&& (activePlayerToKick.getPlayer() != null)) {
+			if (activePlayerToKick.getPlayer().getType()
+					.compareTo(PlayerType.GUEST) != 0) {
+				playerManager.logout(activePlayerToKick);
+			}
+
+			messageHandler.send(new KickPlayerAnswer(), activePlayerToKick);
+			messageHandler.send(new KickAnswer(true), admin);
+		} else {
+			messageHandler.send(new KickAnswer(false), admin);
+		}
+	}
+
+	@Override
+	public ActivePlayer getActivePlayerForPlayerName(final String name) {
+		for (final ActivePlayer activePlayer : sessions.values()) {
+			if (activePlayer.getPlayer().getName().equals(name)) {
+				return activePlayer;
+			}
+		}
+
+		return null;
 	}
 
 }

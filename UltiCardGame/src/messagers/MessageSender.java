@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.websocket.Session;
 
-import model.ActivePlayer;
+import domain.ActivePlayer;
 
 public class MessageSender implements IMessageSender {
 	
