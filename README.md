@@ -27,7 +27,7 @@
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}`
-- Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}`
+- Kijelentkezés válasz: `{"type":"logout"}`
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`
 - Hiba üzenet: `{"type":"error", "message":<string>}`

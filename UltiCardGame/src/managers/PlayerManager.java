@@ -77,7 +77,7 @@ public class PlayerManager implements IPlayerManager {
 		try {
 			playerRepository.add(player);
 			this.messageHandler
-			.send(new RegisterAnswer(true, ""), activePlayer);
+					.send(new RegisterAnswer(true, ""), activePlayer);
 		} catch (final SQLException e) {
 			if (e.getErrorCode() == 1062) {
 				if (e.getMessage().contains("name")) {
@@ -131,7 +131,7 @@ public class PlayerManager implements IPlayerManager {
 		chatRoomManager.deletePlayerFromRoom(activePlayer);
 		activePlayer.setLoggedIn(false);
 
-		this.messageHandler.send(new LogoutAnswer(true), activePlayer);
+		this.messageHandler.send(new LogoutAnswer(), activePlayer);
 	}
 
 }
