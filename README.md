@@ -27,7 +27,7 @@
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}` :ok:
-- Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}` :ok:
+- Kijelentkezés válasz: `{"type":"logout"}` :ok:
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}` :ok:
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}` :ok:
 - Hiba üzenet: `{"type":"error", "message":<string>}` :ok:
@@ -36,7 +36,7 @@
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :ok:
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}`
-- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[<PlayersInUltiRoom>]}` :ok:
+- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName"=<String>, "names"=[<String>]}]}` :ok:
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`

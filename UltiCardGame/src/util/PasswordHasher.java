@@ -1,6 +1,6 @@
 package util;
 
-import interfaces.IPasswordHasher;
+import interfaces.util.IPasswordHasher;
 
 import java.security.SecureRandom;
 

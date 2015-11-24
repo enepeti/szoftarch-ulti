@@ -1,11 +1,11 @@
 package managers;
 
-import interfaces.IMessageHandler;
-import interfaces.IUltiRoomManager;
+import interfaces.managers.IUltiRoomManager;
+import interfaces.messagers.IMessageHandler;
 import managers.util.UltiRoom;
 import messagers.MessageHandler;
-import messagers.util.NewUltiAnswer;
-import messagers.util.ToUltiAnswer;
+import messagers.util.ulti.room.NewUltiAnswer;
+import messagers.util.ulti.room.ToUltiAnswer;
 import ulti.UltiGame;
 import domain.ActivePlayer;
 

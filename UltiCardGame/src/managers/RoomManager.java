@@ -1,13 +1,13 @@
 package managers;
 
-import interfaces.IRoomManager;
+import interfaces.managers.IRoomManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import domain.ActivePlayer;
 import managers.util.Room;
+import domain.ActivePlayer;
 
 public abstract class RoomManager implements IRoomManager {
 	protected static Map<String, ? extends Room> roomMap;
@@ -52,7 +52,7 @@ public abstract class RoomManager implements IRoomManager {
 	@Override
 	public void changePlayerRoom(final ActivePlayer activePlayer,
 			final String toRoomName) {
-		if(getRoomMap().containsKey(toRoomName)) {
+		if (getRoomMap().containsKey(toRoomName)) {
 			deletePlayerFromRoom(activePlayer);
 		}
 		addPlayerToRoom(activePlayer, toRoomName);

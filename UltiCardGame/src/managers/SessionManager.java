@@ -1,8 +1,8 @@
 package managers;
 
-import interfaces.IMessageHandler;
-import interfaces.IPlayerManager;
-import interfaces.ISessionManager;
+import interfaces.managers.IPlayerManager;
+import interfaces.managers.ISessionManager;
+import interfaces.messagers.IMessageHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +13,8 @@ import java.util.Set;
 import javax.websocket.Session;
 
 import messagers.MessageHandler;
-import messagers.util.KickAnswer;
-import messagers.util.KickPlayerAnswer;
+import messagers.util.admin.KickAnswer;
+import messagers.util.admin.KickPlayerAnswer;
 import domain.ActivePlayer;
 import domain.PlayerTypeClass.PlayerType;
 

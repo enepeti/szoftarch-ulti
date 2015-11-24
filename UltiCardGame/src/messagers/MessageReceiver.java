@@ -1,8 +1,8 @@
 package messagers;
 
-import interfaces.IMessageHandler;
-import interfaces.IMessageReceiver;
-import interfaces.ISessionManager;
+import interfaces.managers.ISessionManager;
+import interfaces.messagers.IMessageHandler;
+import interfaces.messagers.IMessageReceiver;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
