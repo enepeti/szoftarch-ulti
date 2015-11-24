@@ -26,7 +26,7 @@
 - Lap lerakás: `{"type":"playcard", "card":<string>}`
 
 #### Szerver - Kliens
-- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
+- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}`
 - Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}`
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`

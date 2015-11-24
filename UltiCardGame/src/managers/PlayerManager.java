@@ -49,7 +49,8 @@ public class PlayerManager implements IPlayerManager {
 				loginSuccess(activePlayer);
 			}
 		} else {
-			this.messageHandler.send(new LoginAnswer(false, ""), activePlayer);
+			this.messageHandler.send(new LoginAnswer(false, "", ""),
+					activePlayer);
 		}
 	}
 
@@ -122,7 +123,8 @@ public class PlayerManager implements IPlayerManager {
 		activePlayer.setLoggedIn(true);
 
 		this.messageHandler.send(new LoginAnswer(true, activePlayer.getPlayer()
-				.getType().toString().toLowerCase()), activePlayer);
+				.getName(), activePlayer.getPlayer().getType().toString()
+				.toLowerCase()), activePlayer);
 	}
 
 	private void logoutSuccess(final ActivePlayer activePlayer) {
