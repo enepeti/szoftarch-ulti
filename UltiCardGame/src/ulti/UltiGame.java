@@ -1,7 +1,7 @@
 package ulti;
 
-import interfaces.IMessageHandler;
-import interfaces.IPlayerRepository;
+import interfaces.dal.IPlayerRepository;
+import interfaces.messagers.IMessageHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Random;
 
 import messagers.MessageHandler;
-import messagers.util.DealAnswer;
-import messagers.util.HasToConfirmAnswer;
-import messagers.util.PickUpCardsAnswer;
-import messagers.util.TakeCardsAnswer;
+import messagers.util.ulti.DealAnswer;
+import messagers.util.ulti.HasToConfirmAnswer;
+import messagers.util.ulti.PickUpCardsAnswer;
+import messagers.util.ulti.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.gametype.ConcreteGameType;

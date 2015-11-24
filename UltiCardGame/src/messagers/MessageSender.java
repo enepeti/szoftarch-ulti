@@ -1,6 +1,6 @@
 package messagers;
 
-import interfaces.IMessageSender;
+import interfaces.messagers.IMessageSender;
 
 import java.io.IOException;
 

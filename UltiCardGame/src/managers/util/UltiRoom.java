@@ -1,15 +1,15 @@
 package managers.util;
 
-import interfaces.IMessageHandler;
+import interfaces.messagers.IMessageHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import messagers.util.PlayerOnTurnAnswer;
-import messagers.util.ShowResultAnswer;
-import messagers.util.StartUltiAnswer;
-import messagers.util.StartUltiGameAnswer;
+import messagers.util.ulti.PlayerOnTurnAnswer;
+import messagers.util.ulti.ShowResultAnswer;
+import messagers.util.ulti.StartUltiAnswer;
+import messagers.util.ulti.StartUltiGameAnswer;
 import ulti.UltiGame;
 import domain.ActivePlayer;
 

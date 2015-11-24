@@ -1,6 +1,6 @@
 package dal;
 
-import interfaces.IPlayerRepository;
+import interfaces.dal.IPlayerRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;

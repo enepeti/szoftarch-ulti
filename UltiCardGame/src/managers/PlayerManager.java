@@ -1,20 +1,20 @@
 package managers;
 
-import interfaces.IChatRoomManager;
-import interfaces.IMessageHandler;
-import interfaces.IPasswordHasher;
-import interfaces.IPlayerManager;
-import interfaces.IPlayerRepository;
+import interfaces.dal.IPlayerRepository;
+import interfaces.managers.IChatRoomManager;
+import interfaces.managers.IPlayerManager;
+import interfaces.messagers.IMessageHandler;
+import interfaces.util.IPasswordHasher;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
 import messagers.MessageHandler;
-import messagers.util.LoginAnswer;
-import messagers.util.LogoutAnswer;
-import messagers.util.RegisterAnswer;
-import messagers.util.TopListAnswer;
+import messagers.util.guest.TopListAnswer;
+import messagers.util.userhandling.LoginAnswer;
+import messagers.util.userhandling.LogoutAnswer;
+import messagers.util.userhandling.RegisterAnswer;
 import util.PasswordHasher;
 import dal.PlayerRepository;
 import domain.ActivePlayer;

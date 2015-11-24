@@ -1,11 +1,11 @@
 package messagers;
 
-import interfaces.IChatRoomManager;
-import interfaces.IMessageHandler;
-import interfaces.IMessageSender;
-import interfaces.IPlayerManager;
-import interfaces.ISessionManager;
-import interfaces.IUltiRoomManager;
+import interfaces.managers.IChatRoomManager;
+import interfaces.managers.IPlayerManager;
+import interfaces.managers.ISessionManager;
+import interfaces.managers.IUltiRoomManager;
+import interfaces.messagers.IMessageHandler;
+import interfaces.messagers.IMessageSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,13 @@ import managers.ChatRoomManager;
 import managers.PlayerManager;
 import managers.SessionManager;
 import managers.UltiRoomManager;
-import messagers.util.ActivePlayerListAnswer;
-import messagers.util.AllChatAnswer;
-import messagers.util.AllUltiAnswer;
 import messagers.util.AnswerMessage;
-import messagers.util.ErrorAnswer;
-import messagers.util.MessageType.Type;
-import messagers.util.PlayersInUltiRoom;
+import messagers.util.admin.ActivePlayerListAnswer;
+import messagers.util.chat.room.AllChatAnswer;
+import messagers.util.error.ErrorAnswer;
+import messagers.util.messagetype.MessageType.Type;
+import messagers.util.ulti.PlayersInUltiRoom;
+import messagers.util.ulti.room.AllUltiAnswer;
 import ulti.domain.Card;
 import ulti.domain.CardConverter;
 import ulti.domain.gametype.ConcreteGameType;

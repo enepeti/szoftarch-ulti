@@ -1,6 +1,6 @@
 package managers.util;
 
-import interfaces.IMessageHandler;
+import interfaces.messagers.IMessageHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
