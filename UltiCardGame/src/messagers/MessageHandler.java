@@ -14,6 +14,7 @@ import managers.SessionManager;
 import messagers.util.ActivePlayerListAnswer;
 import messagers.util.AllChatAnswer;
 import messagers.util.AnswerMessage;
+import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
 
 import com.google.gson.Gson;

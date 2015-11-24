@@ -11,7 +11,6 @@ import messagers.MessageHandler;
 import messagers.util.ErrorAnswer;
 import messagers.util.NewChatAnswer;
 import messagers.util.ToChatAnswer;
-import model.ActivePlayer;
 
 public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 
