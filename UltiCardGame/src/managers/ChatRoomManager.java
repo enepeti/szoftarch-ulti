@@ -57,7 +57,6 @@ public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 		ChatRoom actualRoom = activePlayer.getChatRoom();
 		
 		if(actualRoom != null) {
-			activePlayer.setChatRoom(null);
 			actualRoom.remove(activePlayer);
 		}
 	}

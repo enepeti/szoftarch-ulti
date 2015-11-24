@@ -2,47 +2,34 @@ package ulti;
 
 import interfaces.IPlayerRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import messagers.util.MessageType.Type;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.gametype.ConcreteGameType;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
 import domain.Player;
+import domain.PlayerTypeClass.PlayerType;
 
 public class UltiGame {
 
-	private final ArrayList<ActivePlayer> activePlayerList;
+	private final List<ActivePlayer> activePlayerList;
 	private int starterActivePlayer;
 	private int activePlayerOnTurn;
 	private int lastPlayerWithConcreteGameType;
 	private Card remainingCard1;
 	private Card remainingCard2;
-	private ArrayList<Card> cardsOnTable;
+	private List<Card> cardsOnTable;
 	private ConcreteGameType concreteGameType;
 	private DeckOfCards deckOfCards;
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 
-	public UltiGame(final ArrayList<ActivePlayer> activePlayerList,
-			final int starterActivePlayer, final int activePlayerOnTurn,
-			final int lastPlayerWithConcreteGameType,
-			final Card remainingCard1, final Card remainingCard2,
-			final ConcreteGameType concreteGameType,
-			final DeckOfCards deckOfCards) {
-		super();
+	public UltiGame(final List<ActivePlayer> activePlayerList) {
 		this.activePlayerList = activePlayerList;
-		this.starterActivePlayer = starterActivePlayer;
-		this.activePlayerOnTurn = activePlayerOnTurn;
-		this.lastPlayerWithConcreteGameType = lastPlayerWithConcreteGameType;
-		this.remainingCard1 = remainingCard1;
-		this.remainingCard2 = remainingCard2;
-		this.concreteGameType = concreteGameType;
-		this.deckOfCards = deckOfCards;
+		this.deckOfCards = new DeckOfCards();
 
 		randomizeStarterPlayer();
 		deal();
@@ -97,7 +84,7 @@ public class UltiGame {
 		this.concreteGameType = concreteGameType;
 	}
 
-	public ArrayList<ActivePlayer> getActivePlayerList() {
+	public List<ActivePlayer> getActivePlayerList() {
 		return activePlayerList;
 	}
 
@@ -223,9 +210,9 @@ public class UltiGame {
 
 	private void evaluateGame() {
 		// TODO: játék pontok számolása
+		int sumForPlayer0 = 0;
 		int sumForPlayer1 = 0;
 		int sumForPlayer2 = 0;
-		int sumForPlayer3 = 0;
 
 		if (concreteGameType.isThereParty()) {
 			int sumForPlayer = 0;
@@ -240,28 +227,25 @@ public class UltiGame {
 				}
 			}
 
-			sumForPlayer1 += sumForPlayer;
+			sumForPlayer0 += sumForPlayer;
+			sumForPlayer1 += sumForOpponents;
 			sumForPlayer2 += sumForOpponents;
-			sumForPlayer3 += sumForOpponents;
 		}
 
-		final Player player1 = activePlayerList.get(0).getPlayer();
+		final Player player0 = activePlayerList.get(0).getPlayer();
+		player0.addPoint(sumForPlayer0);
+		if (player0.getType() != PlayerType.GUEST) {
+			savePoints(player0);
+		}
+		final Player player1 = activePlayerList.get(1).getPlayer();
 		player1.addPoint(sumForPlayer1);
-		if (player1.getType().toString().toUpperCase() != Type.GUESTLOGIN
-				.toString()) {
+		if (player1.getType() != PlayerType.GUEST) {
 			savePoints(player1);
 		}
-		final Player player2 = activePlayerList.get(1).getPlayer();
+		final Player player2 = activePlayerList.get(2).getPlayer();
 		player2.addPoint(sumForPlayer2);
-		if (player2.getType().toString().toUpperCase() != Type.GUESTLOGIN
-				.toString()) {
+		if (player2.getType() != PlayerType.GUEST) {
 			savePoints(player2);
-		}
-		final Player player3 = activePlayerList.get(2).getPlayer();
-		player3.addPoint(sumForPlayer3);
-		if (player3.getType().toString().toUpperCase() != Type.GUESTLOGIN
-				.toString()) {
-			savePoints(player3);
 		}
 
 		nextGame();

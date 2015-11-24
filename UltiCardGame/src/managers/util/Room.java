@@ -10,7 +10,7 @@ import messagers.util.AnswerMessage;
 
 public abstract class Room {
 
-	private final Set<ActivePlayer> activePlayersInRoom;
+	protected final Set<ActivePlayer> activePlayersInRoom;
 	private final int maxSize;
 	private String name;
 	private boolean active;
@@ -23,7 +23,7 @@ public abstract class Room {
 	}
 
 	public boolean add(final ActivePlayer activePlayer) {
-		if ((activePlayersInRoom.size() < maxSize) || (maxSize == -1)) {
+		if (!isFull()) {
 			activePlayersInRoom.add(activePlayer);
 			return true;
 		}
@@ -46,6 +46,10 @@ public abstract class Room {
 		}
 	}
 
+	public boolean isFull() {
+		return (activePlayersInRoom.size() >= maxSize) && (maxSize != -1);
+	}
+	
 	public String getName() {
 		return name;
 	}

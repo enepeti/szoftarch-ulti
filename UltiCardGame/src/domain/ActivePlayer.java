@@ -3,6 +3,7 @@ package domain;
 import javax.websocket.Session;
 
 import managers.util.ChatRoom;
+import managers.util.UltiRoom;
 import ulti.domain.UltiPlayer;
 
 public class ActivePlayer {
@@ -12,6 +13,7 @@ public class ActivePlayer {
 	private Session session;
 	private boolean loggedIn;
 	private ChatRoom chatRoom;
+	private UltiRoom ultiRoom;
 
 	public Player getPlayer() {
 		return player;
@@ -51,6 +53,14 @@ public class ActivePlayer {
 
 	public void setChatRoom(final ChatRoom chatRoom) {
 		this.chatRoom = chatRoom;
+	}
+
+	public UltiRoom getUltiRoom() {
+		return ultiRoom;
+	}
+
+	public void setUltiRoom(UltiRoom ultiRoom) {
+		this.ultiRoom = ultiRoom;
 	}
 
 }

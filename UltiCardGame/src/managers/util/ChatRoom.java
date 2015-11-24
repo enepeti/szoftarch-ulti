@@ -18,6 +18,12 @@ public class ChatRoom extends Room {
 		}
 		return inRoom;
 	}
+	
+	@Override
+	public void remove(ActivePlayer activePlayer) {
+		super.remove(activePlayer);
+		activePlayer.setChatRoom(null);
+	}
 
 	public void sendMessageToAll(final String message, final String from,
 			final IMessageHandler messageHandler) {
