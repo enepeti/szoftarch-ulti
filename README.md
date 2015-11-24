@@ -15,6 +15,11 @@
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
 - Toplista lekérés: `{"type":"gettoplist"}`
+- Játék bemondás: `{"type":"gameselection", "gametype":<string>, "card1":<string>, "card2":<string>}`
+- Passzolás: `{"type":"pass"}`
+- Lapfelvétel: `{"type":"pickupcards"}`
+- Játék jóváhagyása: `{"type":"confirmgame"}`
+- Lap lerakás: `{"type":"playcard", "card":<string>}`
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
@@ -29,3 +34,10 @@
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`
 - Toplista válasz: `{"type":"toplist", "toplist":[<string, int>]}`
+- Ulti szobába 3. ember belépett: `{"type":"startulti"}`
+- Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
+- Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
+- Felvett lapok válasz: `{"type":"pickedupcards", "card1":<string>, "card2":<string>}`
+- Játék kezdődik: `{"type":"startgame"}`
+- Lap elvitel: `{"type":"takecards", "cards":[<string>]}`
+- Eredmények mutatása: `{"type":"showresult", "points":[<string, int>]}`
