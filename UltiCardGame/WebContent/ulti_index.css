@@ -31,24 +31,35 @@
 
 #mainpage {
 	display: none;
+	margin-left: 10px;
+	margin-right: 10px;
+	height: 100%;
 }
 
-#roompage {
-	min-height: 80%;
+#ultipage {
+	min-height: 64%;
+}
+
+#ultiroomspage {
+	height: 100%;
+	overflow: auto;
+}
+
+#ultibuttoncontainer {
+	width: 7%;
 }
 
 #chatpage {
-	height: 20%;
+	height: 35%;
 	width: 100%;
-	margin-left: 10px;
-	margin-right: 10px;
 }
 
 #chat_buttoncontainer {
-	width: 5%;
+	width: 6%;
 }
 
 #chat_container {
+	height: 80%;
 	width: 90%;
 }
 
@@ -72,7 +83,7 @@
 
 #chat_sendcontainer{
 	float: left;
-	width: 9%;
+	width: 8%;
 }
 
 #chat_send {
@@ -86,14 +97,59 @@
 	margin-bottom: 10px;
 }
 
-.chatcontainer {
+.ulticontainer {
 	margin-left: 10px;
 	margin-right: 10px;
 	float: left;
 }
 
+
+.ultiroomrow {
+	overflow: hidden;
+	width: 100%;
+}
+
+.ultiroom {
+	width: 200px;
+	height: 100px;
+	float:left;
+	margin: 10px;
+	overflow: hidden;
+	border-radius: 10px;
+	border: 2px solid #73AD21;
+}
+
+.ulti_playernames {
+	float: left;
+	margin-right: 5px;
+}
+
+.ubtn {
+	white-space: normal;
+	width: 120px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.ulti_playername {
+	width: 80px;
+}
+
+.ulti_joinbuttoncontainer {
+	float: left;
+}
+
+.admin {
+	display: none;
+}
+
+html {
+	height: 100%;
+}
+
 body {
 	overflow: hidden;
+	height: 100%;
 }
 
 input[type=text] {
@@ -114,7 +170,7 @@ input[type=text] {
 
 .scrollable-text {
 	background-color: lightgray; 
-	height: 200px;
+	height: 100%;
 	overflow: auto;
 }
 
@@ -128,6 +184,14 @@ input[type=text] {
 	100% {left:50%; opacity: 100}
 }
 
+.disabled {
+   pointer-events: none;
+   cursor: default;
+}
+
+.clear{
+	clear:both;
+}
 
 .modalDialog {
 	position: fixed;

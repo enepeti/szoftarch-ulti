@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Ulti</title>
-<link rel="stylesheet" href="bootstrap.min.css" />
-<link rel="stylesheet" href="ulti_index.css" />
-<script src="jquery.min.js"></script>
-<script src="ulti_index.js"></script>
+	<meta charset="utf-8" />
+	<title>Ulti</title>
+	<link rel="stylesheet" href="bootstrap.min.css" />
+	<link rel="stylesheet" href="ulti_index.css" />
+	<script src="jquery.min.js"></script>
+	<script src="ulti_index.js"></script>
 </head>
 <body>
 	<div id="loginpage" class="screen-center">
@@ -38,12 +38,33 @@
 	</div>
 	<div id="mainpage">
 		<div id="ultipage">
-
+			<div id="ultiroomspage">
+				<div id="ultibuttoncontainer" class="ulticontainer">
+					<div>
+						<p>Üdv <span id="name"></span>!</p>
+						<!--<p>Jelenleg a <span id="chatroomname">Józsi</span> chat szobában vagy</p>-->
+					</div>
+					<div>
+						<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
+					</div>
+					<div>
+						<button class="btn btn-primary ubtn">Statisztikák</button>
+					</div>
+					<div class="admin">
+						<button class="btn btn-primary ubtn">Admin felület</button>
+					</div>
+					<div>
+						<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
+					</div>
+				</div>
+				<div id="ultiroomrows" class="ulticontainer">
+				</div>
+			</div>
 		</div>
 		<div id="chatpage">
-			<div id="chat_buttoncontainer" class="chatcontainer">
+			<div id="chat_buttoncontainer" class="ulticontainer">
 				<div>
-					<a href="#opennewchatroommodal"><button class="btn btn-primary cbtn">Szoba készítése</button></a>
+					<a href="#opennewchatroommodal" class="nonguest"><button class="btn btn-primary cbtn nonguest">Szoba készítése</button></a>
 				</div>
 				<div>
 					<a href="#openswitchchatroommodal"><button class="btn btn-warning cbtn" onclick="getAllChatRoom()">Szobába csatlakozás</button></a>
@@ -52,7 +73,7 @@
 					<button class="btn btn-danger cbtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
 				</div>
 			</div>
-			<div id="chat_container" class="chatcontainer">
+			<div id="chat_container" class="ulticontainer">
 				<div id="chat_historycontainer" class="scrollable-text hor-sep vertical-center">
 					<p id="chat_history">
 					</p>
@@ -67,7 +88,20 @@
 						</div>
 					</div>
 				</form>
+				<div class="clear"></div>
 			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="opennewultiroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Ulti asztal készítése</h2>
+			<form id="ulti_newroomform" action="javascript:newUltiRoom()">
+				<p id="ulti_newroomerror"></p>
+				<input id="ulti_roomname" type="text" class="form-control hor-sep" placeholder="Asztal neve" autocomplete="off" required/>
+				<input id="ulti_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Szoba létrehozása"/>
+			</form>
 		</div>
 	</div>
 	<div id="opennewchatroommodal" class="modalDialog">
@@ -79,7 +113,7 @@
 				<input id="chat_roomname" type="text" class="form-control hor-sep" placeholder="Szoba neve" autocomplete="off" required/>
 				<input id="chat_playernumber" type="number" class="hor-sep"placeholder="Szoba létszáma" autocomplete="off" min="1" required/>
 				<input id="chat_infiniteplayer" type="checkbox" onchange="togglechatplayernumber(this.checked)"/> Végtelen.
-				<input id="chat_newroom_submit" type="submit" class="btn btn-succes hor-sep vertical-center" value="Szoba létrehozása"/>
+				<input id="chat_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Szoba létrehozása"/>
 			</form>
 		</div>
 	</div>
@@ -90,7 +124,7 @@
 			<form id="chat_newroomform" action="javascript:joinChatRoom()">
 				<select id="chat_roomselector" class="hor-sep"><option value="0">Válassz szobát</option></select><br>
 				<button type="button" class="btn btn-primary hor-sep" onclick="getAllChatRoom()">Frissítés</button>
-				<input id="chat_newroom_submit" type="submit" class="btn btn-succes hor-sep vertical-center" value="Belépés"/>
+				<input id="chat_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Belépés"/>
 			</form>
 		</div>
 	</div>
