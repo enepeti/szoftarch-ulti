@@ -2,6 +2,11 @@ package managers;
 
 import interfaces.managers.IUltiRoomManager;
 import interfaces.messagers.IMessageHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import managers.util.Room;
 import managers.util.UltiRoom;
 import messagers.MessageHandler;
 import messagers.util.ulti.room.NewUltiAnswer;
@@ -13,6 +18,18 @@ public class UltiRoomManager extends RoomManager implements IUltiRoomManager {
 
 	private final IMessageHandler messageHandler = new MessageHandler();
 	private UltiGame ultiGame;
+
+	@Override
+	public List<String> getAllRoomNames() {
+		final ArrayList<String> roomNames = new ArrayList<String>();
+		for (final Room room : roomMap.values()) {
+			if (room instanceof UltiRoom) {
+				roomNames.add(room.getName());
+			}
+		}
+
+		return roomNames;
+	}
 
 	@Override
 	public boolean newRoom(final String roomName, final int maxSize,

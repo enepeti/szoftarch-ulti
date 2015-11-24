@@ -314,7 +314,7 @@ public class MessageHandler implements IMessageHandler {
 			final Card card2 = CardConverter.convertStringToCard(card2String);
 
 			activePlayer.getUltiRoom().getUltiGame()
-					.say(concreteGameType, card1, card2);
+			.say(concreteGameType, card1, card2);
 		}
 	}
 
