@@ -12,6 +12,10 @@
 - Chat szoba váltása: `{"type":"tochat", "name":<string>}`
 - Chat szoba elhagyása: `{"type":"leavechat"}`
 - Összes chat szoba lekérése: `{"type":"getallchat"}`
+- Ulti szoba létrehozása: `{"type":"newulti", "name":<string>, "maxmembers":<int>}`
+- Ulti szoba váltása: `{"type":"toulti", "name":<string>}`
+- Ulti szoba elhagyása: `{"type":"leaveulti"}`
+- Összes ulti szoba lekérése: `{"type":"getallulti"}`
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
 - Toplista lekérés: `{"type":"gettoplist"}`
@@ -30,6 +34,9 @@
 - Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}`
 - Chat szoba váltása: `{"type":"tochat", "success":<bool> "message":<string>}`
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
+- Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}`
+- Ulti szoba váltása: `{"type":"toulti", "success":<bool> "message":<string>}`
+- Ulti szoba nevek leküldése: `{"type":"allulti" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`
