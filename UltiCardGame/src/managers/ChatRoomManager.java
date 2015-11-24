@@ -3,9 +3,12 @@ package managers;
 import interfaces.managers.IChatRoomManager;
 import interfaces.messagers.IMessageHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import managers.util.ChatRoom;
+import managers.util.Room;
 import messagers.MessageHandler;
 import messagers.util.chat.room.NewChatAnswer;
 import messagers.util.chat.room.ToChatAnswer;
@@ -19,6 +22,18 @@ public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 
 	public ChatRoomManager() {
 		roomMap = new HashMap<String, ChatRoom>();
+	}
+
+	@Override
+	public List<String> getAllRoomNames() {
+		final ArrayList<String> roomNames = new ArrayList<String>();
+		for (final Room room : roomMap.values()) {
+			if (room instanceof ChatRoom) {
+				roomNames.add(room.getName());
+			}
+		}
+
+		return roomNames;
 	}
 
 	@Override

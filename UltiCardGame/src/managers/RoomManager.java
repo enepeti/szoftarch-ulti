@@ -2,8 +2,6 @@ package managers;
 
 import interfaces.managers.IRoomManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import managers.util.Room;
@@ -15,16 +13,6 @@ public abstract class RoomManager implements IRoomManager {
 	@SuppressWarnings("unchecked")
 	public Map<String, Room> getRoomMap() {
 		return (Map<String, Room>) roomMap;
-	}
-
-	@Override
-	public List<String> getAllRoomNames() {
-		final ArrayList<String> roomNames = new ArrayList<String>();
-		for (final Room room : roomMap.values()) {
-			roomNames.add(room.getName());
-		}
-
-		return roomNames;
 	}
 
 	@Override
