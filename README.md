@@ -3,19 +3,19 @@
 ## API
 
 #### Kliens - Szerver
-- Bejelentkezés: `{"type":"login", "name":<string>, "password":<string>}`
-- Kijelentkezés: `{"type":"logout"}`
-- Regisztráció: `{"type":"register", "email:<string>" "name":<string>, "password":<string>}`
-- Vendég bejelentkezés: `{"type":"guestlogin"}`
-- Chat üzenet: `{"type":"chat", "message":<string>}`
-- Chat szoba létrehozása: `{"type":"newchat", "name":<string>, "maxmembers":<int>}`
-- Chat szoba váltása: `{"type":"tochat", "name":<string>}`
-- Chat szoba elhagyása: `{"type":"leavechat"}`
-- Összes chat szoba lekérése: `{"type":"getallchat"}`
-- Ulti szoba létrehozása: `{"type":"newulti", "name":<string>, "maxmembers":<int>}`
-- Ulti szoba váltása: `{"type":"toulti", "name":<string>}`
+- Bejelentkezés: `{"type":"login", "name":<string>, "password":<string>}` :ok:
+- Kijelentkezés: `{"type":"logout"}` :ok:
+- Regisztráció: `{"type":"register", "email:<string>" "name":<string>, "password":<string>}` :ok:
+- Vendég bejelentkezés: `{"type":"guestlogin"}` :ok:
+- Chat üzenet: `{"type":"chat", "message":<string>}` :ok:
+- Chat szoba létrehozása: `{"type":"newchat", "name":<string>, "maxmembers":<int>}` :ok:
+- Chat szoba váltása: `{"type":"tochat", "name":<string>}` :ok:
+- Chat szoba elhagyása: `{"type":"leavechat"}` :ok:
+- Összes chat szoba lekérése: `{"type":"getallchat"}` :ok:
+- Ulti szoba létrehozása: `{"type":"newulti", "name":<string>, "maxmembers":<int>}` :ok:
+- Ulti szoba váltása: `{"type":"toulti", "name":<string>}` :ok:
 - Ulti szoba elhagyása: `{"type":"leaveulti"}`
-- Összes ulti szoba lekérése: `{"type":"getallulti"}`
+- Összes ulti szoba lekérése: `{"type":"getallulti"}` :ok:
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
 - Toplista lekérés: `{"type":"gettoplist"}`
@@ -26,17 +26,17 @@
 - Lap lerakás: `{"type":"playcard", "card":<string>}`
 
 #### Szerver - Kliens
-- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}`
-- Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}`
-- Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
-- Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`
-- Hiba üzenet: `{"type":"error", "message":<string>}`
-- Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}`
-- Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}`
-- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
-- Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}`
+- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}` :ok:
+- Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}` :ok:
+- Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}` :ok:
+- Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}` :ok:
+- Hiba üzenet: `{"type":"error", "message":<string>}` :ok:
+- Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}` :ok:
+- Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}` :ok:
+- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :ok:
+- Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}`
-- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[<PlayersInUltiRoom>]}`
+- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[<PlayersInUltiRoom>]}` :ok:
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`
