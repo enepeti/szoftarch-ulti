@@ -19,7 +19,7 @@
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
 - Toplista lekérés: `{"type":"gettoplist"}`
-- Játék bemondás: `{"type":"gameselection", "gametype":<string>, "card1":<string>, "card2":<string>}`
+- Játék bemondás: `{"type":"gameselection", "gametype":<int>, "card1":<string>, "card2":<string>}`
 - Passzolás: `{"type":"pass"}`
 - Lapfelvétel: `{"type":"pickupcards"}`
 - Játék jóváhagyása: `{"type":"confirmgame"}`
@@ -45,6 +45,7 @@
 - Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":<string>, "card2":<string>}`
+- Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
 - Játék kezdődik: `{"type":"startgame"}`
 - Lap elvitel: `{"type":"takecards", "cards":[<string>]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[<string, int>]}`

@@ -19,6 +19,10 @@ import messagers.util.AllUltiAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
+import ulti.domain.Card;
+import ulti.domain.CardConverter;
+import ulti.domain.gametype.ConcreteGameType;
+import ulti.domain.gametype.GameTypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -119,6 +123,19 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase()
 						.equals(Type.GETTOPLIST.toString())) {
 					playerManager.getTopList(activePlayer);
+				} else if (type.toUpperCase().equals(
+						Type.GAMESELECTION.toString())) {
+					gameSelectionMessage(jsonObject, activePlayer);
+				} else if (type.toUpperCase().equals(Type.PASS.toString())) {
+					activePlayer.getUltiRoom().getUltiGame().pass();
+				} else if (type.toUpperCase().equals(
+						Type.PICKUPCARDS.toString())) {
+					activePlayer.getUltiRoom().getUltiGame().pickUpCards();
+				} else if (type.toUpperCase().equals(
+						Type.CONFIRMGAME.toString())) {
+					activePlayer.getUltiRoom().getUltiGame().confirm();
+				} else if (type.toUpperCase().equals(Type.PLAYCARD.toString())) {
+					playCardMessage(jsonObject, activePlayer);
 				}
 			}
 		}
@@ -264,4 +281,44 @@ public class MessageHandler implements IMessageHandler {
 		}
 	}
 
+	private void gameSelectionMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		int gameType = 0;
+		String card1String = "";
+		String card2String = "";
+
+		if ((jsonObject.get("gameType") != null)
+				&& !jsonObject.get("gameType").isJsonNull()
+				&& (jsonObject.get("card1") != null)
+				&& !jsonObject.get("card1").isJsonNull()
+				&& (jsonObject.get("card2") != null)
+				&& !jsonObject.get("card2").isJsonNull()) {
+
+			gameType = jsonObject.get("gameType").getAsInt();
+			card1String = jsonObject.get("card1").getAsString();
+			card2String = jsonObject.get("card2").getAsString();
+
+			final ConcreteGameType concreteGameType = GameTypeConverter
+					.convertIntToConcreteGameType(gameType);
+			final Card card1 = CardConverter.convertStringToCard(card1String);
+			final Card card2 = CardConverter.convertStringToCard(card2String);
+
+			activePlayer.getUltiRoom().getUltiGame()
+			.say(concreteGameType, card1, card2);
+		}
+	}
+
+	private void playCardMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String cardString = "";
+
+		if ((jsonObject.get("card") != null)
+				&& !jsonObject.get("card").isJsonNull()) {
+
+			cardString = jsonObject.get("card").getAsString();
+			final Card card = CardConverter.convertStringToCard(cardString);
+
+			activePlayer.getUltiRoom().getUltiGame().playCard(card);
+		}
+	}
 }

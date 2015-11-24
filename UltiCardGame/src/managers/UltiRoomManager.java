@@ -39,6 +39,7 @@ public class UltiRoomManager extends RoomManager implements IUltiRoomManager {
 						activePlayer);
 				if (room.isFull()) {
 					ultiGame = new UltiGame(room.getAllPlayers());
+					room.setUltiGame(ultiGame);
 					room.sendStartMessageToAll(messageHandler);
 				}
 			} else {
