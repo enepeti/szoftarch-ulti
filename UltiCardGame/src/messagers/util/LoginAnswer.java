@@ -3,11 +3,14 @@ package messagers.util;
 public class LoginAnswer extends AnswerMessage {
 
 	private boolean success;
+	private String name;
 	private String playerType;
 
-	public LoginAnswer(final boolean success, final String playerType) {
+	public LoginAnswer(final boolean success, final String name,
+			final String playerType) {
 		super("login");
 		this.success = success;
+		this.name = name;
 		this.setPlayerType(playerType);
 	}
 
@@ -17,6 +20,14 @@ public class LoginAnswer extends AnswerMessage {
 
 	public void setSuccess(final boolean success) {
 		this.success = success;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	public String getPlayerType() {

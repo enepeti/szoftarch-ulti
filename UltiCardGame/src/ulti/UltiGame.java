@@ -1,10 +1,18 @@
 package ulti;
 
+import interfaces.IMessageHandler;
 import interfaces.IPlayerRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import messagers.MessageHandler;
+import messagers.util.DealAnswer;
+import messagers.util.HasToConfirmAnswer;
+import messagers.util.PickUpCardsAnswer;
+import messagers.util.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.gametype.ConcreteGameType;
@@ -16,16 +24,17 @@ import domain.PlayerTypeClass.PlayerType;
 public class UltiGame {
 
 	private final List<ActivePlayer> activePlayerList;
-	private int starterActivePlayer;
-	private int activePlayerOnTurn;
-	private int lastPlayerWithConcreteGameType;
-	private Card remainingCard1;
-	private Card remainingCard2;
-	private List<Card> cardsOnTable;
-	private ConcreteGameType concreteGameType;
+	private int starterActivePlayer = 0;
+	private int activePlayerOnTurn = 0;
+	private int lastPlayerWithConcreteGameType = 0;
+	private Card remainingCard1 = null;
+	private Card remainingCard2 = null;
+	private final List<Card> cardsOnTable = null;
+	private ConcreteGameType concreteGameType = null;
 	private DeckOfCards deckOfCards;
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
+	private final IMessageHandler messageHandler = new MessageHandler();
 
 	public UltiGame(final List<ActivePlayer> activePlayerList) {
 		this.activePlayerList = activePlayerList;
@@ -128,14 +137,26 @@ public class UltiGame {
 
 		final List<Card> cards = deckOfCards.getCards();
 
-		activePlayerList.get(starterActivePlayer).getUltiPlayer()
-				.addCardsToHand(cards.subList(0, 11));
+		final ActivePlayer activePlayer = activePlayerList
+				.get(starterActivePlayer);
+		final List<Card> subList = cards.subList(0, 11);
+		activePlayer.getUltiPlayer().addCardsToHand(subList);
+		messageHandler.send(new DealAnswer(subList, true), activePlayer);
+
 		incrementStarterPlayer();
-		activePlayerList.get(starterActivePlayer).getUltiPlayer()
-				.addCardsToHand(cards.subList(12, 21));
+		final ActivePlayer activePlayer2 = activePlayerList
+				.get(starterActivePlayer);
+		final List<Card> subList2 = cards.subList(12, 21);
+		activePlayer.getUltiPlayer().addCardsToHand(subList2);
+		messageHandler.send(new DealAnswer(subList2, false), activePlayer2);
+
 		incrementStarterPlayer();
-		activePlayerList.get(starterActivePlayer).getUltiPlayer()
-				.addCardsToHand(cards.subList(22, 31));
+		final ActivePlayer activePlayer3 = activePlayerList
+				.get(starterActivePlayer);
+		final List<Card> subList3 = cards.subList(22, 31);
+		activePlayer.getUltiPlayer().addCardsToHand(subList3);
+		messageHandler.send(new DealAnswer(subList3, false), activePlayer3);
+
 		incrementStarterPlayer();
 	}
 
@@ -152,7 +173,15 @@ public class UltiGame {
 		nextPlayerTurn();
 	}
 
-	public void pickUpCards(final Card card1, final Card card2) {
+	public void pickUpCards() {
+		final List<Card> cardsToHand = new ArrayList<Card>();
+		cardsToHand.add(remainingCard1);
+		cardsToHand.add(remainingCard2);
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		activePlayer.getUltiPlayer().addCardsToHand(cardsToHand);
+		messageHandler.send(new PickUpCardsAnswer(remainingCard1,
+				remainingCard2), activePlayer);
 		remainingCard1 = null;
 		remainingCard2 = null;
 	}
@@ -163,14 +192,20 @@ public class UltiGame {
 
 	public void nextPlayerTurn() {
 		incrementActivePlayerOnTurn();
+
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAll(
+				messageHandler, activePlayer.getPlayer().getName());
+
 		if (lastPlayerWithConcreteGameType == activePlayerOnTurn) {
-			// TODO: bemondás után volt 2 passz és visszaért hozzá, ilyenkor nem
-			// passzolhat, csak jóváhagyhatja a játékot vagy felveheti újra
+			messageHandler.send(new HasToConfirmAnswer(), activePlayer);
 		}
 	}
 
 	public void startGame() {
-
+		activePlayerList.get(0).getUltiRoom()
+				.sendStartGameMessageToAll(messageHandler);
 	}
 
 	public void playCard(final Card card) {
@@ -178,6 +213,7 @@ public class UltiGame {
 		if (cardsOnTable.size() == 3) {
 			evaluateTurn();
 		}
+
 		nextPlayerTurn();
 	}
 
@@ -198,9 +234,11 @@ public class UltiGame {
 	public void evaluateTurn() {
 		// TODO: szabályok alapján a megfelelõ játékos vigye: x
 		final int x = 0;
-		activePlayerList.get(x).getUltiPlayer().addCardsToTaken(cardsOnTable);
+		final ActivePlayer activePlayer = activePlayerList.get(x);
+		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
+		messageHandler.send(new TakeCardsAnswer(cardsOnTable), activePlayer);
 
-		if (activePlayerList.get(x).getUltiPlayer().getHand().isEmpty()) {
+		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
 			evaluateGame();
 		} else {
 			activePlayerOnTurn = x;
@@ -237,16 +275,25 @@ public class UltiGame {
 		if (player0.getType() != PlayerType.GUEST) {
 			savePoints(player0);
 		}
+
 		final Player player1 = activePlayerList.get(1).getPlayer();
 		player1.addPoint(sumForPlayer1);
 		if (player1.getType() != PlayerType.GUEST) {
 			savePoints(player1);
 		}
+
 		final Player player2 = activePlayerList.get(2).getPlayer();
 		player2.addPoint(sumForPlayer2);
 		if (player2.getType() != PlayerType.GUEST) {
 			savePoints(player2);
 		}
+
+		final HashMap<String, Integer> points = new HashMap<String, Integer>();
+		points.put(player0.getName(), sumForPlayer0);
+		points.put(player1.getName(), sumForPlayer1);
+		points.put(player2.getName(), sumForPlayer2);
+		activePlayerList.get(0).getUltiRoom()
+				.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

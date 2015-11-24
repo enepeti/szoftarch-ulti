@@ -30,7 +30,7 @@
 - Lap lerakás: `{"type":"playcard", "card":<string>}`
 
 #### Szerver - Kliens
-- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "playertype":<string>}`
+- Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playertype":<string>}`
 - Kijelentkezés válasz: `{"type":"logout", "success":<boolean>}`
 - Regisztráció válasz: `{"type":"register", "success":<boolean>, "fault":<string>}`
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`
@@ -55,6 +55,7 @@
 - Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":<string>, "card2":<string>}`
+- Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
 - Játék kezdődik: `{"type":"startgame"}`
 - Lap elvitel: `{"type":"takecards", "cards":[<string>]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[<string, int>]}`
