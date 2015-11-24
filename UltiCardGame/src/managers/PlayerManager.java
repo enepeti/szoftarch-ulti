@@ -26,7 +26,7 @@ public class PlayerManager implements IPlayerManager {
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler();
 	private final IPasswordHasher passwordHasher = new PasswordHasher();
-	private final IChatRoomManager chatRoomManager = new ChatRoomManager();
+	private static final IChatRoomManager chatRoomManager = new ChatRoomManager();
 
 	private static int guestNumber = 0;
 

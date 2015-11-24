@@ -77,7 +77,7 @@ function handleMessage (msg) {
 			newChat(msg.success);
 			break;
 		case "tochat":
-			chat.newLine("Mostantól a " + msg.name + " szobában vagy!", "Szerver üzenet");
+			chat.newLine("Mostantól a " + msg.message + " szobában vagy!", "Szerver üzenet");
 			break;
 		case "error":
 			showError(msg.message);
