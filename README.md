@@ -32,10 +32,10 @@
 - Chat üzenet: `{"type":"chat", "message":<string>, from:<string>}`
 - Hiba üzenet: `{"type":"error", "message":<string>}`
 - Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}`
-- Chat szoba váltása: `{"type":"tochat", "success":<bool> "message":<string>}`
+- Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}`
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}`
-- Ulti szoba váltása: `{"type":"toulti", "success":<bool> "message":<string>}`
+- Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}`
 - Ulti szoba nevek leküldése: `{"type":"allulti" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`

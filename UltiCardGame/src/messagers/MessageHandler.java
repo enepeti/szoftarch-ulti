@@ -5,14 +5,17 @@ import interfaces.IMessageHandler;
 import interfaces.IMessageSender;
 import interfaces.IPlayerManager;
 import interfaces.ISessionManager;
+import interfaces.IUltiRoomManager;
 
 import java.util.List;
 
 import managers.ChatRoomManager;
 import managers.PlayerManager;
 import managers.SessionManager;
+import managers.UltiRoomManager;
 import messagers.util.ActivePlayerListAnswer;
 import messagers.util.AllChatAnswer;
+import messagers.util.AllUltiAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
@@ -30,6 +33,7 @@ public class MessageHandler implements IMessageHandler {
 	private static IPlayerManager playerManager = new PlayerManager();
 	private static ISessionManager sessionManager = new SessionManager();
 	private static IChatRoomManager chatRoomManager = new ChatRoomManager();
+	private static IUltiRoomManager ultiRoomManager = new UltiRoomManager();
 	private final IMessageSender messageSender = new MessageSender();
 
 	@Override
@@ -77,6 +81,22 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase()
 						.equals(Type.GETALLCHAT.toString())) {
 					allChatMessage(activePlayer);
+				} else if (type.toUpperCase().equals(Type.NEWULTI.toString())) {
+					if (activePlayer.getPlayer().getType()
+							.compareTo(PlayerType.GUEST) == 0) {
+						send(new ErrorAnswer(
+								"Vendégként nem tudsz létrehozni szobát, ha akarsz, jelentkezz be!"),
+								activePlayer);
+					} else {
+						this.newUltiMessage(jsonObject, activePlayer);
+					}
+				} else if (type.toUpperCase().equals(Type.TOULTI.toString())) {
+					this.toUltiMessage(jsonObject, activePlayer);
+				} else if (type.toUpperCase().equals(Type.LEAVEULTI.toString())) {
+					ultiRoomManager.deletePlayerFromRoom(activePlayer);
+				} else if (type.toUpperCase()
+						.equals(Type.GETALLULTI.toString())) {
+					allUltiMessage(activePlayer);
 				} else if (type.toUpperCase().equals(
 						Type.LISTACTIVEPLAYERS.toString())) {
 					if (activePlayer.getPlayer().getType()
@@ -107,7 +127,7 @@ public class MessageHandler implements IMessageHandler {
 	@Override
 	public <T extends AnswerMessage> void send(final T messageObject,
 			final ActivePlayer activePlayer) {
-		if(activePlayer != null) {
+		if (activePlayer != null) {
 			final Gson gson = new Gson();
 			final String json = gson.toJson(messageObject);
 			this.messageSender.sendMessage(json, activePlayer);
@@ -172,7 +192,7 @@ public class MessageHandler implements IMessageHandler {
 			roomName = jsonObject.get("name").getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
 			if (chatRoomManager.newRoom(roomName, maxSize, activePlayer)) {
-				chatRoomManager.changePlayerRoom(activePlayer, roomName);	
+				chatRoomManager.changePlayerRoom(activePlayer, roomName);
 			}
 		}
 
@@ -193,6 +213,39 @@ public class MessageHandler implements IMessageHandler {
 	private void allChatMessage(final ActivePlayer activePlayer) {
 		final List<String> allRoomNames = chatRoomManager.getAllRoomNames();
 		send(new AllChatAnswer(allRoomNames), activePlayer);
+	}
+
+	private void newUltiMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String roomName = "";
+		final int maxSize;
+
+		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
+				.isJsonNull())) {
+			roomName = jsonObject.get("name").getAsString();
+			maxSize = jsonObject.get("maxmembers").getAsInt();
+			if (ultiRoomManager.newRoom(roomName, maxSize, activePlayer)) {
+				ultiRoomManager.changePlayerRoom(activePlayer, roomName);
+			}
+		}
+
+	}
+
+	private void toUltiMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String toRoomName = "";
+
+		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
+				.isJsonNull())) {
+			toRoomName = jsonObject.get("name").getAsString();
+			ultiRoomManager.changePlayerRoom(activePlayer, toRoomName);
+		}
+
+	}
+
+	private void allUltiMessage(final ActivePlayer activePlayer) {
+		final List<String> allRoomNames = ultiRoomManager.getAllRoomNames();
+		send(new AllUltiAnswer(allRoomNames), activePlayer);
 	}
 
 	private void activePlayerListMessage(final ActivePlayer activePlayer) {
