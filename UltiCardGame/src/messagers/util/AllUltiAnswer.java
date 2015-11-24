@@ -4,18 +4,19 @@ import java.util.List;
 
 public class AllUltiAnswer extends AnswerMessage {
 
-	private List<String> rooms;
+	private List<PlayersInUltiRoom> playersInUltiRoom;
 
-	public AllUltiAnswer(final List<String> allRoomNames) {
+	public AllUltiAnswer(final List<PlayersInUltiRoom> playersInUltiRoom) {
 		super("allulti");
-		this.setAllRoomNames(allRoomNames);
+		this.playersInUltiRoom = playersInUltiRoom;
 	}
 
-	public List<String> getAllRoomNames() {
-		return rooms;
+	public List<PlayersInUltiRoom> getPlayersInUltiRoom() {
+		return playersInUltiRoom;
 	}
 
-	public void setAllRoomNames(final List<String> allRoomNames) {
-		this.rooms = allRoomNames;
+	public void setPlayersInUltiRoom(
+			final List<PlayersInUltiRoom> playersInUltiRoom) {
+		this.playersInUltiRoom = playersInUltiRoom;
 	}
 }

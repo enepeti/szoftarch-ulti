@@ -2,15 +2,17 @@ package managers.util;
 
 import interfaces.IMessageHandler;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import domain.ActivePlayer;
 import messagers.util.AnswerMessage;
+import domain.ActivePlayer;
 
 public abstract class Room {
 
-	protected final Set<ActivePlayer> activePlayersInRoom;
+	private final Set<ActivePlayer> activePlayersInRoom;
 	private final int maxSize;
 	private String name;
 	private boolean active;
@@ -24,22 +26,22 @@ public abstract class Room {
 
 	public boolean add(final ActivePlayer activePlayer) {
 		if (!isFull()) {
-			activePlayersInRoom.add(activePlayer);
+			getActivePlayersInRoom().add(activePlayer);
 			return true;
 		}
 		return false;
 	}
 
 	public void remove(final ActivePlayer activePlayer) {
-		activePlayersInRoom.remove(activePlayer);
-		if (activePlayersInRoom.size() == 0) {
+		getActivePlayersInRoom().remove(activePlayer);
+		if (getActivePlayersInRoom().size() == 0) {
 			active = false;
 		}
 	}
 
 	protected void sendToAll(final IMessageHandler messageHandler,
 			final AnswerMessage message) {
-		for (final ActivePlayer activePlayer : this.activePlayersInRoom) {
+		for (final ActivePlayer activePlayer : this.getActivePlayersInRoom()) {
 			if (activePlayer.isLoggedIn()) {
 				messageHandler.send(message, activePlayer);
 			}
@@ -47,9 +49,9 @@ public abstract class Room {
 	}
 
 	public boolean isFull() {
-		return (activePlayersInRoom.size() >= maxSize) && (maxSize != -1);
+		return (getActivePlayersInRoom().size() >= maxSize) && (maxSize != -1);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -60,5 +62,18 @@ public abstract class Room {
 
 	public boolean isActive() {
 		return active;
+	}
+
+	public Set<ActivePlayer> getActivePlayersInRoom() {
+		return activePlayersInRoom;
+	}
+
+	public List<String> getActivePlayerNamesInRoom() {
+		final List<String> names = new ArrayList<String>();
+		for (final ActivePlayer activePlayer : activePlayersInRoom) {
+			names.add(activePlayer.getPlayer().getName());
+		}
+
+		return names;
 	}
 }

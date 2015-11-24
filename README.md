@@ -36,7 +36,7 @@
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}`
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}`
-- Ulti szoba nevek leküldése: `{"type":"allulti" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}`
+- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[<PlayersInUltiRoom>]}`
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
 - Kidobás játákost: `{"type":"kickplayer"}`
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`

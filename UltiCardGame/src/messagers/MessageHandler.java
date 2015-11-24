@@ -7,6 +7,7 @@ import interfaces.IPlayerManager;
 import interfaces.ISessionManager;
 import interfaces.IUltiRoomManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import managers.ChatRoomManager;
@@ -19,6 +20,7 @@ import messagers.util.AllUltiAnswer;
 import messagers.util.AnswerMessage;
 import messagers.util.ErrorAnswer;
 import messagers.util.MessageType.Type;
+import messagers.util.PlayersInUltiRoom;
 import ulti.domain.Card;
 import ulti.domain.CardConverter;
 import ulti.domain.gametype.ConcreteGameType;
@@ -262,7 +264,15 @@ public class MessageHandler implements IMessageHandler {
 
 	private void allUltiMessage(final ActivePlayer activePlayer) {
 		final List<String> allRoomNames = ultiRoomManager.getAllRoomNames();
-		send(new AllUltiAnswer(allRoomNames), activePlayer);
+		final List<PlayersInUltiRoom> playersInUltiRoom = new ArrayList<PlayersInUltiRoom>();
+		for (final String roomName : allRoomNames) {
+			final List<String> activePlayerNames = ultiRoomManager.getRoom(
+					roomName).getActivePlayerNamesInRoom();
+			playersInUltiRoom.add(new PlayersInUltiRoom(roomName,
+					activePlayerNames));
+		}
+
+		send(new AllUltiAnswer(playersInUltiRoom), activePlayer);
 	}
 
 	private void activePlayerListMessage(final ActivePlayer activePlayer) {
@@ -304,7 +314,7 @@ public class MessageHandler implements IMessageHandler {
 			final Card card2 = CardConverter.convertStringToCard(card2String);
 
 			activePlayer.getUltiRoom().getUltiGame()
-			.say(concreteGameType, card1, card2);
+					.say(concreteGameType, card1, card2);
 		}
 	}
 

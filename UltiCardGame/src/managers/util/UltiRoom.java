@@ -45,7 +45,7 @@ public class UltiRoom extends Room {
 	}
 
 	public List<ActivePlayer> getAllPlayers() {
-		return new ArrayList<ActivePlayer>(activePlayersInRoom);
+		return new ArrayList<ActivePlayer>(getActivePlayersInRoom());
 	}
 
 	public void sendStartMessageToAll(final IMessageHandler messageHandler) {
