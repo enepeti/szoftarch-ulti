@@ -502,14 +502,22 @@ function showToplist(toplist) {
 	
 	table.append(headerrow);
 
+	var sortlist = [];
+
 	$.each(toplist, function(key, value) {
+		sortlist.push({name:key, point:value});
+	});
+
+	sortlist.sort(function(a,b) {return a.point - b.point});
+
+	$.each(sortlist, function(index,value) { 
 		var row = $('<tr>');
 		var data = $('<td>');
-		data.html(key);
+		data.html(value.name);
 		row.append(data);
 
 		data = $('<td>');
-		data.html(value);
+		data.html(value.point);
 		row.append(data);
 
 		table.append(row);
