@@ -19,11 +19,11 @@
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}` :ok:
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}` :ok:
 - Toplista lekérés: `{"type":"gettoplist"}` :ok:
-- Játék bemondás: `{"type":"gameselection", "gametype":<int>, "card1":<string>, "card2":<string>}`
+- Játék bemondás: `{"type":"gameselection", "gametype":<int>, "card1":{"suit":<String>, "Value":<String>}, "card2":{"suit":<String>, "Value":<String>}}`
 - Passzolás: `{"type":"pass"}`
 - Lapfelvétel: `{"type":"pickupcards"}`
 - Játék jóváhagyása: `{"type":"confirmgame"}`
-- Lap lerakás: `{"type":"playcard", "card":<string>}`
+- Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "Value":<String>}}`
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playerType":<string>}` :ok:
@@ -42,10 +42,10 @@
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
-- Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
+- Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "Value":<String>}], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
-- Felvett lapok válasz: `{"type":"pickedupcards", "card1":<string>, "card2":<string>}`
+- Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "Value":<String>}, "card2":{"suit":<String>, "Value":<String>}}`
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
 - Játék kezdődik: `{"type":"startgame"}`
-- Lap elvitel: `{"type":"takecards", "cards":[<string>]}`
+- Lap elvitel: `{"type":"takecards", "cards":[{"suit":<String>, "Value":<String>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[<string, int>]}`
