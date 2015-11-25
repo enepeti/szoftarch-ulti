@@ -144,7 +144,7 @@ public class UltiGame {
 
 		final ActivePlayer activePlayer = activePlayerList
 				.get(starterActivePlayer);
-		final List<Card> subList = cards.subList(0, 11);
+		final List<Card> subList = cards.subList(0, 12);
 
 		activePlayer.getUltiPlayer().addCardsToHand(subList);
 		messageHandler.send(new DealAnswer(subList, true), activePlayer);
@@ -152,14 +152,14 @@ public class UltiGame {
 		incrementStarterPlayer();
 		final ActivePlayer activePlayer2 = activePlayerList
 				.get(starterActivePlayer);
-		final List<Card> subList2 = cards.subList(12, 21);
+		final List<Card> subList2 = cards.subList(12, 22);
 		activePlayer2.getUltiPlayer().addCardsToHand(subList2);
 		messageHandler.send(new DealAnswer(subList2, false), activePlayer2);
 
 		incrementStarterPlayer();
 		final ActivePlayer activePlayer3 = activePlayerList
 				.get(starterActivePlayer);
-		final List<Card> subList3 = cards.subList(22, 31);
+		final List<Card> subList3 = cards.subList(22, 32);
 		activePlayer3.getUltiPlayer().addCardsToHand(subList3);
 		messageHandler.send(new DealAnswer(subList3, false), activePlayer3);
 
@@ -211,7 +211,7 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-				.sendStartGameMessageToAll(messageHandler);
+		.sendStartGameMessageToAll(messageHandler);
 	}
 
 	public void playCard(final Card card) {
@@ -299,7 +299,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForPlayer1);
 		points.put(player2.getName(), sumForPlayer2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}
