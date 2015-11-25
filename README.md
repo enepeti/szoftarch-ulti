@@ -41,7 +41,7 @@
 - Kidobás játákost: `{"type":"kickplayer"}` :ok:
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
 - Toplista válasz: `{"type":"toplist", "toplist":[<string, int>]}` :hankey:
-- Ulti szobába 3. ember belépett: `{"type":"startulti"}`
+- Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
 - Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":<string>, "card2":<string>}`

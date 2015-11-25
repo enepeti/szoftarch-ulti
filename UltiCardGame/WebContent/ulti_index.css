@@ -37,12 +37,20 @@
 }
 
 #ultipage {
-	min-height: 64%;
+	height: 64%;
+	overflow: hidden;
 }
 
 #ultiroomspage {
 	height: 100%;
 	overflow: auto;
+}
+
+#ultigamepage {
+	background-color: lightgreen;
+	height: 100%;
+	width: 90%;
+	display: none;
 }
 
 #ultibuttoncontainer {
@@ -55,7 +63,7 @@
 }
 
 #chat_buttoncontainer {
-	width: 6%;
+	width: 7%;
 }
 
 #chat_container {
@@ -140,7 +148,7 @@
 	float: left;
 }
 
-.admin {
+.admin, .game {
 	display: none;
 }
 

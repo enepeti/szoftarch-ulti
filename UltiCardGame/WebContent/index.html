@@ -38,39 +38,44 @@
 	</div>
 	<div id="mainpage">
 		<div id="ultipage">
-			<div id="ultiroomspage">
-				<div id="ultibuttoncontainer" class="ulticontainer">
-					<div>
-						<p>Üdv <span id="name"></span>!</p>
-						<!--<p>Jelenleg a <span id="chatroomname">Józsi</span> chat szobában vagy</p>-->
-					</div>
-					<div>
-						<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
-					</div>
-					<div>
-						<button class="btn btn-primary ubtn" onclick="showStatistics()">Statisztikák</button>
-					</div>
-					<div class="admin">
-						<a href="#openadminmodal"><button class="btn btn-primary ubtn" onclick="admin_getAllPlayers()">Admin felület</button></a>
-					</div>
-					<div>
-						<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
-					</div>
+			<div id="ultibuttoncontainer" class="ulticontainer">
+				<div>
+					<p>Üdv <span id="name"></span>!</p>
+					<!--<p>Jelenleg a <span id="chatroomname">Józsi</span> chat szobában vagy</p>-->
 				</div>
-				<div id="ultiroomrows" class="ulticontainer">
+				<div class="room">
+					<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
 				</div>
+				<div class="room">
+					<button class="btn btn-primary ubtn" onclick="showStatistics()">Statisztikák</button>
+				</div>
+				<div class="admin">
+					<a href="#openadminmodal"><button class="btn btn-primary ubtn" onclick="admin_getAllPlayers()">Admin felület</button></a>
+				</div>
+				<div class="room">
+					<button class="btn btn-danger ubtn nonguest" onclick="logout()">Kijelenetkezés</button>
+				</div>
+				<div class="game">
+					<button class="btn btn-danger ubtn nonguest" onclick="standUp()">Asztal elhagyása</button>
+				</div>
+			</div>
+			<div id="ultiroomspage" class="ulticontainer">
+				<div id="ultiroomrows"></div>
+			</div>
+			<div id="ultigamepage" class="ulticontainer">
+
 			</div>
 		</div>
 		<div id="chatpage">
 			<div id="chat_buttoncontainer" class="ulticontainer">
 				<div>
-					<a href="#opennewchatroommodal" class="nonguest"><button class="btn btn-primary cbtn nonguest">Szoba készítése</button></a>
+					<a href="#opennewchatroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Szoba készítése</button></a>
 				</div>
 				<div>
-					<a href="#openswitchchatroommodal"><button class="btn btn-warning cbtn" onclick="getAllChatRoom()">Szobába csatlakozás</button></a>
+					<a href="#openswitchchatroommodal"><button class="btn btn-warning ubtn" onclick="getAllChatRoom()">Szobába csatlakozás</button></a>
 				</div>
 				<div>
-					<button class="btn btn-danger cbtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
+					<button class="btn btn-danger ubtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
 				</div>
 			</div>
 			<div id="chat_container" class="ulticontainer">

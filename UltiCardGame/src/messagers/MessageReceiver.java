@@ -40,7 +40,7 @@ public class MessageReceiver implements IMessageReceiver {
 	@Override
 	@OnError
 	public void error(final Throwable error) {
-		System.err.println(error.getMessage());
+		System.err.println(error);
 	}
 
 	@Override

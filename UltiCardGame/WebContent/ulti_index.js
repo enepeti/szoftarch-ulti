@@ -108,6 +108,9 @@ function handleMessage (msg) {
 		case "kickplayer":
 			doLogout("Egy admin kirúgott!");
 			break;
+		case "startulti":
+			startUlti();
+			break;
 		case "error":
 			showError(msg.message);
 			log("Error: " + msg.message);
@@ -435,6 +438,31 @@ function showStatistics () {
 	send(gettoplistmsg);
 }
 
+function startUlti () {
+	var ultiroomspage = $('#ultiroomspage');
+	var ultigamepage = $('#ultigamepage');
+	var roombuttons = $('.room');
+	var gamebuttons = $('.game');
+
+	ultiroomspage.css('display', 'none');
+	ultigamepage.css('display', 'block');
+	roombuttons.css('display', 'none');
+	gamebuttons.css('display', 'block');
+
+}
+
+function standUp () {
+	var ultiroomspage = $('#ultiroomspage');
+	var ultigamepage = $('#ultigamepage');
+	var roombuttons = $('.room');
+	var gamebuttons = $('.game');
+
+	ultiroomspage.css('display', 'block');
+	ultigamepage.css('display', 'none');
+	roombuttons.css('display', 'block');
+	gamebuttons.css('display', 'none');
+}
+
 function admin_getAllPlayers () {
 	if(admin_checkAdmin()) {
 		listactiveplayersmsg = {};
@@ -536,3 +564,8 @@ $(document).ready(function () {
 	onpage.css("display", "block");
 	var ultiroomrefreshinterval = setInterval(autoGetUltiRooms, 5000);
 });
+
+function __debug_game__ () {
+	showPage("mainpage");
+	startUlti();
+}
