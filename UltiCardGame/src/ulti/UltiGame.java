@@ -12,7 +12,6 @@ import messagers.MessageHandler;
 import messagers.util.ulti.DealAnswer;
 import messagers.util.ulti.HasToConfirmAnswer;
 import messagers.util.ulti.PickUpCardsAnswer;
-import messagers.util.ulti.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.UltiPlayer;
@@ -25,9 +24,9 @@ import domain.PlayerTypeClass.PlayerType;
 public class UltiGame {
 
 	private final List<ActivePlayer> activePlayerList;
-	private int starterActivePlayer = 0;
-	private int activePlayerOnTurn = 0;
-	private int lastPlayerWithConcreteGameType = 0;
+	private int starterActivePlayer = -1;
+	private int activePlayerOnTurn = -1;
+	private int lastPlayerWithConcreteGameType = -1;
 	private Card remainingCard1 = null;
 	private Card remainingCard2 = null;
 	private List<Card> cardsOnTable = null;
@@ -212,20 +211,28 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-				.sendStartGameMessageToAll(messageHandler);
+		.sendStartGameMessageToAll(messageHandler);
 	}
 
 	public void playCard(final Card card) {
 		cardsOnTable.add(card);
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		activePlayer.getUltiPlayer().playCard(card);
+		activePlayer.getUltiRoom().sendPlayedCardMessageToAll(messageHandler,
+				activePlayer.getPlayer().getName(), card);
 		if (cardsOnTable.size() == 3) {
 			evaluateTurn();
+		} else {
+			nextPlayerTurn();
 		}
-
-		nextPlayerTurn();
 	}
 
 	private void nextPlayerTurnAfterEvaluation() {
-
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAll(
+				messageHandler, activePlayer.getPlayer().getName());
 	}
 
 	public void endGame() {
@@ -243,7 +250,9 @@ public class UltiGame {
 		final int x = 0;
 		final ActivePlayer activePlayer = activePlayerList.get(x);
 		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
-		messageHandler.send(new TakeCardsAnswer(cardsOnTable), activePlayer);
+		activePlayer.getUltiRoom().sendTakenCardsMessageToAll(messageHandler,
+				activePlayer.getPlayer().getName(), cardsOnTable);
+		cardsOnTable = new ArrayList<Card>();
 
 		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
 			evaluateGame();
@@ -300,7 +309,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForPlayer1);
 		points.put(player2.getName(), sumForPlayer2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

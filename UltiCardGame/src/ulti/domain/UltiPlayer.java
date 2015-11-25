@@ -8,16 +8,12 @@ import ulti.domain.gametype.ConcreteGameType;
 
 public class UltiPlayer {
 
-	private List<Card> hand = new ArrayList<Card>(12);
+	private final List<Card> hand = new ArrayList<Card>();
 	private int pointsInGamesInActualRoom = 0;
-	private List<Card> taken = new ArrayList<Card>(30);
+	private final List<Card> taken = new ArrayList<Card>();
 
 	public List<Card> getHand() {
 		return hand;
-	}
-
-	public void setHand(final List<Card> hand) {
-		this.hand = hand;
 	}
 
 	public int getPointsInGamesInActualRoom() {
@@ -29,19 +25,17 @@ public class UltiPlayer {
 	}
 
 	public void addCardsToHand(final List<Card> cardsToHand) {
-		hand = new ArrayList<Card>();
 		hand.addAll(cardsToHand);
 	}
 
 	public void addCardsToTaken(final List<Card> cardsToTaken) {
-		taken = new ArrayList<Card>();
 		taken.addAll(cardsToTaken);
 	}
 
 	public void say(final ConcreteGameType concreteGameType, final Card card1,
 			final Card card2) {
-		getHand().remove(card1);
-		getHand().remove(card2);
+		hand.remove(card1);
+		hand.remove(card2);
 	}
 
 	public void pass() {
@@ -49,12 +43,12 @@ public class UltiPlayer {
 	}
 
 	public void pickUpCards(final Card card1, final Card card2) {
-		getHand().add(card1);
-		getHand().add(card2);
+		hand.add(card1);
+		hand.add(card2);
 	}
 
 	public void playCard(final Card card) {
-		getHand().remove(card);
+		hand.remove(card);
 	}
 
 	public void takeCards(final Card card1, final Card card2, final Card card3) {

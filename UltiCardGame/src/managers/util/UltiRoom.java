@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
 import messagers.util.ulti.ShowResultAnswer;
 import messagers.util.ulti.StartUltiAnswer;
 import messagers.util.ulti.StartUltiGameAnswer;
+import messagers.util.ulti.TakeCardsAnswer;
 import ulti.UltiGame;
+import ulti.domain.Card;
 import domain.ActivePlayer;
 
 public class UltiRoom extends Room {
@@ -69,6 +72,20 @@ public class UltiRoom extends Room {
 			final IMessageHandler messageHandler,
 			final HashMap<String, Integer> points) {
 		final ShowResultAnswer answer = new ShowResultAnswer(points);
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendPlayedCardMessageToAll(
+			final IMessageHandler messageHandler, final String name,
+			final Card card) {
+		final PlayedCardAnswer answer = new PlayedCardAnswer(name, card);
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendTakenCardsMessageToAll(
+			final IMessageHandler messageHandler, final String name,
+			final List<Card> cardsOnTable) {
+		final TakeCardsAnswer answer = new TakeCardsAnswer(name, cardsOnTable);
 		super.sendToAll(messageHandler, answer);
 	}
 }
