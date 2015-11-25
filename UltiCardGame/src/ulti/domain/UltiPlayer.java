@@ -40,11 +40,6 @@ public class UltiPlayer {
 
 	}
 
-	public void pickUpCards(final Card card1, final Card card2) {
-		hand.add(card1);
-		hand.add(card2);
-	}
-
 	public void playCard(final Card card) {
 		hand.remove(card);
 	}
