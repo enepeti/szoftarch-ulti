@@ -6,6 +6,7 @@ var dorefresh = false;
 var inultiroom = null;
 
 var isadmin = false;
+var mycards = [];
 
 var chat = {};
 
@@ -47,7 +48,7 @@ function onClose() {
 }
 
 function onMessage(msg) {
-	log("Message: " + msg.data);
+	log("Got: " + msg.data);
 	handleMessage(JSON.parse(msg.data));
 }
 
@@ -111,12 +112,17 @@ function handleMessage (msg) {
 		case "startulti":
 			startUlti();
 			break;
+		case "deal":
+			mycards = msg.cards;
+			showCards();
+			break;
 		case "error":
 			showError(msg.message);
 			log("Error: " + msg.message);
 			break;
 		default:
 			log("Unkonwn message!");
+			break;
 	}
 }
 
@@ -130,7 +136,7 @@ function showMessage (msg) {
 
 function send(data) {
 	var msg = JSON.stringify(data);
-	log(msg);
+	log("Send: "+ msg);
 	socket.send(msg);
 }
 
@@ -449,6 +455,8 @@ function startUlti () {
 	roombuttons.css('display', 'none');
 	gamebuttons.css('display', 'block');
 
+	dorefresh = false;
+
 }
 
 function standUp () {
@@ -461,6 +469,54 @@ function standUp () {
 	ultigamepage.css('display', 'none');
 	roombuttons.css('display', 'block');
 	gamebuttons.css('display', 'none');
+
+	dorefresh = true;
+}
+
+function refreshHand() {
+
+}
+
+function showCards () {
+	var myhand = $('#myhand');
+
+	myhand.html('');
+
+	for (var i = 0; i < mycards.length; i++) {
+		var card = createCard(mycards[i], i);
+		myhand.append(card);
+	};
+}
+
+function playCard(index) {
+	card = mycards.splice(index, 1)[0];
+	showCards();
+	
+	var playcardmsg = {};
+	playcardmsg.type = "playcard";
+	playcardmsg.card = card;
+	send(playcardmsg);
+}
+
+function createCard (cardInfo, num) {
+	var card = $('<div>');
+	var suit = cardInfo.suit;
+	var value = cardInfo.value;
+
+	card.addClass('card');
+	card.attr('id', suit + ' ' + value);
+	card.click(function() {playCard(num)});
+	if(num === 0) {
+		card.css('margin-left', '0');
+	}
+	
+	var cardtext = $('<p>');
+	
+	cardtext.html(suit + "<br>" + value);
+	cardtext.addClass('font');
+	card.append(cardtext);
+
+	return card;
 }
 
 function admin_getAllPlayers () {

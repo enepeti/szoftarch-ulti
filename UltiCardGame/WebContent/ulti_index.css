@@ -148,6 +148,24 @@
 	float: left;
 }
 
+#myhand {
+	width: 84%;
+	height: 20%;
+	overflow: hidden;
+	nopbackground: red;
+}
+
+.card {
+	border-radius: 10px;
+	border :2px solid black;
+	width: 12.917%;
+	height: 100%;
+	margin-left: -5%;
+	float: left;
+	background: white;
+	cursor: pointer;
+}
+
 .admin, .game {
 	display: none;
 }

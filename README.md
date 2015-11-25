@@ -23,7 +23,7 @@
 - Passzolás: `{"type":"pass"}`
 - Lapfelvétel: `{"type":"pickupcards"}`
 - Játék jóváhagyása: `{"type":"confirmgame"}`
-- Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}`
+- Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 
 #### Szerver - Kliens
 - Bejelentkezés válasz: `{"type":"login", "success":<boolean>, "name":<string>, "playerType":<string>}` :ok:
@@ -33,14 +33,14 @@
 - Hiba üzenet: `{"type":"error", "message":<string>}` :ok:
 - Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}` :ok:
 - Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}` :ok:
-- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :ok:
+- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :hankey:
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}` :ok:
 - Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName"=<String>, "names"=[<String>]}]}` :ok:
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "nameList":[<string>]}` :ok:
 - Kidobás játákost: `{"type":"kickplayer"}` :ok:
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
-- Toplista válasz: `{"type":"toplist", "toplist":{<string>: int>}}` :ok:
+- Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}`
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
 - Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
