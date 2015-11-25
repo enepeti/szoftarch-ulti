@@ -54,7 +54,7 @@ public class FakePlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Integer>> listOrderedByPoint() {
+	public HashMap<String, Integer> listOrderedByPoint() {
 		// TODO Auto-generated method stub
 		return null;
 	}

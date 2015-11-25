@@ -1,7 +1,6 @@
 package interfaces.dal;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +20,6 @@ public interface IPlayerRepository {
 
 	public List<Player> list();
 
-	public ArrayList<HashMap<String, Integer>> listOrderedByPoint();
+	public HashMap<String, Integer> listOrderedByPoint();
 
 }

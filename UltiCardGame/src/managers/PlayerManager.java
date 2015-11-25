@@ -9,7 +9,6 @@ import interfaces.util.IPasswordHasher;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 
 import messagers.MessageHandler;
 import messagers.util.guest.TopListAnswer;
@@ -78,7 +77,7 @@ public class PlayerManager implements IPlayerManager {
 		try {
 			playerRepository.add(player);
 			this.messageHandler
-					.send(new RegisterAnswer(true, ""), activePlayer);
+			.send(new RegisterAnswer(true, ""), activePlayer);
 		} catch (final SQLException e) {
 			if (e.getErrorCode() == 1062) {
 				if (e.getMessage().contains("name")) {
@@ -113,7 +112,7 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public void getTopList(final ActivePlayer activePlayer) {
-		final List<HashMap<String, Integer>> topList = playerRepository
+		final HashMap<String, Integer> topList = playerRepository
 				.listOrderedByPoint();
 		messageHandler.send(new TopListAnswer(topList), activePlayer);
 	}
