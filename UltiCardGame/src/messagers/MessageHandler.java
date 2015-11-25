@@ -300,13 +300,12 @@ public class MessageHandler implements IMessageHandler {
 			final JsonElement jsonElementValue1 = card1JsonObject.get("value");
 			final JsonElement jsonElementSuit2 = card2JsonObject.get("suit");
 			final JsonElement jsonElementValue2 = card2JsonObject.get("value");
-			if ((jsonElementSuit1.getAsString() != null)
-					&& !jsonElementSuit1.isJsonNull()
-					&& (jsonElementValue1.getAsString() != null)
+			if ((jsonElementSuit1 != null) && !jsonElementSuit1.isJsonNull()
+					&& (jsonElementValue1 != null)
 					&& !jsonElementValue1.isJsonNull()
-					&& (jsonElementSuit2.getAsString() != null)
+					&& (jsonElementSuit2 != null)
 					&& !jsonElementSuit2.isJsonNull()
-					&& (jsonElementValue2.getAsString() != null)
+					&& (jsonElementValue2 != null)
 					&& !jsonElementValue2.isJsonNull()) {
 
 				final String card1Suit = jsonElementSuit1.getAsString();
@@ -322,7 +321,7 @@ public class MessageHandler implements IMessageHandler {
 						card2Suit, card2Value);
 
 				activePlayer.getUltiRoom().getUltiGame()
-						.say(concreteGameType, card1, card2);
+				.say(concreteGameType, card1, card2);
 			}
 		}
 	}
@@ -338,9 +337,8 @@ public class MessageHandler implements IMessageHandler {
 			final JsonElement jsonElementSuit = cardJsonObject.get("suit");
 			final JsonElement jsonElementValue = cardJsonObject.get("value");
 
-			if ((jsonElementSuit.getAsString() != null)
-					&& !jsonElementSuit.isJsonNull()
-					&& (jsonElementValue.getAsString() != null)
+			if ((jsonElementSuit != null) && !jsonElementSuit.isJsonNull()
+					&& (jsonElementValue != null)
 					&& !jsonElementValue.isJsonNull()) {
 
 				final String cardSuit = jsonElementSuit.getAsString();

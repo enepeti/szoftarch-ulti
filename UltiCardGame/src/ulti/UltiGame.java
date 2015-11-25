@@ -30,7 +30,7 @@ public class UltiGame {
 	private int lastPlayerWithConcreteGameType = 0;
 	private Card remainingCard1 = null;
 	private Card remainingCard2 = null;
-	private final List<Card> cardsOnTable = null;
+	private List<Card> cardsOnTable = null;
 	private ConcreteGameType concreteGameType = null;
 	private DeckOfCards deckOfCards;
 
@@ -39,7 +39,8 @@ public class UltiGame {
 
 	public UltiGame(final List<ActivePlayer> activePlayerList) {
 		this.activePlayerList = activePlayerList;
-		this.deckOfCards = new DeckOfCards();
+		deckOfCards = new DeckOfCards();
+		cardsOnTable = new ArrayList<Card>();
 
 		for (final ActivePlayer activePlayerInRoom : activePlayerList) {
 			activePlayerInRoom.setUltiPlayer(new UltiPlayer());
@@ -211,7 +212,7 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-		.sendStartGameMessageToAll(messageHandler);
+				.sendStartGameMessageToAll(messageHandler);
 	}
 
 	public void playCard(final Card card) {
@@ -299,7 +300,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForPlayer1);
 		points.put(player2.getName(), sumForPlayer2);
 		activePlayerList.get(0).getUltiRoom()
-		.sendShowResultMessageToAll(messageHandler, points);
+				.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}
