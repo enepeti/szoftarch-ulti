@@ -14,11 +14,11 @@
 - Összes chat szoba lekérése: `{"type":"getallchat"}` :ok:
 - Ulti szoba létrehozása: `{"type":"newulti", "name":<string>, "maxmembers":<int>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "name":<string>}` :ok:
-- Ulti szoba elhagyása: `{"type":"leaveulti"}`
+- Ulti szoba elhagyása: `{"type":"leaveulti"}` :ok:
 - Összes ulti szoba lekérése: `{"type":"getallulti"}` :ok:
-- Felhasználók listázása adminnak: `{"type":"listactiveplayers"}`
-- Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}`
-- Toplista lekérés: `{"type":"gettoplist"}`
+- Felhasználók listázása adminnak: `{"type":"listactiveplayers"}` :ok:
+- Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}` :ok:
+- Toplista lekérés: `{"type":"gettoplist"}` :ok:
 - Játék bemondás: `{"type":"gameselection", "gametype":<int>, "card1":<string>, "card2":<string>}`
 - Passzolás: `{"type":"pass"}`
 - Lapfelvétel: `{"type":"pickupcards"}`
@@ -35,12 +35,12 @@
 - Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}` :ok:
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :ok:
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
-- Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}`
+- Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}` :ok:
 - Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName"=<String>, "names"=[<String>]}]}` :ok:
-- Felhasználónevek leküldése: `{"type":"activeplayerlist", "namelist":[<string>]}`
-- Kidobás játákost: `{"type":"kickplayer"}`
-- Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}`
-- Toplista válasz: `{"type":"toplist", "toplist":[<string, int>]}`
+- Felhasználónevek leküldése: `{"type":"activeplayerlist", "nameList":[<string>]}` :ok:
+- Kidobás játákost: `{"type":"kickplayer"}` :ok:
+- Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
+- Toplista válasz: `{"type":"toplist", "toplist":[<string, int>]}` :hankey:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}`
 - Osztás válasz: `{"type":"deal", "cards":[<string>], "isstarter":<boolean>}`
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`

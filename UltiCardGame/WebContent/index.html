@@ -48,10 +48,10 @@
 						<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
 					</div>
 					<div>
-						<button class="btn btn-primary ubtn">Statisztikák</button>
+						<button class="btn btn-primary ubtn" onclick="showStatistics()">Statisztikák</button>
 					</div>
 					<div class="admin">
-						<button class="btn btn-primary ubtn">Admin felület</button>
+						<a href="#openadminmodal"><button class="btn btn-primary ubtn" onclick="admin_getAllPlayers()">Admin felület</button></a>
 					</div>
 					<div>
 						<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
@@ -122,10 +122,25 @@
 			<a href="#close" title="Close" class="close">X</a>
 			<h2>Chat szoba váltása</h2>
 			<form id="chat_newroomform" action="javascript:joinChatRoom()">
-				<select id="chat_roomselector" class="hor-sep"><option value="0">Válassz szobát</option></select><br>
-				<button type="button" class="btn btn-primary hor-sep" onclick="getAllChatRoom()">Frissítés</button>
+				<div>
+					<select id="chat_roomselector" class="hor-sep"><option value="0">Válassz szobát</option></select>
+				</div>
+				<div>
+					<button type="button" class="btn btn-primary hor-sep" onclick="getAllChatRoom()">Frissítés</button>
+				</div>
 				<input id="chat_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Belépés"/>
 			</form>
+		</div>
+	</div>
+	<div id="openadminmodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Admin</h2>
+			<p id="admin_info"></p>
+			<select id="admin_playerselector" class="hor-sep"><option value="0">Összes aktív játékos</option></select><br>
+			<button type="button" class="btn btn-primary hor-sep" onclick="admin_getAllPlayers()">Frissítés</button>
+			<button type="button" class="btn btn-danger hor-sep" onclick="admin_kickPlayer()">Kirúgás</button>
+			<a href="#close"><button class="btn btn-success vertical-center">Rendben</button></a>
 		</div>
 	</div>
 </body>

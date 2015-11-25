@@ -5,6 +5,8 @@ var onpagename = "loginpage"
 var dorefresh = false;
 var inultiroom = null;
 
+var isadmin = false;
+
 var chat = {};
 
 chat.messages = [];
@@ -63,16 +65,12 @@ function handleMessage (msg) {
 			}
 			break;
 		case "logout":
-			showPage("loginpage");
-			chat.flush();
-			inultiroom = null;
-			dorefresh = false;
-			alert("Kijelentkeztél.");
+			doLogout("Kijelentkeztél");
 			break;
 		case "register":
 			if(msg.success) {
 				showPage("loginpage");
-				alert("Sikeres regisztráció, most már beléphetsz!");
+				showMessage("Sikeres regisztráció, most már beléphetsz!");
 			} else {
 				showError("Sikertelen regisztráció " + msg.fault);
 			}
@@ -101,6 +99,15 @@ function handleMessage (msg) {
 				getAllUltiRoom();
 			}
 			break;
+		case "activeplayerlist":
+			admin_refreshPlayerNames(msg.nameList);
+			break;
+		case "kick":
+			admin_showKickResult(msg.success);
+			break;
+		case "kickplayer":
+			doLogout("Egy admin kirúgott!");
+			break;
 		case "error":
 			showError(msg.message);
 			log("Error: " + msg.message);
@@ -112,6 +119,10 @@ function handleMessage (msg) {
 
 function showError (errormsg) {
 	alert(errormsg);
+}
+
+function showMessage (msg) {
+	alert(msg);
 }
 
 function send(data) {
@@ -148,6 +159,15 @@ function logout () {
 	send(logoutmessage);
 }
 
+function doLogout (logoutmessage) {
+	showPage("loginpage");
+	chat.flush();
+	inultiroom = null;
+	dorefresh = false;
+	isadmin = false;
+	showMessage(logoutmessage);
+}
+
 function loginSuccess (loginData) {
 	
 	var playertype = loginData.playerType;
@@ -162,6 +182,7 @@ function loginSuccess (loginData) {
 	} else {
 		if(playertype === "admin") {
 			changeAdminFeatures(true);
+			isadmin = true;
 		}
 	}
 
@@ -329,7 +350,7 @@ function joinUltiRoom (roomname) {
 function leaveUltiRoom () {
 	inultiroom = null;
 
-	var leaveultimessage = {}
+	var leaveultimessage = {};
 	leaveultimessage.type = "leaveulti";
 	send(leaveultimessage);
 }
@@ -376,7 +397,7 @@ function createUltiRoom (roomData) {
 	var name = roomData.roomName;
 	var room = $('<div>');
 	room.addClass('ultiroom');
-	var roomname = $('<p>');
+	var roomname = $('<h4>');
 	roomname.html(name);
 	room.append(roomname);
 	var playernames = $('<div>');
@@ -406,6 +427,70 @@ function createUltiRoom (roomData) {
 	room.append(buttoncontainer);
 
 	return room;
+}
+
+function showStatistics () {
+	var gettoplistmsg = {};
+	gettoplistmsg.type = "gettoplist";
+	send(gettoplistmsg);
+}
+
+function admin_getAllPlayers () {
+	if(admin_checkAdmin()) {
+		listactiveplayersmsg = {};
+		listactiveplayersmsg.type = "listactiveplayers";
+		send(listactiveplayersmsg);
+	}
+}
+
+function admin_kickPlayer (msg) {
+	if(admin_checkAdmin()) {
+		var playerselector = $('#admin_playerselector');
+		var player = playerselector.val();
+
+		if(player != 0) {
+			var kickplayermsg = {};
+			kickplayermsg.type = "kick";
+			kickplayermsg.name = player;
+			send(kickplayermsg);
+			admin_getAllPlayers();
+		} else {
+			showError("Nem választottál játékost!");
+		}
+	}
+}
+
+function admin_checkAdmin() {
+	if(isadmin) {
+		return true;
+	}
+	window.location.href = "#close";
+	showError('Nem vagy admin!');
+	return false;
+}
+
+function admin_refreshPlayerNames (names) {
+	var playerselector = $('#admin_playerselector');
+	playerselector.html("");
+	var newoption = $('<option>');
+	newoption.val(0);
+	newoption.html("Összes aktív játékos");
+	playerselector.append(newoption);
+	for (var i = 0; i < names.length; i++) {
+		newoption = $('<option>');
+		newoption.val(names[i]);
+		newoption.html(names[i]);
+		playerselector.append(newoption);
+	}
+}
+
+function admin_showKickResult (success) {
+	var admininfo = $('#admin_info');
+	if(success) {
+		admin_info = "Kirúgás sikerült!"
+	} else {
+		admin_info = "Kirúgás nem sikerült!"
+	}
 }
 
 function autoGetUltiRooms () {
