@@ -28,14 +28,4 @@ public class Card {
 	public void setValue(final Value value) {
 		this.value = value;
 	}
-
-	@Override
-	public String toString() {
-		final StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(suit.toString());
-		stringBuilder.append(" ");
-		stringBuilder.append(value.toString());
-
-		return stringBuilder.toString();
-	}
 }

@@ -166,20 +166,18 @@ public class PlayerRepository implements IPlayerRepository {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Integer>> listOrderedByPoint() {
-		final ArrayList<HashMap<String, Integer>> topList = new ArrayList<HashMap<String, Integer>>();
+	public HashMap<String, Integer> listOrderedByPoint() {
+		final HashMap<String, Integer> topList = new HashMap<String, Integer>();
 		try {
 			statement = connectionBuilder.getConnection().createStatement();
 			resultSet = statement
-					.executeQuery("SELECT name, point FROM player ORDER BY point DESC");
+					.executeQuery("SELECT name, point FROM player ORDER BY point");
 
 			while (resultSet.next()) {
 				final String nameInDb = resultSet.getString("name");
 				if (nameInDb != null) {
 					final int point = resultSet.getInt("point");
-					final HashMap<String, Integer> map = new HashMap<String, Integer>();
-					map.put(nameInDb, point);
-					topList.add(map);
+					topList.put(nameInDb, point);
 				}
 			}
 

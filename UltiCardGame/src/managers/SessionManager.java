@@ -16,7 +16,7 @@ import messagers.MessageHandler;
 import messagers.util.admin.KickAnswer;
 import messagers.util.admin.KickPlayerAnswer;
 import domain.ActivePlayer;
-import domain.PlayerTypeClass.PlayerType;
+import domain.Player;
 
 public class SessionManager implements ISessionManager {
 
@@ -53,7 +53,10 @@ public class SessionManager implements ISessionManager {
 	public List<String> getAllActivePlayerNames() {
 		final List<String> nameList = new ArrayList<String>();
 		for (final ActivePlayer activePlayer : sessions.values()) {
-			nameList.add(activePlayer.getPlayer().getName());
+			final Player player = activePlayer.getPlayer();
+			if (player != null) {
+				nameList.add(player.getName());
+			}
 		}
 
 		return nameList;
@@ -69,10 +72,7 @@ public class SessionManager implements ISessionManager {
 		final ActivePlayer activePlayerToKick = getActivePlayerForPlayerName(name);
 		if ((activePlayerToKick != null)
 				&& (activePlayerToKick.getPlayer() != null)) {
-			if (activePlayerToKick.getPlayer().getType()
-					.compareTo(PlayerType.GUEST) != 0) {
-				playerManager.logout(activePlayerToKick);
-			}
+			playerManager.logout(activePlayerToKick);
 
 			messageHandler.send(new KickPlayerAnswer(), activePlayerToKick);
 			messageHandler.send(new KickAnswer(true), admin);
@@ -84,8 +84,11 @@ public class SessionManager implements ISessionManager {
 	@Override
 	public ActivePlayer getActivePlayerForPlayerName(final String name) {
 		for (final ActivePlayer activePlayer : sessions.values()) {
-			if (activePlayer.getPlayer().getName().equals(name)) {
-				return activePlayer;
+			final Player player = activePlayer.getPlayer();
+			if (player != null) {
+				if (player.getName().equals(name)) {
+					return activePlayer;
+				}
 			}
 		}
 

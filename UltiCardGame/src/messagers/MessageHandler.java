@@ -50,45 +50,37 @@ public class MessageHandler implements IMessageHandler {
 		final JsonElement jelement = new JsonParser().parse(message);
 		if (jelement != null) {
 			final JsonObject jsonObject = jelement.getAsJsonObject();
-			if ((jsonObject.get("type") != null)
-					&& !jsonObject.get("type").isJsonNull()) {
+			final JsonElement jsonElement = jsonObject.get("type");
+			if ((jsonElement != null) && !jsonElement.isJsonNull()) {
 
-				type = jsonObject.get("type").getAsString();
-				if (type.toUpperCase().equals(Type.REGISTER.toString())) {
-					this.registerMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.LOGIN.toString())) {
-					this.loginMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.LOGOUT.toString())) {
-					if (activePlayer.getPlayer().getType()
-							.compareTo(PlayerType.GUEST) != 0) {
-						playerManager.logout(activePlayer);
-					} else {
-						send(new ErrorAnswer(
-								"Vendégként nem tudsz kijelentkezni."),
-								activePlayer);
-					}
-				} else if (type.toUpperCase()
-						.equals(Type.GUESTLOGIN.toString())) {
+				type = jsonElement.getAsString();
+				final String upperCaseType = type.toUpperCase();
+				if (upperCaseType.equals(Type.REGISTER.toString())) {
+					registerMessage(jsonObject, activePlayer);
+				} else if (upperCaseType.equals(Type.LOGIN.toString())) {
+					loginMessage(jsonObject, activePlayer);
+				} else if (upperCaseType.equals(Type.LOGOUT.toString())) {
+					playerManager.logout(activePlayer);
+				} else if (upperCaseType.equals(Type.GUESTLOGIN.toString())) {
 					playerManager.guestLogin(activePlayer);
-				} else if (type.toUpperCase().equals(Type.CHAT.toString())) {
-					this.chatMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.NEWCHAT.toString())) {
+				} else if (upperCaseType.equals(Type.CHAT.toString())) {
+					chatMessage(jsonObject, activePlayer);
+				} else if (upperCaseType.equals(Type.NEWCHAT.toString())) {
 					if (activePlayer.getPlayer().getType()
 							.compareTo(PlayerType.GUEST) == 0) {
 						send(new ErrorAnswer(
 								"Vendégként nem tudsz létrehozni szobát, ha akarsz, jelentkezz be!"),
 								activePlayer);
 					} else {
-						this.newChatMessage(jsonObject, activePlayer);
+						newChatMessage(jsonObject, activePlayer);
 					}
-				} else if (type.toUpperCase().equals(Type.TOCHAT.toString())) {
-					this.toChatMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.LEAVECHAT.toString())) {
+				} else if (upperCaseType.equals(Type.TOCHAT.toString())) {
+					toChatMessage(jsonObject, activePlayer);
+				} else if (upperCaseType.equals(Type.LEAVECHAT.toString())) {
 					chatRoomManager.deletePlayerFromRoom(activePlayer);
-				} else if (type.toUpperCase()
-						.equals(Type.GETALLCHAT.toString())) {
+				} else if (upperCaseType.equals(Type.GETALLCHAT.toString())) {
 					allChatMessage(activePlayer);
-				} else if (type.toUpperCase().equals(Type.NEWULTI.toString())) {
+				} else if (upperCaseType.equals(Type.NEWULTI.toString())) {
 					if (activePlayer.getPlayer().getType()
 							.compareTo(PlayerType.GUEST) == 0) {
 						send(new ErrorAnswer(
@@ -97,15 +89,14 @@ public class MessageHandler implements IMessageHandler {
 					} else {
 						this.newUltiMessage(jsonObject, activePlayer);
 					}
-				} else if (type.toUpperCase().equals(Type.TOULTI.toString())) {
+				} else if (upperCaseType.equals(Type.TOULTI.toString())) {
 					toUltiMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.LEAVEULTI.toString())) {
+				} else if (upperCaseType.equals(Type.LEAVEULTI.toString())) {
 					ultiRoomManager.deletePlayerFromRoom(activePlayer);
-				} else if (type.toUpperCase()
-						.equals(Type.GETALLULTI.toString())) {
+				} else if (upperCaseType.equals(Type.GETALLULTI.toString())) {
 					allUltiMessage(activePlayer);
-				} else if (type.toUpperCase().equals(
-						Type.LISTACTIVEPLAYERS.toString())) {
+				} else if (upperCaseType.equals(Type.LISTACTIVEPLAYERS
+						.toString())) {
 					if (activePlayer.getPlayer().getType()
 							.compareTo(PlayerType.ADMIN) == 0) {
 						activePlayerListMessage(activePlayer);
@@ -114,7 +105,7 @@ public class MessageHandler implements IMessageHandler {
 								"Nem adminként nem lehet listázni a játékosokat."),
 								activePlayer);
 					}
-				} else if (type.toUpperCase().equals(Type.KICK.toString())) {
+				} else if (upperCaseType.equals(Type.KICK.toString())) {
 					if (activePlayer.getPlayer().getType()
 							.compareTo(PlayerType.ADMIN) == 0) {
 						kickMessage(jsonObject, activePlayer);
@@ -123,21 +114,17 @@ public class MessageHandler implements IMessageHandler {
 								"Nem adminként nem lehet kidobni játékost."),
 								activePlayer);
 					}
-				} else if (type.toUpperCase()
-						.equals(Type.GETTOPLIST.toString())) {
+				} else if (upperCaseType.equals(Type.GETTOPLIST.toString())) {
 					playerManager.getTopList(activePlayer);
-				} else if (type.toUpperCase().equals(
-						Type.GAMESELECTION.toString())) {
+				} else if (upperCaseType.equals(Type.GAMESELECTION.toString())) {
 					gameSelectionMessage(jsonObject, activePlayer);
-				} else if (type.toUpperCase().equals(Type.PASS.toString())) {
+				} else if (upperCaseType.equals(Type.PASS.toString())) {
 					activePlayer.getUltiRoom().getUltiGame().pass();
-				} else if (type.toUpperCase().equals(
-						Type.PICKUPCARDS.toString())) {
+				} else if (upperCaseType.equals(Type.PICKUPCARDS.toString())) {
 					activePlayer.getUltiRoom().getUltiGame().pickUpCards();
-				} else if (type.toUpperCase().equals(
-						Type.CONFIRMGAME.toString())) {
+				} else if (upperCaseType.equals(Type.CONFIRMGAME.toString())) {
 					activePlayer.getUltiRoom().getUltiGame().confirm();
-				} else if (type.toUpperCase().equals(Type.PLAYCARD.toString())) {
+				} else if (upperCaseType.equals(Type.PLAYCARD.toString())) {
 					playCardMessage(jsonObject, activePlayer);
 				}
 			}
@@ -160,16 +147,17 @@ public class MessageHandler implements IMessageHandler {
 		String email = "";
 		String password = "";
 
-		if ((jsonObject.get("name") != null)
-				&& !jsonObject.get("name").isJsonNull()
-				&& (jsonObject.get("email") != null)
-				&& !jsonObject.get("email").isJsonNull()
-				&& (jsonObject.get("password") != null)
-				&& !jsonObject.get("password").isJsonNull()) {
+		final JsonElement jsonElementName = jsonObject.get("name");
+		final JsonElement jsonElementEmail = jsonObject.get("email");
+		final JsonElement jsonElementPassword = jsonObject.get("password");
+		if ((jsonElementName != null) && !jsonElementName.isJsonNull()
+				&& (jsonElementEmail != null) && !jsonElementEmail.isJsonNull()
+				&& (jsonElementPassword != null)
+				&& !jsonElementPassword.isJsonNull()) {
 
-			name = jsonObject.get("name").getAsString();
-			email = jsonObject.get("email").getAsString();
-			password = jsonObject.get("password").getAsString();
+			name = jsonElementName.getAsString();
+			email = jsonElementEmail.getAsString();
+			password = jsonElementPassword.getAsString();
 			playerManager.register(name, email, password, activePlayer);
 		}
 	}
@@ -179,13 +167,14 @@ public class MessageHandler implements IMessageHandler {
 		String name = "";
 		String password = "";
 
-		if ((jsonObject.get("name") != null)
-				&& !jsonObject.get("name").isJsonNull()
-				&& (jsonObject.get("password") != null)
-				&& !jsonObject.get("password").isJsonNull()) {
+		final JsonElement jsonElementName = jsonObject.get("name");
+		final JsonElement jsonElementPassword = jsonObject.get("password");
+		if ((jsonElementName != null) && !jsonElementName.isJsonNull()
+				&& (jsonElementPassword != null)
+				&& !jsonElementPassword.isJsonNull()) {
 
-			name = jsonObject.get("name").getAsString();
-			password = jsonObject.get("password").getAsString();
+			name = jsonElementName.getAsString();
+			password = jsonElementPassword.getAsString();
 			playerManager.login(name, password, activePlayer);
 		}
 	}
@@ -194,10 +183,10 @@ public class MessageHandler implements IMessageHandler {
 			final ActivePlayer activePlayer) {
 		String message = "";
 
-		if ((jsonObject.get("message") != null)
-				&& !jsonObject.get("message").isJsonNull()) {
+		final JsonElement jsonElementMessage = jsonObject.get("message");
+		if ((jsonElementMessage != null) && !jsonElementMessage.isJsonNull()) {
 
-			message = jsonObject.get("message").getAsString();
+			message = jsonElementMessage.getAsString();
 			chatRoomManager.Send(message, activePlayer);
 		}
 	}
@@ -207,24 +196,23 @@ public class MessageHandler implements IMessageHandler {
 		String roomName = "";
 		final int maxSize;
 
-		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
-				.isJsonNull())) {
-			roomName = jsonObject.get("name").getAsString();
+		final JsonElement jsonElementName = jsonObject.get("name");
+		if (((jsonElementName != null) && !jsonElementName.isJsonNull())) {
+			roomName = jsonElementName.getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
 			if (chatRoomManager.newRoom(roomName, maxSize, activePlayer)) {
 				chatRoomManager.changePlayerRoom(activePlayer, roomName);
 			}
 		}
-
 	}
 
 	private void toChatMessage(final JsonObject jsonObject,
 			final ActivePlayer activePlayer) {
 		String toRoomName = "";
 
-		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
-				.isJsonNull())) {
-			toRoomName = jsonObject.get("name").getAsString();
+		final JsonElement jsonElementName = jsonObject.get("name");
+		if (((jsonElementName != null) && !jsonElementName.isJsonNull())) {
+			toRoomName = jsonElementName.getAsString();
 			chatRoomManager.changePlayerRoom(activePlayer, toRoomName);
 		}
 
@@ -240,24 +228,23 @@ public class MessageHandler implements IMessageHandler {
 		String roomName = "";
 		final int maxSize;
 
-		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
-				.isJsonNull())) {
-			roomName = jsonObject.get("name").getAsString();
+		final JsonElement jsonElementName = jsonObject.get("name");
+		if (((jsonElementName != null) && !jsonElementName.isJsonNull())) {
+			roomName = jsonElementName.getAsString();
 			maxSize = jsonObject.get("maxmembers").getAsInt();
 			if (ultiRoomManager.newRoom(roomName, maxSize, activePlayer)) {
 				ultiRoomManager.changePlayerRoom(activePlayer, roomName);
 			}
 		}
-
 	}
 
 	private void toUltiMessage(final JsonObject jsonObject,
 			final ActivePlayer activePlayer) {
 		String toRoomName = "";
 
-		if (((jsonObject.get("name") != null) && !jsonObject.get("name")
-				.isJsonNull())) {
-			toRoomName = jsonObject.get("name").getAsString();
+		final JsonElement jsonElementName = jsonObject.get("name");
+		if (((jsonElementName != null) && !jsonElementName.isJsonNull())) {
+			toRoomName = jsonElementName.getAsString();
 			ultiRoomManager.changePlayerRoom(activePlayer, toRoomName);
 		}
 	}
@@ -285,9 +272,9 @@ public class MessageHandler implements IMessageHandler {
 			final ActivePlayer activePlayer) {
 		String name = "";
 
-		if ((jsonObject.get("name") != null)
-				&& !jsonObject.get("name").isJsonNull()) {
-			name = jsonObject.get("name").getAsString();
+		final JsonElement jsonElementName = jsonObject.get("name");
+		if ((jsonElementName != null) && !jsonElementName.isJsonNull()) {
+			name = jsonElementName.getAsString();
 			sessionManager.kickPlayer(name, activePlayer);
 		}
 	}
@@ -295,41 +282,75 @@ public class MessageHandler implements IMessageHandler {
 	private void gameSelectionMessage(final JsonObject jsonObject,
 			final ActivePlayer activePlayer) {
 		int gameType = 0;
-		String card1String = "";
-		String card2String = "";
+		JsonObject card1JsonObject;
+		JsonObject card2JsonObject;
 
-		if ((jsonObject.get("gameType") != null)
-				&& !jsonObject.get("gameType").isJsonNull()
-				&& (jsonObject.get("card1") != null)
-				&& !jsonObject.get("card1").isJsonNull()
-				&& (jsonObject.get("card2") != null)
-				&& !jsonObject.get("card2").isJsonNull()) {
+		final JsonElement jsonElementGameType = jsonObject.get("gameType");
+		final JsonElement jsonElementCard1 = jsonObject.get("card1");
+		final JsonElement jsonElementCard2 = jsonObject.get("card2");
+		if ((jsonElementGameType != null) && !jsonElementGameType.isJsonNull()
+				&& (jsonElementCard1 != null) && !jsonElementCard1.isJsonNull()
+				&& (jsonElementCard2 != null) && !jsonElementCard2.isJsonNull()) {
 
-			gameType = jsonObject.get("gameType").getAsInt();
-			card1String = jsonObject.get("card1").getAsString();
-			card2String = jsonObject.get("card2").getAsString();
+			gameType = jsonElementGameType.getAsInt();
+			card1JsonObject = jsonElementCard1.getAsJsonObject();
+			card2JsonObject = jsonElementCard2.getAsJsonObject();
 
-			final ConcreteGameType concreteGameType = GameTypeConverter
-					.convertIntToConcreteGameType(gameType);
-			final Card card1 = CardConverter.convertStringToCard(card1String);
-			final Card card2 = CardConverter.convertStringToCard(card2String);
+			final JsonElement jsonElementSuit1 = card1JsonObject.get("suit");
+			final JsonElement jsonElementValue1 = card1JsonObject.get("value");
+			final JsonElement jsonElementSuit2 = card2JsonObject.get("suit");
+			final JsonElement jsonElementValue2 = card2JsonObject.get("value");
+			if ((jsonElementSuit1.getAsString() != null)
+					&& !jsonElementSuit1.isJsonNull()
+					&& (jsonElementValue1.getAsString() != null)
+					&& !jsonElementValue1.isJsonNull()
+					&& (jsonElementSuit2.getAsString() != null)
+					&& !jsonElementSuit2.isJsonNull()
+					&& (jsonElementValue2.getAsString() != null)
+					&& !jsonElementValue2.isJsonNull()) {
 
-			activePlayer.getUltiRoom().getUltiGame()
-			.say(concreteGameType, card1, card2);
+				final String card1Suit = jsonElementSuit1.getAsString();
+				final String card1Value = jsonElementValue1.getAsString();
+				final String card2Suit = jsonElementSuit2.getAsString();
+				final String card2Value = jsonElementValue2.getAsString();
+
+				final ConcreteGameType concreteGameType = GameTypeConverter
+						.convertIntToConcreteGameType(gameType);
+				final Card card1 = CardConverter.convertStringsToCard(
+						card1Suit, card1Value);
+				final Card card2 = CardConverter.convertStringsToCard(
+						card2Suit, card2Value);
+
+				activePlayer.getUltiRoom().getUltiGame()
+						.say(concreteGameType, card1, card2);
+			}
 		}
 	}
 
 	private void playCardMessage(final JsonObject jsonObject,
 			final ActivePlayer activePlayer) {
-		String cardString = "";
+		JsonObject cardJsonObject;
 
-		if ((jsonObject.get("card") != null)
-				&& !jsonObject.get("card").isJsonNull()) {
+		final JsonElement jsonElementCard = jsonObject.get("card");
+		if ((jsonElementCard != null) && !jsonElementCard.isJsonNull()) {
+			cardJsonObject = jsonElementCard.getAsJsonObject();
 
-			cardString = jsonObject.get("card").getAsString();
-			final Card card = CardConverter.convertStringToCard(cardString);
+			final JsonElement jsonElementSuit = cardJsonObject.get("suit");
+			final JsonElement jsonElementValue = cardJsonObject.get("value");
 
-			activePlayer.getUltiRoom().getUltiGame().playCard(card);
+			if ((jsonElementSuit.getAsString() != null)
+					&& !jsonElementSuit.isJsonNull()
+					&& (jsonElementValue.getAsString() != null)
+					&& !jsonElementValue.isJsonNull()) {
+
+				final String cardSuit = jsonElementSuit.getAsString();
+				final String cardValue = jsonElementValue.getAsString();
+
+				final Card card = CardConverter.convertStringsToCard(cardSuit,
+						cardValue);
+
+				activePlayer.getUltiRoom().getUltiGame().playCard(card);
+			}
 		}
 	}
 }
