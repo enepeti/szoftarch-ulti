@@ -59,14 +59,7 @@ public class MessageHandler implements IMessageHandler {
 				} else if (type.toUpperCase().equals(Type.LOGIN.toString())) {
 					this.loginMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LOGOUT.toString())) {
-					if (activePlayer.getPlayer().getType()
-							.compareTo(PlayerType.GUEST) != 0) {
-						playerManager.logout(activePlayer);
-					} else {
-						send(new ErrorAnswer(
-								"Vendégként nem tudsz kijelentkezni."),
-								activePlayer);
-					}
+					playerManager.logout(activePlayer);
 				} else if (type.toUpperCase()
 						.equals(Type.GUESTLOGIN.toString())) {
 					playerManager.guestLogin(activePlayer);
@@ -315,7 +308,7 @@ public class MessageHandler implements IMessageHandler {
 			final Card card2 = CardConverter.convertStringToCard(card2String);
 
 			activePlayer.getUltiRoom().getUltiGame()
-			.say(concreteGameType, card1, card2);
+					.say(concreteGameType, card1, card2);
 		}
 	}
 
