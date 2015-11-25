@@ -43,6 +43,7 @@ public abstract class RoomManager implements IRoomManager {
 		if (getRoomMap().containsKey(toRoomName)) {
 			deletePlayerFromRoom(activePlayer);
 		}
+
 		addPlayerToRoom(activePlayer, toRoomName);
 	}
 }

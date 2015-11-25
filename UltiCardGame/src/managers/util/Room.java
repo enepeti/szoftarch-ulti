@@ -29,12 +29,13 @@ public abstract class Room {
 			getActivePlayersInRoom().add(activePlayer);
 			return true;
 		}
+
 		return false;
 	}
 
 	public void remove(final ActivePlayer activePlayer) {
 		getActivePlayersInRoom().remove(activePlayer);
-		if (getActivePlayersInRoom().size() == 0) {
+		if (getActivePlayersInRoom().isEmpty()) {
 			active = false;
 		}
 	}

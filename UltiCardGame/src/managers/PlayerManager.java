@@ -3,6 +3,7 @@ package managers;
 import interfaces.dal.IPlayerRepository;
 import interfaces.managers.IChatRoomManager;
 import interfaces.managers.IPlayerManager;
+import interfaces.managers.IUltiRoomManager;
 import interfaces.messagers.IMessageHandler;
 import interfaces.util.IPasswordHasher;
 
@@ -27,6 +28,7 @@ public class PlayerManager implements IPlayerManager {
 	private final IMessageHandler messageHandler = new MessageHandler();
 	private final IPasswordHasher passwordHasher = new PasswordHasher();
 	private static final IChatRoomManager chatRoomManager = new ChatRoomManager();
+	private static final IUltiRoomManager ultiRoomManager = new UltiRoomManager();
 
 	private static int guestNumber = 0;
 
@@ -34,7 +36,7 @@ public class PlayerManager implements IPlayerManager {
 	public void login(final String name, final String pass,
 			final ActivePlayer activePlayer) {
 		final Player player = playerRepository.get(name);
-		boolean arePasswordsEqual = false;
+		boolean arePasswordsEqual = true;
 		try {
 			arePasswordsEqual = passwordHasher
 					.check(pass, player.getPassword());
@@ -56,7 +58,6 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public void logout(final ActivePlayer activePlayer) {
-		activePlayer.setPlayer(null);
 		logoutSuccess(activePlayer);
 	}
 
@@ -128,10 +129,12 @@ public class PlayerManager implements IPlayerManager {
 	}
 
 	private void logoutSuccess(final ActivePlayer activePlayer) {
+		activePlayer.setPlayer(null);
+		activePlayer.setUltiPlayer(null);
 		chatRoomManager.deletePlayerFromRoom(activePlayer);
+		ultiRoomManager.deletePlayerFromRoom(activePlayer);
 		activePlayer.setLoggedIn(false);
 
 		this.messageHandler.send(new LogoutAnswer(), activePlayer);
 	}
-
 }

@@ -11,30 +11,30 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import domain.ActivePlayer;
 import managers.SessionManager;
+import domain.ActivePlayer;
 
 @ServerEndpoint("/websocket/ulti")
 public class MessageReceiver implements IMessageReceiver {
 
-	private final ISessionManager sessionRepository;
+	private final ISessionManager sessionManager;
 	private final IMessageHandler messageHandler = new MessageHandler();
 
 	public MessageReceiver() {
-		sessionRepository = new SessionManager();
+		sessionManager = new SessionManager();
 	}
 
 	@Override
 	@OnOpen
 	public void open(final Session session) {
-		sessionRepository.add(session);
+		sessionManager.add(session);
 		System.out.println("open");
 	}
 
 	@Override
 	@OnClose
 	public void close(final Session session) {
-		sessionRepository.remove(session);
+		sessionManager.remove(session);
 	}
 
 	@Override
@@ -47,7 +47,8 @@ public class MessageReceiver implements IMessageReceiver {
 	@OnMessage
 	public void handleMessage(final String message, final Session session) {
 		System.out.println(message);
-		ActivePlayer activePlayer = this.sessionRepository.getActivePlayer(session);
+		final ActivePlayer activePlayer = this.sessionManager
+				.getActivePlayer(session);
 		messageHandler.handle(message, activePlayer);
 	}
 

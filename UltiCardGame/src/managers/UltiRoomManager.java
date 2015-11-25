@@ -78,7 +78,6 @@ public class UltiRoomManager extends RoomManager implements IUltiRoomManager {
 		if (room != null) {
 			room.remove(activePlayer);
 		}
-
 	}
 
 }

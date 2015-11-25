@@ -35,6 +35,7 @@ public class UltiRoom extends Room {
 		if (inRoom) {
 			activePlayer.setUltiRoom(this);
 		}
+
 		return inRoom;
 	}
 
