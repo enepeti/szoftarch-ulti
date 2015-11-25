@@ -15,6 +15,7 @@ import messagers.util.ulti.PickUpCardsAnswer;
 import messagers.util.ulti.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
+import ulti.domain.UltiPlayer;
 import ulti.domain.gametype.ConcreteGameType;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
@@ -39,6 +40,10 @@ public class UltiGame {
 	public UltiGame(final List<ActivePlayer> activePlayerList) {
 		this.activePlayerList = activePlayerList;
 		this.deckOfCards = new DeckOfCards();
+
+		for (final ActivePlayer activePlayerInRoom : activePlayerList) {
+			activePlayerInRoom.setUltiPlayer(new UltiPlayer());
+		}
 
 		randomizeStarterPlayer();
 		deal();
@@ -140,6 +145,7 @@ public class UltiGame {
 		final ActivePlayer activePlayer = activePlayerList
 				.get(starterActivePlayer);
 		final List<Card> subList = cards.subList(0, 11);
+
 		activePlayer.getUltiPlayer().addCardsToHand(subList);
 		messageHandler.send(new DealAnswer(subList, true), activePlayer);
 
@@ -147,14 +153,14 @@ public class UltiGame {
 		final ActivePlayer activePlayer2 = activePlayerList
 				.get(starterActivePlayer);
 		final List<Card> subList2 = cards.subList(12, 21);
-		activePlayer.getUltiPlayer().addCardsToHand(subList2);
+		activePlayer2.getUltiPlayer().addCardsToHand(subList2);
 		messageHandler.send(new DealAnswer(subList2, false), activePlayer2);
 
 		incrementStarterPlayer();
 		final ActivePlayer activePlayer3 = activePlayerList
 				.get(starterActivePlayer);
 		final List<Card> subList3 = cards.subList(22, 31);
-		activePlayer.getUltiPlayer().addCardsToHand(subList3);
+		activePlayer3.getUltiPlayer().addCardsToHand(subList3);
 		messageHandler.send(new DealAnswer(subList3, false), activePlayer3);
 
 		incrementStarterPlayer();

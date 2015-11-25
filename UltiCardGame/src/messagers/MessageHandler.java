@@ -14,6 +14,7 @@ import managers.ChatRoomManager;
 import managers.PlayerManager;
 import managers.SessionManager;
 import managers.UltiRoomManager;
+import managers.util.Room;
 import messagers.util.AnswerMessage;
 import messagers.util.admin.ActivePlayerListAnswer;
 import messagers.util.chat.room.AllChatAnswer;
@@ -97,7 +98,7 @@ public class MessageHandler implements IMessageHandler {
 						this.newUltiMessage(jsonObject, activePlayer);
 					}
 				} else if (type.toUpperCase().equals(Type.TOULTI.toString())) {
-					this.toUltiMessage(jsonObject, activePlayer);
+					toUltiMessage(jsonObject, activePlayer);
 				} else if (type.toUpperCase().equals(Type.LEAVEULTI.toString())) {
 					ultiRoomManager.deletePlayerFromRoom(activePlayer);
 				} else if (type.toUpperCase()
@@ -259,15 +260,15 @@ public class MessageHandler implements IMessageHandler {
 			toRoomName = jsonObject.get("name").getAsString();
 			ultiRoomManager.changePlayerRoom(activePlayer, toRoomName);
 		}
-
 	}
 
 	private void allUltiMessage(final ActivePlayer activePlayer) {
 		final List<String> allRoomNames = ultiRoomManager.getAllRoomNames();
 		final List<PlayersInUltiRoom> playersInUltiRoom = new ArrayList<PlayersInUltiRoom>();
 		for (final String roomName : allRoomNames) {
-			final List<String> activePlayerNames = ultiRoomManager.getRoom(
-					roomName).getActivePlayerNamesInRoom();
+			final Room room = ultiRoomManager.getRoom(roomName);
+			final List<String> activePlayerNames = room
+					.getActivePlayerNamesInRoom();
 			playersInUltiRoom.add(new PlayersInUltiRoom(roomName,
 					activePlayerNames));
 		}

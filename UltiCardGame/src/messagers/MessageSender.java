@@ -9,18 +9,18 @@ import javax.websocket.Session;
 import domain.ActivePlayer;
 
 public class MessageSender implements IMessageSender {
-	
+
 	@Override
-	public void sendMessage(String message, ActivePlayer activePlayer) {
-		Session session = activePlayer.getSession();
-		
+	public void sendMessage(final String message,
+			final ActivePlayer activePlayer) {
+		final Session session = activePlayer.getSession();
+
 		try {
 			session.getBasicRemote().sendText(message);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 }

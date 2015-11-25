@@ -9,7 +9,7 @@ import ulti.domain.gametype.ConcreteGameType;
 public class UltiPlayer {
 
 	private List<Card> hand = new ArrayList<Card>(12);
-	private int pointsInGamesInActualRoom;
+	private int pointsInGamesInActualRoom = 0;
 	private List<Card> taken = new ArrayList<Card>(30);
 
 	public List<Card> getHand() {
@@ -29,8 +29,8 @@ public class UltiPlayer {
 	}
 
 	public void addCardsToHand(final List<Card> cardsToHand) {
-		setHand(new ArrayList<Card>());
-		getHand().addAll(cardsToHand);
+		hand = new ArrayList<Card>();
+		hand.addAll(cardsToHand);
 	}
 
 	public void addCardsToTaken(final List<Card> cardsToTaken) {

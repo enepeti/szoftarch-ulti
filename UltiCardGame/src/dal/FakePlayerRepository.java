@@ -30,6 +30,7 @@ public class FakePlayerRepository implements IPlayerRepository {
 				return player;
 			}
 		}
+
 		return null;
 	}
 
