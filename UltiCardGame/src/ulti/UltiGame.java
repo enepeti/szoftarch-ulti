@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import messagers.MessageHandler;
+import messagers.util.error.ErrorAnswer;
 import messagers.util.ulti.DealAnswer;
 import messagers.util.ulti.HasToConfirmAnswer;
 import messagers.util.ulti.PickUpCardsAnswer;
@@ -214,18 +215,31 @@ public class UltiGame {
 		.sendStartGameMessageToAll(messageHandler);
 	}
 
-	public void playCard(final Card card) {
-		cardsOnTable.add(card);
-		final ActivePlayer activePlayer = activePlayerList
-				.get(activePlayerOnTurn);
-		activePlayer.getUltiPlayer().playCard(card);
-		activePlayer.getUltiRoom().sendPlayedCardMessageToAll(messageHandler,
-				activePlayer.getPlayer().getName(), card);
-		if (cardsOnTable.size() == 3) {
-			evaluateTurn();
+	public void playCard(final Card card, final ActivePlayer senderActivePlayer) {
+		if (validatePlayer(senderActivePlayer)) {
+			cardsOnTable.add(card);
+			final ActivePlayer activePlayer = activePlayerList
+					.get(activePlayerOnTurn);
+			activePlayer.getUltiPlayer().playCard(card);
+			activePlayer.getUltiRoom().sendPlayedCardMessageToAll(
+					messageHandler, activePlayer.getPlayer().getName(), card);
+			if (cardsOnTable.size() == 3) {
+				evaluateTurn();
+			} else {
+				nextPlayerTurn();
+			}
 		} else {
-			nextPlayerTurn();
+			messageHandler.send(new ErrorAnswer("Nem Ön jön!"),
+					senderActivePlayer);
 		}
+	}
+
+	private boolean validatePlayer(final ActivePlayer senderActivePlayer) {
+		if (senderActivePlayer == activePlayerList.get(activePlayerOnTurn)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private void nextPlayerTurnAfterEvaluation() {

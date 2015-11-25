@@ -321,7 +321,7 @@ public class MessageHandler implements IMessageHandler {
 						card2Suit, card2Value);
 
 				activePlayer.getUltiRoom().getUltiGame()
-				.say(concreteGameType, card1, card2);
+						.say(concreteGameType, card1, card2);
 			}
 		}
 	}
@@ -347,7 +347,8 @@ public class MessageHandler implements IMessageHandler {
 				final Card card = CardConverter.convertStringsToCard(cardSuit,
 						cardValue);
 
-				activePlayer.getUltiRoom().getUltiGame().playCard(card);
+				activePlayer.getUltiRoom().getUltiGame()
+						.playCard(card, activePlayer);
 			}
 		}
 	}
