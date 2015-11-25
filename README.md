@@ -43,10 +43,11 @@
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
 - Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
-- Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
+- Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}`
+- Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}`
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}`
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
 - Játék kezdődik: `{"type":"startgame"}`
-- Lap elvitel: `{"type":"takecards", "name":<String>, "cards":[{"suit":<String>, "value":<String>}]}`
+- Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
-- Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "card":{"suit":<String>, "value":<String>}}`
+- Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}`

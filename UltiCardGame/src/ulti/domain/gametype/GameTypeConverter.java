@@ -19,11 +19,11 @@ public class GameTypeConverter {
 		return gameTypeMap;
 	}
 
-	public static ConcreteGameType convertIntToConcreteGameType(final int key) {
+	public ConcreteGameType convertIntToConcreteGameType(final int key) {
 		return gameTypeMap.get(key);
 	}
 
-	public static int convertConcreteGameTypeToInt(
+	public int convertConcreteGameTypeToInt(
 			final ConcreteGameType concreteGameType) {
 		for (final Entry<Integer, ConcreteGameType> entry : gameTypeMap
 				.entrySet()) {

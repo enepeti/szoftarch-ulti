@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
 import messagers.util.ulti.ShowResultAnswer;
@@ -57,10 +58,11 @@ public class UltiRoom extends Room {
 		super.sendToAll(messageHandler, answer);
 	}
 
-	public void sendNextPlayerOnTurnMessageToAll(
-			final IMessageHandler messageHandler, final String name) {
-		final PlayerOnTurnAnswer answer = new PlayerOnTurnAnswer(name);
-		super.sendToAll(messageHandler, answer);
+	public void sendNextPlayerOnTurnMessageToAllOthers(
+			final IMessageHandler messageHandler, final String name,
+			final ActivePlayer activePlayer) {
+		final PlayerOnTurnAnswer answer = new PlayerOnTurnAnswer(name, false);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
 	}
 
 	public void sendStartGameMessageToAll(final IMessageHandler messageHandler) {
@@ -75,17 +77,27 @@ public class UltiRoom extends Room {
 		super.sendToAll(messageHandler, answer);
 	}
 
-	public void sendPlayedCardMessageToAll(
+	public void sendPlayedCardMessageToAllOthers(
 			final IMessageHandler messageHandler, final String name,
-			final Card card) {
-		final PlayedCardAnswer answer = new PlayedCardAnswer(name, card);
-		super.sendToAll(messageHandler, answer);
+			final Card card, final ActivePlayer activePlayer) {
+		final PlayedCardAnswer answer = new PlayedCardAnswer(name, false, card);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
 	}
 
-	public void sendTakenCardsMessageToAll(
+	public void sendTakenCardsMessageToAllOthers(
 			final IMessageHandler messageHandler, final String name,
-			final List<Card> cardsOnTable) {
-		final TakeCardsAnswer answer = new TakeCardsAnswer(name, cardsOnTable);
-		super.sendToAll(messageHandler, answer);
+			final List<Card> cardsOnTable, final ActivePlayer activePlayer) {
+		final TakeCardsAnswer answer = new TakeCardsAnswer(name, false,
+				cardsOnTable);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
+	}
+
+	public void sendGameSelectionMessageToAllOthers(
+			final IMessageHandler messageHandler, final String name,
+			final int convertConcreteGameTypeToInt,
+			final ActivePlayer activePlayer) {
+		final GameSelectedAnswer answer = new GameSelectedAnswer(name, false,
+				convertConcreteGameTypeToInt);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
 	}
 }

@@ -49,6 +49,16 @@ public abstract class Room {
 		}
 	}
 
+	public void sendToAllOthers(final IMessageHandler messageHandler,
+			final AnswerMessage message, final ActivePlayer activePlayerToOmit) {
+		for (final ActivePlayer activePlayer : this.getActivePlayersInRoom()) {
+			if (activePlayer.isLoggedIn()
+					&& (activePlayer != activePlayerToOmit)) {
+				messageHandler.send(message, activePlayer);
+			}
+		}
+	}
+
 	public boolean isFull() {
 		return (getActivePlayersInRoom().size() >= maxSize) && (maxSize != -1);
 	}
@@ -77,4 +87,5 @@ public abstract class Room {
 
 		return names;
 	}
+
 }
