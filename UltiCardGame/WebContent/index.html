@@ -49,10 +49,13 @@
 				<div class="room">
 					<button class="btn btn-primary ubtn" onclick="showStatistics()">Statisztikák</button>
 				</div>
+				<div class="stat">
+					<button class="btn btn-primary ubtn" onclick="showRooms()">Vissza az asztalokhoz</button>
+				</div>
 				<div class="admin">
 					<a href="#openadminmodal"><button class="btn btn-primary ubtn" onclick="admin_getAllPlayers()">Admin felület</button></a>
 				</div>
-				<div class="room">
+				<div class="room stat">
 					<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
 				</div>
 				<div class="game">
@@ -63,9 +66,10 @@
 				<div id="ultiroomrows"></div>
 			</div>
 			<div id="ultigamepage" class="ulticontainer">
-				<div id="myhand" class="vertical-center">
-					
-				</div>
+				<div id="myhand" class="vertical-center"></div>
+			</div>
+			<div id="statpage" class="ulticontainer">
+				<table id="staticticstable" class="table-striped"></table>
 			</div>
 		</div>
 		<div id="chatpage">

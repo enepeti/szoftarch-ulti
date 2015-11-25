@@ -36,17 +36,17 @@
 - Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :hankey:
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}` :ok:
-- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName"=<String>, "names"=[<String>]}]}` :ok:
+- Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName":<String>, "names":[<String>]}]}` :ok:
 - Felhasználónevek leküldése: `{"type":"activeplayerlist", "nameList":[<string>]}` :ok:
 - Kidobás játákost: `{"type":"kickplayer"}` :ok:
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
-- Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}`
+- Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
-- Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}`
+- Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>}`
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}`
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
 - Játék kezdődik: `{"type":"startgame"}`
 - Lap elvitel: `{"type":"takecards", "name":<String>, "cards":[{"suit":<String>, "value":<String>}]}`
-- Eredmények mutatása: `{"type":"showresult", "points":[<string, int>]}`
+- Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "card":{"suit":<String>, "value":<String>}}`

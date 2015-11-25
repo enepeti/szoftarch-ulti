@@ -44,6 +44,7 @@ function onOpen() {
 
 function onClose() {
 	log("Socket Closed.");
+	showError("Megszakadt a kapcsolat a szerverrel. Próbáld újratölteni az oldalt.");
 	dorefresh = false;
 }
 
@@ -105,6 +106,9 @@ function handleMessage (msg) {
 			break;
 		case "kick":
 			admin_showKickResult(msg.success);
+			break;
+		case "toplist":
+			showToplist(msg.topList);
 			break;
 		case "kickplayer":
 			doLogout("Egy admin kirúgott!");
@@ -438,12 +442,6 @@ function createUltiRoom (roomData) {
 	return room;
 }
 
-function showStatistics () {
-	var gettoplistmsg = {};
-	gettoplistmsg.type = "gettoplist";
-	send(gettoplistmsg);
-}
-
 function startUlti () {
 	var ultiroomspage = $('#ultiroomspage');
 	var ultigamepage = $('#ultigamepage');
@@ -465,16 +463,69 @@ function standUp () {
 	var roombuttons = $('.room');
 	var gamebuttons = $('.game');
 
-	ultiroomspage.css('display', 'block');
 	ultigamepage.css('display', 'none');
-	roombuttons.css('display', 'block');
+	ultiroomspage.css('display', 'block');
 	gamebuttons.css('display', 'none');
+	roombuttons.css('display', 'block');
 
 	dorefresh = true;
 }
 
-function refreshHand() {
+function showStatistics () {
+	var gettoplistmsg = {};
+	gettoplistmsg.type = "gettoplist";
+	send(gettoplistmsg);
+}
 
+function showToplist(toplist) {
+	var ultiroomspage = $('#ultiroomspage');
+	var statspage = $('#statpage');
+	var roombuttons = $('.room');
+	var statbuttons = $('.stat');
+
+	ultiroomspage.css('display', 'none');
+	statspage.css('display', 'block');
+	roombuttons.css('display', 'none');
+	statbuttons.css('display', 'block');
+
+	var table = $('#staticticstable');
+	table.html('');
+	
+	var headerrow = $('<tr>');
+	var header = $('<th>');
+	header.html('Név');
+	headerrow.append(header);
+	
+	header = $('<th>');
+	header.html('Pontszám');
+	headerrow.append(header);
+	
+	table.append(headerrow);
+
+	$.each(toplist, function(key, value) {
+		var row = $('<tr>');
+		var data = $('<td>');
+		data.html(key);
+		row.append(data);
+
+		data = $('<td>');
+		data.html(value);
+		row.append(data);
+
+		table.append(row);
+	});
+}
+
+function showRooms() {
+	var ultiroomspage = $('#ultiroomspage');
+	var statspage = $('#statpage');
+	var roombuttons = $('.room');
+	var statbuttons = $('.stat');
+
+	statspage.css('display', 'none');
+	ultiroomspage.css('display', 'block');
+	statbuttons.css('display', 'none');
+	roombuttons.css('display', 'block');
 }
 
 function showCards () {
@@ -506,6 +557,7 @@ function createCard (cardInfo, num) {
 	card.addClass('card');
 	card.attr('id', suit + ' ' + value);
 	card.click(function() {playCard(num)});
+	card.hover(function(){this.style.zIndex=1;}, function(){this.style.zIndex=0;})
 	if(num === 0) {
 		card.css('margin-left', '0');
 	}
@@ -624,4 +676,8 @@ $(document).ready(function () {
 function __debug_game__ () {
 	showPage("mainpage");
 	startUlti();
+	for (var i = 0; i < 12; i++) {
+		mycards.push({"suit":"kaka", "value":i});
+	};
+	showCards();
 }

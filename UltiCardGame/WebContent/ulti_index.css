@@ -98,6 +98,15 @@
 	min-width: 100%;
 }
 
+#statpage {
+	display: none;
+	width: 89%;
+}
+
+#staticticstable {
+	width: 100%;
+}
+
 .cbtn {
 	white-space: normal;
 	width: 90px;
@@ -156,18 +165,24 @@
 }
 
 .card {
+	position: relative;
 	border-radius: 10px;
 	border :2px solid black;
-	width: 12.917%;
+	width: 12.9%;
 	height: 100%;
 	margin-left: -5%;
 	float: left;
 	background: white;
 	cursor: pointer;
+	z-index: 0;
 }
 
-.admin, .game {
+.admin, .game, .stat {
 	display: none;
+}
+
+.room {
+	display: block;
 }
 
 html {
