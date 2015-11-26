@@ -6,7 +6,12 @@ var dorefresh = false;
 var inultiroom = null;
 
 var isadmin = false;
+
 var mycards = [];
+var playedcard = null;
+var myturn = false;
+var issayingphase = true;
+var markedcards = [];
 
 var chat = {};
 
@@ -118,7 +123,11 @@ function handleMessage (msg) {
 			break;
 		case "deal":
 			mycards = msg.cards;
+			myturn = msg.isStarter;
 			showCards();
+			break;
+		case "playedcard":
+			handlePlayedCard(msg);
 			break;
 		case "error":
 			showError(msg.message);
@@ -189,6 +198,7 @@ function loginSuccess (loginData) {
 	namespan.html(loginData.name);
 	changeNonGuestFeatures(true);
 	changeAdminFeatures(false);
+	showRooms();
 	
 	if(playertype === "guest") {
 		changeNonGuestFeatures(false);
@@ -548,13 +558,46 @@ function showCards () {
 }
 
 function playCard(index) {
-	card = mycards.splice(index, 1)[0];
-	showCards();
-	
-	var playcardmsg = {};
-	playcardmsg.type = "playcard";
-	playcardmsg.card = card;
-	send(playcardmsg);
+	if(myturn) {
+		var card = mycards[index];
+		if(issayingphase) {
+			var mi = markedcards.indexOf(card)
+			var cardView = $('#' + card.suit + '_' + card.value);
+			if(mi !== -1) {
+				markedcards.splice(mi, 1);
+
+				cardView.css('margin-top', '0');
+			} else {
+				if(markedcards.length < 2) {
+					cardView.css('margin-top', '-1.5%');
+
+					markedcards.push(card);
+				}
+			}
+		} else {
+			playedcard = mycards[index];
+
+			var playcardmsg = {};
+			playcardmsg.type = "playcard";
+			playcardmsg.card = playedcard;
+			send(playcardmsg);
+		}
+	}
+}
+
+function handlePlayedCard (data) {
+	if(playedcard) {
+		var index = mycards.indexOf(playedcard);
+		mycards.splice(index, 1);
+		showCards();
+		playedcard = null;
+	}
+}
+
+function toHunCard (suit, value) {
+	var hunSuit = {BELL:"tök", ACORN:"makk", HEART:"piros", LEAF:"zöld"};
+	var hunValue = {SEVEN:"VII", EIGHT:"VIII", NINE:"IX", TEN:"X", UNDER_KNAVE:"alsó", OVER_KNAVE:"felső", KING:"király", ACE:"ász"};
+	return {suit:hunSuit[suit], value:hunValue[value]};
 }
 
 function createCard (cardInfo, num) {
@@ -563,7 +606,7 @@ function createCard (cardInfo, num) {
 	var value = cardInfo.value;
 
 	card.addClass('card');
-	card.attr('id', suit + ' ' + value);
+	card.attr('id', suit + '_' + value);
 	card.click(function() {playCard(num)});
 	card.hover(function(){this.style.zIndex=1;}, function(){this.style.zIndex=0;})
 	if(num === 0) {
@@ -572,7 +615,8 @@ function createCard (cardInfo, num) {
 	
 	var cardtext = $('<p>');
 	
-	cardtext.html(suit + "<br>" + value);
+	var hunCard = toHunCard(suit, value);
+	cardtext.html(hunCard.suit + "<br>" + hunCard.value);
 	cardtext.addClass('font');
 	card.append(cardtext);
 
@@ -685,7 +729,31 @@ function __debug_game__ () {
 	showPage("mainpage");
 	startUlti();
 	for (var i = 0; i < 12; i++) {
-		mycards.push({"suit":"kaka", "value":i});
+		var suit;
+		var value;
+		switch (i % 4) {
+			case 0:
+				suit = "LEAF";
+				break;
+			case 1:
+				suit = "ACORN";
+				break;
+			case 2:
+				suit = "BELL";
+				break;
+			case 3:
+				suit = "HEART";
+				break;
+		}
+		if(i < 4) {
+			value = "KING";
+		} else if (i < 8) {
+			value = "TEN";
+		} else {
+			value = "ACE";
+		}
+			mycards.push({"suit":suit, "value":value});
 	};
 	showCards();
+	myturn = true;
 }

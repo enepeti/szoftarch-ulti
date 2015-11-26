@@ -158,8 +158,11 @@
 }
 
 #myhand {
-	width: 84%;
-	height: 20%;
+	margin-bottom: 10px;
+	position: relative;
+	top: 73%;
+	width: 72%;
+	height: 25%;
 	overflow: hidden;
 	nopbackground: red;
 }
@@ -169,7 +172,8 @@
 	border-radius: 10px;
 	border :2px solid black;
 	width: 12.9%;
-	height: 100%;
+	top:25%;
+	height: 75%;
 	margin-left: -5%;
 	float: left;
 	background: white;
