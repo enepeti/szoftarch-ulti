@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ulti.domain.ValueType.Value;
-import ulti.domain.gametype.ConcreteGameType;
 
 public class UltiPlayer {
 
@@ -32,19 +31,13 @@ public class UltiPlayer {
 		taken.addAll(cardsToTaken);
 	}
 
-	public void say(final ConcreteGameType concreteGameType, final Card card1,
-			final Card card2) {
+	public void say(final Card card1, final Card card2) {
 		hand.remove(card1);
 		hand.remove(card2);
 	}
 
 	public void pass() {
 
-	}
-
-	public void pickUpCards(final Card card1, final Card card2) {
-		hand.add(card1);
-		hand.add(card2);
 	}
 
 	public void playCard(final Card card) {

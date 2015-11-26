@@ -6,12 +6,15 @@ import ulti.domain.Card;
 public class PlayedCardAnswer extends AnswerMessage {
 
 	private final String name;
+	private final boolean isItMe;
 	private final Card card;
 
-	public PlayedCardAnswer(final String name, final Card card) {
+	public PlayedCardAnswer(final String name, final boolean isItMe,
+			final Card card) {
 		super("playedcard");
 		this.name = name;
 		this.card = card;
+		this.isItMe = isItMe;
 	}
 
 	public String getName() {
@@ -20,6 +23,10 @@ public class PlayedCardAnswer extends AnswerMessage {
 
 	public Card getCard() {
 		return card;
+	}
+
+	public boolean isItMe() {
+		return isItMe;
 	}
 
 }

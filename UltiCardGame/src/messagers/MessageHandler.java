@@ -42,6 +42,7 @@ public class MessageHandler implements IMessageHandler {
 	private static IChatRoomManager chatRoomManager = new ChatRoomManager();
 	private static IUltiRoomManager ultiRoomManager = new UltiRoomManager();
 	private final IMessageSender messageSender = new MessageSender();
+	private static GameTypeConverter gameTypeConverter = new GameTypeConverter();
 
 	@Override
 	public void handle(final String message, final ActivePlayer activePlayer) {
@@ -313,7 +314,7 @@ public class MessageHandler implements IMessageHandler {
 				final String card2Suit = jsonElementSuit2.getAsString();
 				final String card2Value = jsonElementValue2.getAsString();
 
-				final ConcreteGameType concreteGameType = GameTypeConverter
+				final ConcreteGameType concreteGameType = gameTypeConverter
 						.convertIntToConcreteGameType(gameType);
 				final Card card1 = CardConverter.convertStringsToCard(
 						card1Suit, card1Value);

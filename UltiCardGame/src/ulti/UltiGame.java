@@ -11,12 +11,17 @@ import java.util.Random;
 import messagers.MessageHandler;
 import messagers.util.error.ErrorAnswer;
 import messagers.util.ulti.DealAnswer;
+import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.HasToConfirmAnswer;
 import messagers.util.ulti.PickUpCardsAnswer;
+import messagers.util.ulti.PlayedCardAnswer;
+import messagers.util.ulti.PlayerOnTurnAnswer;
+import messagers.util.ulti.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
 import ulti.domain.UltiPlayer;
 import ulti.domain.gametype.ConcreteGameType;
+import ulti.domain.gametype.GameTypeConverter;
 import dal.PlayerRepository;
 import domain.ActivePlayer;
 import domain.Player;
@@ -33,6 +38,8 @@ public class UltiGame {
 	private List<Card> cardsOnTable = null;
 	private ConcreteGameType concreteGameType = null;
 	private DeckOfCards deckOfCards;
+
+	private static GameTypeConverter gameTypeConverter = new GameTypeConverter();
 
 	private final IPlayerRepository playerRepository = new PlayerRepository();
 	private final IMessageHandler messageHandler = new MessageHandler();
@@ -169,9 +176,20 @@ public class UltiGame {
 
 	public void say(final ConcreteGameType concreteGameType, final Card card1,
 			final Card card2) {
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		activePlayer.getUltiPlayer().say(card1, card2);
 		remainingCard1 = card1;
 		remainingCard2 = card2;
 		this.concreteGameType = concreteGameType;
+		final String name = activePlayer.getPlayer().getName();
+		final int convertConcreteGameTypeToInt = gameTypeConverter
+				.convertConcreteGameTypeToInt(concreteGameType);
+		messageHandler.send(new GameSelectedAnswer(name, true,
+				convertConcreteGameTypeToInt), activePlayer);
+		activePlayer.getUltiRoom().sendGameSelectionMessageToAllOthers(
+				messageHandler, name, convertConcreteGameTypeToInt,
+				activePlayer);
 		lastPlayerWithConcreteGameType = activePlayerOnTurn;
 		nextPlayerTurn();
 	}
@@ -202,8 +220,10 @@ public class UltiGame {
 
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
-		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAll(
-				messageHandler, activePlayer.getPlayer().getName());
+		final String name = activePlayer.getPlayer().getName();
+		messageHandler.send(new PlayerOnTurnAnswer(name, true), activePlayer);
+		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAllOthers(
+				messageHandler, name, activePlayer);
 
 		if (lastPlayerWithConcreteGameType == activePlayerOnTurn) {
 			messageHandler.send(new HasToConfirmAnswer(), activePlayer);
@@ -212,7 +232,7 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-		.sendStartGameMessageToAll(messageHandler);
+				.sendStartGameMessageToAll(messageHandler);
 	}
 
 	public void playCard(final Card card, final ActivePlayer senderActivePlayer) {
@@ -221,8 +241,11 @@ public class UltiGame {
 			final ActivePlayer activePlayer = activePlayerList
 					.get(activePlayerOnTurn);
 			activePlayer.getUltiPlayer().playCard(card);
-			activePlayer.getUltiRoom().sendPlayedCardMessageToAll(
-					messageHandler, activePlayer.getPlayer().getName(), card);
+			final String name = activePlayer.getPlayer().getName();
+			messageHandler.send(new PlayedCardAnswer(name, true, card),
+					activePlayer);
+			activePlayer.getUltiRoom().sendPlayedCardMessageToAllOthers(
+					messageHandler, name, card, activePlayer);
 			if (cardsOnTable.size() == 3) {
 				evaluateTurn();
 			} else {
@@ -245,8 +268,11 @@ public class UltiGame {
 	private void nextPlayerTurnAfterEvaluation() {
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
-		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAll(
-				messageHandler, activePlayer.getPlayer().getName());
+		final String name = activePlayer.getPlayer().getName();
+		messageHandler.send(new PlayerOnTurnAnswer(name, true), activePlayer);
+		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAllOthers(
+				messageHandler, activePlayer.getPlayer().getName(),
+				activePlayer);
 	}
 
 	public void endGame() {
@@ -264,8 +290,11 @@ public class UltiGame {
 		final int x = 0;
 		final ActivePlayer activePlayer = activePlayerList.get(x);
 		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
-		activePlayer.getUltiRoom().sendTakenCardsMessageToAll(messageHandler,
-				activePlayer.getPlayer().getName(), cardsOnTable);
+		final String name = activePlayer.getPlayer().getName();
+		messageHandler.send(new TakeCardsAnswer(name, true, cardsOnTable),
+				activePlayer);
+		activePlayer.getUltiRoom().sendTakenCardsMessageToAllOthers(
+				messageHandler, name, cardsOnTable, activePlayer);
 		cardsOnTable = new ArrayList<Card>();
 
 		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
@@ -323,7 +352,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForPlayer1);
 		points.put(player2.getName(), sumForPlayer2);
 		activePlayerList.get(0).getUltiRoom()
-		.sendShowResultMessageToAll(messageHandler, points);
+				.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}
