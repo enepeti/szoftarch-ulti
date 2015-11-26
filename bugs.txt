@@ -1,0 +1,10 @@
+szerver:
+szûrni ha még nem játék fázisban akar lapot kijátszani Jani
+szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt
+startgame-nél is elküldeni, h ki jön
+validálni, h rakhatja-e azt a lapot
+eldönteni, hogy ki viszi a lapokat
+ne lehessen ugyanazzal a felhasználóval kétszer belépni
+
+kliens:
+mikor lead a kezdõ játékos 2 lapot, a másik két játékosnál is eltûnik két lap
