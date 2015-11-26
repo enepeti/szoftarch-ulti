@@ -25,10 +25,13 @@ public class GameTypeConverter {
 
 	public int convertConcreteGameTypeToInt(
 			final ConcreteGameType concreteGameType) {
-		for (final Entry<Integer, ConcreteGameType> entry : gameTypeMap
-				.entrySet()) {
-			if (concreteGameType.getName().equals(entry.getValue().getName())) {
-				return entry.getKey();
+		if (concreteGameType != null) {
+			for (final Entry<Integer, ConcreteGameType> entry : gameTypeMap
+					.entrySet()) {
+				if (concreteGameType.getName().equals(
+						entry.getValue().getName())) {
+					return entry.getKey();
+				}
 			}
 		}
 
