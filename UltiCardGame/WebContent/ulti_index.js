@@ -11,7 +11,9 @@ var mycards = [];
 var playedcard = null;
 var myturn = false;
 var issayingphase = true;
+var isayrule = false;
 var markedcards = [];
+var hastoconfirm = false;
 
 var chat = {};
 
@@ -124,10 +126,29 @@ function handleMessage (msg) {
 		case "deal":
 			mycards = msg.cards;
 			myturn = msg.isStarter;
+			isayrule = msg.isStarter;
+			issayingphase = true;
+			var sayBar = $('#saying');
+			sayBar.css('display', 'block');
 			showCards();
 			break;
 		case "playedcard":
 			handlePlayedCard(msg);
+			break;
+		case "playeronturn":
+			myturn = msg.isItMe;
+			break;
+		case "gameselected":
+			removeMarkedCardsFromHand();
+			break;
+		case "pickedupcards":
+			mycards.push(msg.card1, msg.card2);
+			break;
+		case "hastoconfirm":
+			hastoconfirm = true;
+			break;
+		case "startgame":
+			sayPhaseOver()
 			break;
 		case "error":
 			showError(msg.message);
@@ -557,6 +578,49 @@ function showCards () {
 	};
 }
 
+function sayPass () {
+	if(myturn) {
+		if(isayrule) {
+			if(markedcards.length < 2) {
+				showError("Meg kell jelölnöd két kártyát amit a talonba teszel!");
+			} else {
+				isayrule = false;
+
+				gameselectionmsg = {};
+				gameselectionmsg.type = "gameselection";
+				gameselectionmsg.gameType = 1;
+				gameselectionmsg.card1 = markedcards[0];
+				gameselectionmsg.card2 = markedcards[1];
+				send(gameselectionmsg);
+			}
+		} else if (hastoconfirm) {
+			confirmgamemsg = {};
+			confirmgamemsg.type = "confirmgame";
+			send(confirmgamemsg);
+		} else {
+			passmsg = {};
+			passmsg.type = "pass";
+			send(passmsg);
+		}
+	}
+}
+
+function sayPhaseOver () {
+	var sayBar = $('#saying');
+	sayBar.css('display', 'none');
+
+	issayingphase = false;
+}
+
+function removeMarkedCardsFromHand () {
+	for (var i = 0; i < 2; i++) {
+		var card = markedcards[i];
+		var index = mycards.indexOf(card);
+		mycards.splice(index, 1);
+	};
+	showCards();
+}
+
 function playCard(index) {
 	if(myturn) {
 		var card = mycards[index];
@@ -586,7 +650,7 @@ function playCard(index) {
 }
 
 function handlePlayedCard (data) {
-	if(playedcard) {
+	if(playedcard && data.isItMe) {
 		var index = mycards.indexOf(playedcard);
 		mycards.splice(index, 1);
 		showCards();

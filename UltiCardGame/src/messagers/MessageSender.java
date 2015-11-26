@@ -16,6 +16,7 @@ public class MessageSender implements IMessageSender {
 		final Session session = activePlayer.getSession();
 
 		try {
+			System.out.println("sent: " + message);
 			session.getBasicRemote().sendText(message);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block

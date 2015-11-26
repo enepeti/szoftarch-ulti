@@ -19,10 +19,10 @@
 - Felhasználók listázása adminnak: `{"type":"listactiveplayers"}` :ok:
 - Felhasználó kidobása adminnak: `{"type":"kick", "name":<string>}` :ok:
 - Toplista lekérés: `{"type":"gettoplist"}` :ok:
-- Játék bemondás: `{"type":"gameselection", "gametype":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}`
-- Passzolás: `{"type":"pass"}`
+- Játék bemondás: `{"type":"gameselection", "gameType":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
+- Passzolás: `{"type":"pass"}` :ok:
 - Lapfelvétel: `{"type":"pickupcards"}`
-- Játék jóváhagyása: `{"type":"confirmgame"}`
+- Játék jóváhagyása: `{"type":"confirmgame"}` :ok:
 - Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 
 #### Szerver - Kliens
@@ -43,11 +43,11 @@
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
 - Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
-- Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}`
-- Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}`
-- Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}`
-- Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}`
-- Játék kezdődik: `{"type":"startgame"}`
+- Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}` :ok:
+- Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}` :ok:
+- Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
+- Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
+- Játék kezdődik: `{"type":"startgame"}` :ok:
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
-- Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}`
+- Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
