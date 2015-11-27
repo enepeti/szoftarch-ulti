@@ -33,6 +33,7 @@ public class UltiGame {
 	private int starterActivePlayer = -1;
 	private int activePlayerOnTurn = -1;
 	private int lastPlayerWithConcreteGameType = -1;
+	private boolean isGameStarted = false;
 	private Card remainingCard1 = null;
 	private Card remainingCard2 = null;
 	private List<Card> cardsOnTable = null;
@@ -178,20 +179,28 @@ public class UltiGame {
 			final Card card2) {
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
-		activePlayer.getUltiPlayer().say(card1, card2);
-		remainingCard1 = card1;
-		remainingCard2 = card2;
-		this.concreteGameType = concreteGameType;
-		final String name = activePlayer.getPlayer().getName();
-		final int convertConcreteGameTypeToInt = gameTypeConverter
-				.convertConcreteGameTypeToInt(concreteGameType);
-		messageHandler.send(new GameSelectedAnswer(name, true,
-				convertConcreteGameTypeToInt), activePlayer);
-		activePlayer.getUltiRoom().sendGameSelectionMessageToAllOthers(
-				messageHandler, name, convertConcreteGameTypeToInt,
-				activePlayer);
-		lastPlayerWithConcreteGameType = activePlayerOnTurn;
-		nextPlayerTurn();
+		if ((gameTypeConverter
+				.convertConcreteGameTypeToInt(this.concreteGameType) >= gameTypeConverter
+				.convertConcreteGameTypeToInt(concreteGameType))
+				|| (this.concreteGameType == null)) {
+			activePlayer.getUltiPlayer().say(card1, card2);
+			remainingCard1 = card1;
+			remainingCard2 = card2;
+			this.concreteGameType = concreteGameType;
+			final String name = activePlayer.getPlayer().getName();
+			final int convertConcreteGameTypeToInt = gameTypeConverter
+					.convertConcreteGameTypeToInt(concreteGameType);
+			messageHandler.send(new GameSelectedAnswer(name, true,
+					convertConcreteGameTypeToInt), activePlayer);
+			activePlayer.getUltiRoom().sendGameSelectionMessageToAllOthers(
+					messageHandler, name, convertConcreteGameTypeToInt,
+					activePlayer);
+			lastPlayerWithConcreteGameType = activePlayerOnTurn;
+			nextPlayerTurn();
+		} else {
+			messageHandler.send(new ErrorAnswer("Nem elég nagy bemondás!"),
+					activePlayer);
+		}
 	}
 
 	public void pass() {
@@ -232,27 +241,41 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-				.sendStartGameMessageToAll(messageHandler);
+		.sendStartGameMessageToAll(messageHandler);
+		isGameStarted = true;
+
+		final ActivePlayer activePlayer = activePlayerList
+				.get(activePlayerOnTurn);
+		final String name = activePlayer.getPlayer().getName();
+		messageHandler.send(new PlayerOnTurnAnswer(name, true), activePlayer);
+		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAllOthers(
+				messageHandler, name, activePlayer);
 	}
 
 	public void playCard(final Card card, final ActivePlayer senderActivePlayer) {
-		if (validatePlayer(senderActivePlayer)) {
-			cardsOnTable.add(card);
-			final ActivePlayer activePlayer = activePlayerList
-					.get(activePlayerOnTurn);
-			activePlayer.getUltiPlayer().playCard(card);
-			final String name = activePlayer.getPlayer().getName();
-			messageHandler.send(new PlayedCardAnswer(name, true, card),
-					activePlayer);
-			activePlayer.getUltiRoom().sendPlayedCardMessageToAllOthers(
-					messageHandler, name, card, activePlayer);
-			if (cardsOnTable.size() == 3) {
-				evaluateTurn();
+		if (isGameStarted) {
+			if (validatePlayer(senderActivePlayer)) {
+				cardsOnTable.add(card);
+				final ActivePlayer activePlayer = activePlayerList
+						.get(activePlayerOnTurn);
+				activePlayer.getUltiPlayer().playCard(card);
+				final String name = activePlayer.getPlayer().getName();
+				messageHandler.send(new PlayedCardAnswer(name, true, card),
+						activePlayer);
+				activePlayer.getUltiRoom().sendPlayedCardMessageToAllOthers(
+						messageHandler, name, card, activePlayer);
+				if (cardsOnTable.size() == 3) {
+					evaluateTurn();
+				} else {
+					nextPlayerTurn();
+				}
 			} else {
-				nextPlayerTurn();
+				messageHandler.send(new ErrorAnswer("Nem Ön jön!"),
+						senderActivePlayer);
 			}
 		} else {
-			messageHandler.send(new ErrorAnswer("Nem Ön jön!"),
+			messageHandler.send(new ErrorAnswer(
+					"Még a licitálás tart, nem játszhat ki lapot!"),
 					senderActivePlayer);
 		}
 	}
@@ -280,15 +303,16 @@ public class UltiGame {
 	}
 
 	public void nextGame() {
+		concreteGameType = null;
+		isGameStarted = false;
 		incrementStarterPlayer();
 		deal();
 		activePlayerOnTurn = starterActivePlayer;
 	}
 
 	public void evaluateTurn() {
-		// TODO: szabályok alapján a megfelelõ játékos vigye: x
-		final int x = 0;
-		final ActivePlayer activePlayer = activePlayerList.get(x);
+		final int takeCards = determineWhoTakesCards();
+		final ActivePlayer activePlayer = activePlayerList.get(takeCards);
 		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
 		final String name = activePlayer.getPlayer().getName();
 		messageHandler.send(new TakeCardsAnswer(name, true, cardsOnTable),
@@ -300,9 +324,13 @@ public class UltiGame {
 		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
 			evaluateGame();
 		} else {
-			activePlayerOnTurn = x;
+			activePlayerOnTurn = takeCards;
 			nextPlayerTurnAfterEvaluation();
 		}
+	}
+
+	private int determineWhoTakesCards() {
+		return 0;
 	}
 
 	private void evaluateGame() {
@@ -352,7 +380,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForPlayer1);
 		points.put(player2.getName(), sumForPlayer2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

@@ -1,9 +1,9 @@
 szerver:
-szûrni ha még nem játék fázisban akar lapot kijátszani Jani
-szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt
-startgame-nél is elküldeni, h ki jön
-validálni, h rakhatja-e azt a lapot
+szûrni ha még nem játék fázisban akar lapot kijátszani Jani :ok:
+szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt :ok:
+startgame-nél is elküldeni, h ki jön :ok:
 eldönteni, hogy ki viszi a lapokat
+validálni, h rakhatja-e azt a lapot
 ne lehessen ugyanazzal a felhasználóval kétszer belépni
 
 kliens:
