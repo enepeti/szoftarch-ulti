@@ -6,6 +6,7 @@ import interfaces.messagers.IMessageHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import messagers.MessageHandler;
@@ -19,7 +20,9 @@ import messagers.util.ulti.PlayerOnTurnAnswer;
 import messagers.util.ulti.TakeCardsAnswer;
 import ulti.domain.Card;
 import ulti.domain.DeckOfCards;
+import ulti.domain.SuitType.Suit;
 import ulti.domain.UltiPlayer;
+import ulti.domain.ValueType.Value;
 import ulti.domain.gametype.ConcreteGameType;
 import ulti.domain.gametype.GameTypeConverter;
 import dal.PlayerRepository;
@@ -146,6 +149,16 @@ public class UltiGame {
 		}
 	}
 
+	private int incrementTakeCards(int takeCards) {
+		if (takeCards == 2) {
+			takeCards = 0;
+		} else {
+			takeCards++;
+		}
+
+		return takeCards;
+	}
+
 	public void deal() {
 		deckOfCards.shuffle();
 
@@ -210,7 +223,6 @@ public class UltiGame {
 	public void pickUpCards() {
 		final List<Card> cardsToHand = new ArrayList<Card>();
 		cardsToHand.add(remainingCard1);
-		cardsToHand.add(remainingCard2);
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
 		activePlayer.getUltiPlayer().addCardsToHand(cardsToHand);
@@ -234,7 +246,8 @@ public class UltiGame {
 		activePlayer.getUltiRoom().sendNextPlayerOnTurnMessageToAllOthers(
 				messageHandler, name, activePlayer);
 
-		if (lastPlayerWithConcreteGameType == activePlayerOnTurn) {
+		if ((lastPlayerWithConcreteGameType == activePlayerOnTurn)
+				&& !isGameStarted) {
 			messageHandler.send(new HasToConfirmAnswer(), activePlayer);
 		}
 	}
@@ -243,6 +256,9 @@ public class UltiGame {
 		activePlayerList.get(0).getUltiRoom()
 		.sendStartGameMessageToAll(messageHandler);
 		isGameStarted = true;
+
+		// TODO: lekérni klienstõl
+		concreteGameType.setTrump(Suit.LEAF);
 
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
@@ -311,7 +327,13 @@ public class UltiGame {
 	}
 
 	public void evaluateTurn() {
-		final int takeCards = determineWhoTakesCards();
+		int takeCards = determineWhoTakesCards();
+		if (activePlayerOnTurn == 0) {
+			takeCards = incrementTakeCards(takeCards);
+		} else if (activePlayerOnTurn == 1) {
+			takeCards = incrementTakeCards(takeCards);
+			takeCards = incrementTakeCards(takeCards);
+		}
 		final ActivePlayer activePlayer = activePlayerList.get(takeCards);
 		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
 		final String name = activePlayer.getPlayer().getName();
@@ -330,7 +352,86 @@ public class UltiGame {
 	}
 
 	private int determineWhoTakesCards() {
-		return 0;
+		final HashMap<Card, Integer> orderMap = createCardOrder(concreteGameType
+				.getTrump());
+
+		return takeCardIndex(orderMap);
+	}
+
+	private int takeCardIndex(final HashMap<Card, Integer> orderMap) {
+		int first = 0;
+		int second = 0;
+		int third = 0;
+		final Suit suit1 = cardsOnTable.get(0).getSuit();
+		final Value value1 = cardsOnTable.get(0).getValue();
+		final Suit suit2 = cardsOnTable.get(1).getSuit();
+		final Value value2 = cardsOnTable.get(1).getValue();
+		final Suit suit3 = cardsOnTable.get(2).getSuit();
+		final Value value3 = cardsOnTable.get(2).getValue();
+		for (final Entry<Card, Integer> entry : orderMap.entrySet()) {
+			if ((entry.getKey().getSuit().compareTo(suit1) == 0)
+					&& (entry.getKey().getValue().compareTo(value1) == 0)) {
+				first = entry.getValue();
+			}
+
+			if ((entry.getKey().getSuit().compareTo(suit2) == 0)
+					&& (entry.getKey().getValue().compareTo(value2) == 0)) {
+				second = entry.getValue();
+			}
+
+			if ((entry.getKey().getSuit().compareTo(suit3) == 0)
+					&& (entry.getKey().getValue().compareTo(value3) == 0)) {
+				third = entry.getValue();
+			}
+		}
+
+		return findMin(first, second, third);
+	}
+
+	private int findMin(final Integer firstOrder, final Integer secondOrder,
+			final Integer thirdOrder) {
+		int min = firstOrder;
+		int minIndex = 0;
+
+		if (secondOrder < min) {
+			min = secondOrder;
+			minIndex = 1;
+		}
+
+		if (thirdOrder < min) {
+			min = thirdOrder;
+			minIndex = 2;
+		}
+
+		return minIndex;
+	}
+
+	private HashMap<Card, Integer> createCardOrder(final Suit trumpSuit) {
+		final HashMap<Card, Integer> orderMap = new HashMap<Card, Integer>();
+
+		int orderNumber = 1;
+		for (final Value value : Value.values()) {
+			orderMap.put(new Card(trumpSuit, value), orderNumber++);
+		}
+
+		final Suit firstCardSuit = cardsOnTable.get(0).getSuit();
+		if (firstCardSuit.compareTo(trumpSuit) != 0) {
+			for (final Value value : Value.values()) {
+				orderMap.put(new Card(firstCardSuit, value), orderNumber++);
+			}
+		}
+
+		orderNumber++;
+		for (final Suit suit : Suit.values()) {
+			if ((suit.compareTo(firstCardSuit) != 0)
+					&& (suit.compareTo(trumpSuit) != 0)) {
+				for (final Value value : Value.values()) {
+					orderMap.put(new Card(suit, value), orderNumber);
+				}
+			}
+		}
+
+		return orderMap;
 	}
 
 	private void evaluateGame() {

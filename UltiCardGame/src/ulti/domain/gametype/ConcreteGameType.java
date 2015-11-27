@@ -3,6 +3,8 @@ package ulti.domain.gametype;
 import java.util.ArrayList;
 import java.util.List;
 
+import ulti.domain.SuitType.Suit;
+
 public class ConcreteGameType {
 
 	private final List<GameType> gameTypeList = new ArrayList<GameType>();
@@ -14,6 +16,7 @@ public class ConcreteGameType {
 	private final boolean isThereTrump;
 	private final boolean isItRed;
 	private final boolean isThereParty;
+	private Suit trump;
 
 	public ConcreteGameType(final String name, final int value,
 			final int partyValue, final boolean isTenUp,
@@ -59,6 +62,14 @@ public class ConcreteGameType {
 
 	public boolean isThereParty() {
 		return isThereParty;
+	}
+
+	public Suit getTrump() {
+		return trump;
+	}
+
+	public void setTrump(Suit trump) {
+		this.trump = trump;
 	}
 
 }
