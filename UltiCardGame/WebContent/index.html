@@ -9,6 +9,7 @@
 	<script src="ulti_index.js"></script>
 </head>
 <body>
+	<!--Bejelentkezés-->
 	<div id="loginpage" class="screen-center">
 		<form id="loginform" action="javascript:login();">
 			<input id="login_name" type="text" class="form-control hor-sep" placeholder="Neved" required/>
@@ -20,6 +21,7 @@
 			<a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
+	<!--Regisztráció-->
 	<div id="registrationpage" class="screen-center">
 		<form id="registrationform" action="javascript:register();">
 			<input id="register_name" type="text" class="form-control hor-sep" placeholder="Név" required/>
@@ -36,12 +38,13 @@
 			Nem szeretnél regisztálni? <a href="javascript:loginGuest()">Lépj be vendégként!</a>
 		</p>
 	</div>
+	<!--Fő oldal-->
 	<div id="mainpage">
+		<!--Ulti-->
 		<div id="ultipage">
 			<div id="ultibuttoncontainer" class="ulticontainer">
 				<div>
 					<p>Üdv <span id="name"></span>!</p>
-					<!--<p>Jelenleg a <span id="chatroomname">Józsi</span> chat szobában vagy</p>-->
 				</div>
 				<div class="room">
 					<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
@@ -67,7 +70,18 @@
 			</div>
 			<div id="ultigamepage" class="ulticontainer">
 				<div id="saying">
-					<button id="passbutton" class="btn btn-primary" onclick="sayPass()">Passz</button>
+					<div id="saying_other">
+						<button class="btn btn-primary" onclick="sayPass()">Passz</button>
+						<button class="btn btn-primary" onclick="pickUpCards()">Talon felvevés</button>
+					</div>
+					<div id="saying_me">
+						<select id="rule_selector">
+							<option value="1">Passz</option>
+						</select>
+						<button class="btn btn-success" onclick="sayRule()">Rendben</button>
+					</div>
+				</div>
+				<div id="playedcards" class="screen-center">
 				</div>
 				<div id="myhand" class="vertical-center"></div>
 			</div>
@@ -75,6 +89,7 @@
 				<table id="staticticstable" class="table-striped"></table>
 			</div>
 		</div>
+		<!--Chat-->
 		<div id="chatpage">
 			<div id="chat_buttoncontainer" class="ulticontainer">
 				<div>
@@ -107,6 +122,7 @@
 			<div class="clear"></div>
 		</div>
 	</div>
+	<!--Felugró ablakok-->
 	<div id="opennewultiroommodal" class="modalDialog">
 		<div>
 			<a href="#close" title="Close" class="close">X</a>

@@ -5,6 +5,7 @@ startgame-nél is elküldeni, h ki jön :ok:
 eldönteni, hogy ki viszi a lapokat :ok:
 validálni, h rakhatja-e azt a lapot
 ne lehessen ugyanazzal a felhasználóval kétszer belépni
+ha valaki feláll az asztaltól kéne intézni
 
 kliens:
-mikor lead a kezdõ játékos 2 lapot, a másik két játékosnál is eltûnik két lap
+mikor lead a kezdõ játékos 2 lapot, a másik két játékosnál is eltûnik két lap :hankey:

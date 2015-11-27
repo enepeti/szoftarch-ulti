@@ -21,7 +21,7 @@
 - Toplista lekérés: `{"type":"gettoplist"}` :ok:
 - Játék bemondás: `{"type":"gameselection", "gameType":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Passzolás: `{"type":"pass"}` :ok:
-- Lapfelvétel: `{"type":"pickupcards"}`
+- Lapfelvétel: `{"type":"pickupcards"}` :ok:
 - Játék jóváhagyása: `{"type":"confirmgame"}` :ok:
 - Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 

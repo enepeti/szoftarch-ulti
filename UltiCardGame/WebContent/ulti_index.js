@@ -124,25 +124,20 @@ function handleMessage (msg) {
 			startUlti();
 			break;
 		case "deal":
-			mycards = msg.cards;
-			myturn = msg.isStarter;
-			isayrule = msg.isStarter;
-			issayingphase = true;
-			var sayBar = $('#saying');
-			sayBar.css('display', 'block');
-			showCards();
+			handleDeal(msg);
 			break;
 		case "playedcard":
 			handlePlayedCard(msg);
 			break;
 		case "playeronturn":
-			myturn = msg.isItMe;
+				startTurn(msg.isItMe);
 			break;
 		case "gameselected":
+			chat.newLine("Passz", msg.name);
 			removeMarkedCardsFromHand();
 			break;
 		case "pickedupcards":
-			mycards.push(msg.card1, msg.card2);
+			handleCardPickup(msg.card1, msg.card2);
 			break;
 		case "hastoconfirm":
 			hastoconfirm = true;
@@ -499,6 +494,8 @@ function standUp () {
 	gamebuttons.css('display', 'none');
 	roombuttons.css('display', 'block');
 
+	leaveUltiRoom();
+
 	dorefresh = true;
 }
 
@@ -578,22 +575,57 @@ function showCards () {
 	};
 }
 
+function handleDeal (mydeal) {
+	var saybar = $('#saying');
+	var sayother = $('#saying_other');
+	var sayme = $('#saying_me');
+
+	mycards = mydeal.cards;
+	myturn = mydeal.isStarter;
+	isayrule = mydeal.isStarter;
+
+	saybar.css('display', 'block');
+	if(isayrule) {
+		sayother.css('display', 'none');
+		sayme.css('display', 'block');
+	} else {
+		sayother.css('display', 'none');
+		sayme.css('display', 'none');
+	}
+	issayingphase = true;
+	showCards();
+}
+
+function startTurn (isMyTurn) {
+	myturn = isMyTurn;
+
+	if(issayingphase) {
+		if(myturn) {
+			var sayother = $('#saying_other');
+
+			sayother.css('display', 'block');
+		} else {
+			var sayother = $('#saying_other');
+			var sayme = $('#saying_me');
+
+			sayother.css('display', 'none');
+			sayme.css('display', 'none');
+		}
+	} else {
+		var cards = $('.card');
+		if(myturn) {
+			//alert("te jössz")
+			cards.css('background', 'lightblue');
+		} else {
+			//log("nem te jössz");
+			cards.css('background', 'red');
+		}
+	}
+}
+
 function sayPass () {
 	if(myturn) {
-		if(isayrule) {
-			if(markedcards.length < 2) {
-				showError("Meg kell jelölnöd két kártyát amit a talonba teszel!");
-			} else {
-				isayrule = false;
-
-				gameselectionmsg = {};
-				gameselectionmsg.type = "gameselection";
-				gameselectionmsg.gameType = 1;
-				gameselectionmsg.card1 = markedcards[0];
-				gameselectionmsg.card2 = markedcards[1];
-				send(gameselectionmsg);
-			}
-		} else if (hastoconfirm) {
+		if (hastoconfirm) {
 			confirmgamemsg = {};
 			confirmgamemsg.type = "confirmgame";
 			send(confirmgamemsg);
@@ -605,6 +637,39 @@ function sayPass () {
 	}
 }
 
+function sayRule() {
+	if(myturn) {
+		if(isayrule) {
+			if(markedcards.length < 2) {
+				showError("Meg kell jelölnöd két kártyát amit a talonba teszel!");
+			} else {
+				isayrule = false;
+
+				var ruleSelect = $('#rule_selector');
+				var rule = ruleSelect.val();
+
+				gameselectionmsg = {};
+				gameselectionmsg.type = "gameselection";
+				gameselectionmsg.gameType = rule;
+				gameselectionmsg.card1 = markedcards[0];
+				gameselectionmsg.card2 = markedcards[1];
+				send(gameselectionmsg);
+			}
+		}
+	}
+}
+
+function pickUpCards() {
+	pickupcardmsg = {};
+	pickupcardmsg.type = "pickupcards";
+	send(pickupcardsmsg);
+}
+
+function handleCardPickup (card1, card2) {
+	mycards.push(card1, card2);
+	isayrule = true;
+}
+
 function sayPhaseOver () {
 	var sayBar = $('#saying');
 	sayBar.css('display', 'none');
@@ -613,18 +678,18 @@ function sayPhaseOver () {
 }
 
 function removeMarkedCardsFromHand () {
-	for (var i = 0; i < 2; i++) {
+	for (var i = 0; (i < 2) && (i < markedcards.length); i++) {
 		var card = markedcards[i];
 		var index = mycards.indexOf(card);
 		mycards.splice(index, 1);
-	};
+	}
 	showCards();
 }
 
 function playCard(index) {
 	if(myturn) {
 		var card = mycards[index];
-		if(issayingphase) {
+		if(issayingphase && isayrule) {
 			var mi = markedcards.indexOf(card)
 			var cardView = $('#' + card.suit + '_' + card.value);
 			if(mi !== -1) {
@@ -656,6 +721,8 @@ function handlePlayedCard (data) {
 		showCards();
 		playedcard = null;
 	}
+	var hunCard = toHunCard(data.card.suit, data.card.value);
+	chat.newLine("Kijátszottam: " + hunCard.suit + " " + hunCard.value, data.name);
 }
 
 function toHunCard (suit, value) {
@@ -707,7 +774,8 @@ function admin_kickPlayer (msg) {
 			send(kickplayermsg);
 			admin_getAllPlayers();
 		} else {
-			showError("Nem választottál játékost!");
+			var info = $('#admin_info');
+			info.html("Nem választottál játékost!");
 		}
 	}
 }
