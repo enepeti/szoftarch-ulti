@@ -32,8 +32,22 @@ public class UltiPlayer {
 	}
 
 	public void say(final Card card1, final Card card2) {
-		hand.remove(card1);
-		hand.remove(card2);
+		final ArrayList<Card> cardsToDrop = new ArrayList<Card>();
+		for (final Card cardInHand : hand) {
+			if ((cardInHand.getSuit().compareTo(card1.getSuit()) == 0)
+					&& (cardInHand.getValue().compareTo(card1.getValue()) == 0)) {
+				cardsToDrop.add(cardInHand);
+			}
+
+			if ((cardInHand.getSuit().compareTo(card2.getSuit()) == 0)
+					&& (cardInHand.getValue().compareTo(card2.getValue()) == 0)) {
+				cardsToDrop.add(cardInHand);
+			}
+		}
+
+		for (final Card cardInHand : cardsToDrop) {
+			hand.remove(cardInHand);
+		}
 	}
 
 	public void pass() {

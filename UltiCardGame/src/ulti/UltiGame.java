@@ -271,19 +271,25 @@ public class UltiGame {
 	public void playCard(final Card card, final ActivePlayer senderActivePlayer) {
 		if (isGameStarted) {
 			if (validatePlayer(senderActivePlayer)) {
-				cardsOnTable.add(card);
-				final ActivePlayer activePlayer = activePlayerList
-						.get(activePlayerOnTurn);
-				activePlayer.getUltiPlayer().playCard(card);
-				final String name = activePlayer.getPlayer().getName();
-				messageHandler.send(new PlayedCardAnswer(name, true, card),
-						activePlayer);
-				activePlayer.getUltiRoom().sendPlayedCardMessageToAllOthers(
-						messageHandler, name, card, activePlayer);
-				if (cardsOnTable.size() == 3) {
-					evaluateTurn();
+				if (validateCard(card, senderActivePlayer)) {
+					cardsOnTable.add(card);
+					final ActivePlayer activePlayer = activePlayerList
+							.get(activePlayerOnTurn);
+					activePlayer.getUltiPlayer().playCard(card);
+					final String name = activePlayer.getPlayer().getName();
+					messageHandler.send(new PlayedCardAnswer(name, true, card),
+							activePlayer);
+					activePlayer.getUltiRoom()
+					.sendPlayedCardMessageToAllOthers(messageHandler,
+							name, card, activePlayer);
+					if (cardsOnTable.size() == 3) {
+						evaluateTurn();
+					} else {
+						nextPlayerTurn();
+					}
 				} else {
-					nextPlayerTurn();
+					messageHandler.send(new ErrorAnswer(
+							"Nem tehetõ le az a lap"), senderActivePlayer);
 				}
 			} else {
 				messageHandler.send(new ErrorAnswer("Nem Ön jön!"),
@@ -294,6 +300,155 @@ public class UltiGame {
 					"Még a licitálás tart, nem játszhat ki lapot!"),
 					senderActivePlayer);
 		}
+	}
+
+	private boolean validateCard(final Card card,
+			final ActivePlayer senderActivePlayer) {
+		final UltiPlayer ultiPlayer = senderActivePlayer.getUltiPlayer();
+		if (cardsOnTable.isEmpty()) {
+			return true;
+		} else {
+			if (cardsOnTable.size() == 1) {
+				final Card firstAndOnlyCardOnTable = cardsOnTable.get(0);
+				final Suit cardOnTableSuit = firstAndOnlyCardOnTable.getSuit();
+				final Value cardOnTableValue = firstAndOnlyCardOnTable
+						.getValue();
+				final Suit cardSuit = card.getSuit();
+				final Value cardValue = card.getValue();
+				final Suit trumpSuit = concreteGameType.getTrump();
+
+				if (cardSuit.compareTo(cardOnTableSuit) == 0) {
+					if (cardValue.ordinal() < cardOnTableValue.ordinal()) {
+						return true;
+					} else {
+						return hasNoBiggerCard(ultiPlayer, cardOnTableSuit,
+								cardOnTableValue);
+					}
+				} else if (cardSuit.compareTo(trumpSuit) == 0) {
+					return hasNoSuchSuit(ultiPlayer, cardOnTableSuit);
+				} else {
+					if (hasNoSuchSuit(ultiPlayer, cardOnTableSuit)
+							&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			} else {
+				if (cardsOnTable.size() == 2) {
+					final Card firstCardOnTable = cardsOnTable.get(0);
+					final Suit firstCardOnTableSuit = firstCardOnTable
+							.getSuit();
+					final Value firstCardOnTableValue = firstCardOnTable
+							.getValue();
+					final Card secondCardOnTable = cardsOnTable.get(1);
+					final Suit secondCardOnTableSuit = secondCardOnTable
+							.getSuit();
+					final Value secondCardOnTableValue = secondCardOnTable
+							.getValue();
+					final Suit cardSuit = card.getSuit();
+					final Value cardValue = card.getValue();
+					final Suit trumpSuit = concreteGameType.getTrump();
+
+					if (cardSuit.compareTo(firstCardOnTableSuit) == 0) {
+						if (cardValue.ordinal() < firstCardOnTableValue
+								.ordinal()) {
+							if (cardSuit.compareTo(secondCardOnTableSuit) == 0) {
+								if (cardValue.ordinal() < secondCardOnTableValue
+										.ordinal()) {
+									return true;
+								} else {
+									return hasNoBiggerCard(ultiPlayer,
+											secondCardOnTableSuit,
+											secondCardOnTableValue);
+								}
+							} else {
+								return true;
+							}
+						} else {
+							if (cardSuit.compareTo(secondCardOnTableSuit) == 0) {
+								if (firstCardOnTableValue.ordinal() < secondCardOnTableValue
+										.ordinal()) {
+									return hasNoBiggerCard(ultiPlayer,
+											firstCardOnTableSuit,
+											firstCardOnTableValue);
+								} else {
+									if (cardValue.ordinal() < secondCardOnTableValue
+											.ordinal()) {
+										return true;
+									} else {
+										return hasNoBiggerCard(ultiPlayer,
+												secondCardOnTableSuit,
+												secondCardOnTableValue);
+									}
+								}
+							} else {
+								if (secondCardOnTableSuit.compareTo(trumpSuit) == 0) {
+									return true;
+								} else {
+									return hasNoBiggerCard(ultiPlayer,
+											firstCardOnTableSuit,
+											firstCardOnTableValue);
+								}
+							}
+						}
+					} else if (cardSuit.compareTo(trumpSuit) == 0) {
+						if (secondCardOnTableSuit.compareTo(trumpSuit) == 0) {
+							if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)) {
+								if (cardValue.ordinal() < secondCardOnTableValue
+										.ordinal()) {
+									return true;
+								} else {
+									return hasNoBiggerCard(ultiPlayer,
+											secondCardOnTableSuit,
+											secondCardOnTableValue);
+								}
+							} else {
+								return false;
+							}
+						} else {
+							return hasNoSuchSuit(ultiPlayer,
+									firstCardOnTableSuit);
+						}
+					} else {
+						if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)
+								&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				} else {
+					System.out.println("Too many cards on the table");
+					return false;
+				}
+			}
+		}
+	}
+
+	private boolean hasNoBiggerCard(final UltiPlayer ultiPlayer,
+			final Suit cardOnTableSuit, final Value cardOnTableValue) {
+		for (final Card cardInHand : ultiPlayer.getHand()) {
+			if (cardInHand.getSuit().compareTo(cardOnTableSuit) == 0) {
+				if (cardInHand.getValue().ordinal() < cardOnTableValue
+						.ordinal()) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean hasNoSuchSuit(final UltiPlayer ultiPlayer,
+			final Suit cardOnTableSuit) {
+		for (final Card cardInHand : ultiPlayer.getHand()) {
+			if (cardInHand.getSuit().compareTo(cardOnTableSuit) == 0) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private boolean validatePlayer(final ActivePlayer senderActivePlayer) {
@@ -322,6 +477,12 @@ public class UltiGame {
 		concreteGameType = null;
 		isGameStarted = false;
 		incrementStarterPlayer();
+		lastPlayerWithConcreteGameType = -1;
+		remainingCard1 = null;
+		remainingCard2 = null;
+		cardsOnTable = null;
+		concreteGameType = null;
+		deckOfCards = new DeckOfCards();
 		deal();
 		activePlayerOnTurn = starterActivePlayer;
 	}
