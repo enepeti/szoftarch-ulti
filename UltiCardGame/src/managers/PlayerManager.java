@@ -3,6 +3,7 @@ package managers;
 import interfaces.dal.IPlayerRepository;
 import interfaces.managers.IChatRoomManager;
 import interfaces.managers.IPlayerManager;
+import interfaces.managers.ISessionManager;
 import interfaces.managers.IUltiRoomManager;
 import interfaces.messagers.IMessageHandler;
 import interfaces.util.IPasswordHasher;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import messagers.MessageHandler;
+import messagers.util.error.ErrorAnswer;
 import messagers.util.guest.TopListAnswer;
 import messagers.util.userhandling.LoginAnswer;
 import messagers.util.userhandling.LogoutAnswer;
@@ -28,31 +30,53 @@ public class PlayerManager implements IPlayerManager {
 	private final IPasswordHasher passwordHasher = new PasswordHasher();
 	private static final IChatRoomManager chatRoomManager = new ChatRoomManager();
 	private static final IUltiRoomManager ultiRoomManager = new UltiRoomManager();
+	private static final ISessionManager sessionManager = new SessionManager();
 
 	private static int guestNumber = 0;
 
 	@Override
 	public void login(final String name, final String pass,
 			final ActivePlayer activePlayer) {
-		final Player player = playerRepository.get(name);
-		boolean arePasswordsEqual = true;
-		try {
-			arePasswordsEqual = passwordHasher
-					.check(pass, player.getPassword());
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		if (arePasswordsEqual) {
-			activePlayer.setPlayer(player);
-			if (player.getType().compareTo(PlayerType.ADMIN) == 0) {
-				loginSuccess(activePlayer);
+		if (checkIfNoUserAlreadyIn(name, activePlayer)) {
+			final Player player = playerRepository.get(name);
+			if (player != null) {
+				boolean arePasswordsEqual = true;
+				try {
+					arePasswordsEqual = passwordHasher.check(pass,
+							player.getPassword());
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+				if (arePasswordsEqual) {
+					activePlayer.setPlayer(player);
+					if (player.getType().compareTo(PlayerType.ADMIN) == 0) {
+						loginSuccess(activePlayer);
+					} else {
+						loginSuccess(activePlayer);
+					}
+				} else {
+					this.messageHandler.send(new LoginAnswer(false, "", ""),
+							activePlayer);
+				}
 			} else {
-				loginSuccess(activePlayer);
+				this.messageHandler.send(new LoginAnswer(false, "", ""),
+						activePlayer);
 			}
 		} else {
-			this.messageHandler.send(new LoginAnswer(false, "", ""),
+			this.messageHandler
+			.send(new ErrorAnswer(
+					"Ezzel a felhasználónévvel már be vannak lépve a játékba!"),
 					activePlayer);
 		}
+	}
+
+	private boolean checkIfNoUserAlreadyIn(final String name,
+			final ActivePlayer activePlayer) {
+		if (sessionManager.getActivePlayerForPlayerName(name) == null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

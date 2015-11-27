@@ -65,7 +65,7 @@ public class PlayerRepository implements IPlayerRepository {
 
 			if (resultSet.next()) {
 				final String nameInDb = resultSet.getString("name");
-				if (nameInDb != null) {
+				if ((nameInDb != null) && nameInDb.equals(name)) {
 					final Player player = new Player();
 					player.setName(resultSet.getString("name"));
 					player.setEmail(resultSet.getString("email"));

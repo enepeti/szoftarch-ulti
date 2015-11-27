@@ -4,7 +4,8 @@ szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt :ok:
 startgame-nél is elküldeni, h ki jön :ok:
 eldönteni, hogy ki viszi a lapokat :ok:
 validálni, h rakhatja-e azt a lapot
-ne lehessen ugyanazzal a felhasználóval kétszer belépni
+ha rossz felhasználóval próbálkozunk ne szálljon el :ok:
+ne lehessen ugyanazzal a felhasználóval kétszer belépni :ok:
 ha valaki feláll az asztaltól kéne intézni
 
 kliens:
