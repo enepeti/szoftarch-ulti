@@ -41,7 +41,13 @@ public class UltiPlayer {
 	}
 
 	public void playCard(final Card card) {
-		hand.remove(card);
+		for (final Card cardInHand : hand) {
+			if ((cardInHand.getSuit().compareTo(card.getSuit()) == 0)
+					&& (cardInHand.getValue().compareTo(card.getValue()) == 0)) {
+				hand.remove(cardInHand);
+				return;
+			}
+		}
 	}
 
 	public void takeCards(final Card card1, final Card card2, final Card card3) {
