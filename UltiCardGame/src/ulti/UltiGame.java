@@ -254,9 +254,9 @@ public class UltiGame {
 			startGame();
 		} else {
 			messageHandler
-			.send(new ErrorAnswer(
-					"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
-					activePlayer);
+					.send(new ErrorAnswer(
+							"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
+							activePlayer);
 		}
 	}
 
@@ -278,11 +278,8 @@ public class UltiGame {
 
 	public void startGame() {
 		activePlayerList.get(0).getUltiRoom()
-		.sendStartGameMessageToAll(messageHandler);
+				.sendStartGameMessageToAll(messageHandler);
 		isGameStarted = true;
-
-		// TODO: lekérni klienstõl
-		concreteGameType.setTrump(Suit.LEAF);
 
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
@@ -304,8 +301,8 @@ public class UltiGame {
 					messageHandler.send(new PlayedCardAnswer(name, true, card),
 							activePlayer);
 					activePlayer.getUltiRoom()
-					.sendPlayedCardMessageToAllOthers(messageHandler,
-							name, card, activePlayer);
+							.sendPlayedCardMessageToAllOthers(messageHandler,
+									name, card, activePlayer);
 					if (cardsOnTable.size() == 3) {
 						evaluateTurn();
 					} else {
@@ -664,10 +661,10 @@ public class UltiGame {
 			partyPoints.put(activePlayerList.get(indexOfOpponent2).getPlayer()
 					.getName(), sumForOpponent2Party);
 			activePlayerList
-					.get(0)
-					.getUltiRoom()
-			.sendShowPartyResultMessageToAll(messageHandler,
-							partyPoints);
+			.get(0)
+			.getUltiRoom()
+					.sendShowPartyResultMessageToAll(messageHandler,
+					partyPoints);
 
 			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayer) {
 				sumForPlayerWithSaying += 2;
@@ -708,7 +705,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForOpponent1);
 		points.put(player2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
-		.sendShowResultMessageToAll(messageHandler, points);
+				.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

@@ -13,6 +13,11 @@ public class GameTypeConverter {
 				"Parti", 0, 1, true, true, false, true);
 		concreteGameTypeParty.getGameTypeList().add(new GameTypeParty());
 		gameTypeMap.put(1, concreteGameTypeParty);
+
+		final ConcreteGameType concreteGameTypeRedParty = new ConcreteGameType(
+				"Piros Parti", 0, 2, true, true, true, true);
+		concreteGameTypeRedParty.getGameTypeList().add(new GameTypeParty());
+		gameTypeMap.put(2, concreteGameTypeRedParty);
 	}
 
 	public static Map<Integer, ConcreteGameType> getGametypemap() {

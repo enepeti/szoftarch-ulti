@@ -22,7 +22,7 @@
 - Játék bemondás: `{"type":"gameselection", "gameType":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Passzolás: `{"type":"pass"}` :ok:
 - Lapfelvétel: `{"type":"pickupcards"}` :ok:
-- Játék jóváhagyása: `{"type":"confirmgame", "trumpsuit":<String>}` :ok:
+- Játék jóváhagyása: `{"type":"confirmgame", "suit":<String>}` :ok:
 - Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 
 #### Szerver - Kliens

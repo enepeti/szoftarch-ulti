@@ -68,7 +68,7 @@ public class ConcreteGameType {
 		return trump;
 	}
 
-	public void setTrump(Suit trump) {
+	public void setTrump(final Suit trump) {
 		this.trump = trump;
 	}
 

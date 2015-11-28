@@ -125,10 +125,7 @@ public class MessageHandler implements IMessageHandler {
 				} else if (upperCaseType.equals(Type.PICKUPCARDS.toString())) {
 					activePlayer.getUltiRoom().getUltiGame().pickUpCards();
 				} else if (upperCaseType.equals(Type.CONFIRMGAME.toString())) {
-					// TODO: felcserélni ezeket
-					activePlayer.getUltiRoom().getUltiGame()
-					.confirm(null, activePlayer);
-					// confirmMessage(jsonObject, activePlayer);
+					confirmMessage(jsonObject, activePlayer);
 				} else if (upperCaseType.equals(Type.PLAYCARD.toString())) {
 					playCardMessage(jsonObject, activePlayer);
 				}
@@ -335,7 +332,7 @@ public class MessageHandler implements IMessageHandler {
 			final ActivePlayer activePlayer) {
 		String trumpSuitString = "";
 
-		final JsonElement jsonElementName = jsonObject.get("trumpsuit");
+		final JsonElement jsonElementName = jsonObject.get("suit");
 		if ((jsonElementName != null) && !jsonElementName.isJsonNull()) {
 			trumpSuitString = jsonElementName.getAsString();
 			final Suit trumpSuit = CardConverter
