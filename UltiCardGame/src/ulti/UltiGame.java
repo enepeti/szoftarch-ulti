@@ -254,9 +254,9 @@ public class UltiGame {
 			startGame();
 		} else {
 			messageHandler
-					.send(new ErrorAnswer(
-							"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
-							activePlayer);
+			.send(new ErrorAnswer(
+					"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
+					activePlayer);
 		}
 	}
 
@@ -277,8 +277,16 @@ public class UltiGame {
 	}
 
 	public void startGame() {
+		final HashMap<String, Integer> points = new HashMap<String, Integer>();
+
+		for (final ActivePlayer activePlayer : activePlayerList) {
+			final int sum = activePlayer.getUltiPlayer().countTwentysAndFortys(
+					concreteGameType.getTrump());
+			points.put(activePlayer.getPlayer().getName(), sum);
+		}
+
 		activePlayerList.get(0).getUltiRoom()
-				.sendStartGameMessageToAll(messageHandler);
+		.sendStartGameMessageToAll(messageHandler, points);
 		isGameStarted = true;
 
 		final ActivePlayer activePlayer = activePlayerList
@@ -301,8 +309,8 @@ public class UltiGame {
 					messageHandler.send(new PlayedCardAnswer(name, true, card),
 							activePlayer);
 					activePlayer.getUltiRoom()
-							.sendPlayedCardMessageToAllOthers(messageHandler,
-									name, card, activePlayer);
+					.sendPlayedCardMessageToAllOthers(messageHandler,
+							name, card, activePlayer);
 					if (cardsOnTable.size() == 3) {
 						evaluateTurn();
 					} else {
@@ -491,7 +499,9 @@ public class UltiGame {
 	}
 
 	public void endGame() {
-
+		for (final ActivePlayer activePlayer : activePlayerList) {
+			activePlayer.getUltiPlayer().setSumForTwentysAndFortys(0);
+		}
 	}
 
 	public void nextGame() {
@@ -628,14 +638,14 @@ public class UltiGame {
 		incrementLastPlayerWithConcreteGameType();
 
 		if (concreteGameType.isThereParty()) {
-			int sumForPlayer = 0;
+			int sumForPlayerParty = 0;
 			int sumForOpponent1Party = 0;
 			int sumForOpponent2Party = 0;
 			for (int i = 0; i < 3; i++) {
 				final int sum = activePlayerList.get(i).getUltiPlayer()
 						.calculateParty();
 				if (i == lastPlayerWithConcreteGameType) {
-					sumForPlayer += sum;
+					sumForPlayerParty += sum;
 				} else if (i == indexOfOpponent1) {
 					sumForOpponent1Party += sum;
 				} else if (i == indexOfOpponent2) {
@@ -645,28 +655,36 @@ public class UltiGame {
 
 			if (activePlayer == activePlayerList
 					.get(lastPlayerWithConcreteGameType)) {
-				sumForPlayer += 10;
+				sumForPlayerParty += 10;
 			} else if (activePlayer == activePlayerList.get(indexOfOpponent1)) {
 				sumForOpponent1Party += 10;
 			} else if (activePlayer == activePlayerList.get(indexOfOpponent2)) {
 				sumForOpponent2Party += 10;
 			}
 
+			sumForPlayerParty += activePlayerList
+					.get(lastPlayerWithConcreteGameType).getUltiPlayer()
+					.getSumForTwentysAndFortys();
+			sumForOpponent1Party += activePlayerList.get(indexOfOpponent1)
+					.getUltiPlayer().getSumForTwentysAndFortys();
+			sumForOpponent2Party += activePlayerList.get(indexOfOpponent2)
+					.getUltiPlayer().getSumForTwentysAndFortys();
+
 			final HashMap<String, Integer> partyPoints = new HashMap<String, Integer>();
 			partyPoints.put(activePlayerList
 					.get(lastPlayerWithConcreteGameType).getPlayer().getName(),
-					sumForPlayer);
+					sumForPlayerParty);
 			partyPoints.put(activePlayerList.get(indexOfOpponent1).getPlayer()
 					.getName(), sumForOpponent1Party);
 			partyPoints.put(activePlayerList.get(indexOfOpponent2).getPlayer()
 					.getName(), sumForOpponent2Party);
 			activePlayerList
-			.get(0)
-			.getUltiRoom()
-					.sendShowPartyResultMessageToAll(messageHandler,
-					partyPoints);
+					.get(0)
+					.getUltiRoom()
+			.sendShowPartyResultMessageToAll(messageHandler,
+							partyPoints);
 
-			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayer) {
+			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayerParty) {
 				sumForPlayerWithSaying += 2;
 				sumForOpponent1 -= 1;
 				sumForOpponent2 -= 1;
@@ -705,7 +723,7 @@ public class UltiGame {
 		points.put(player1.getName(), sumForOpponent1);
 		points.put(player2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

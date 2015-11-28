@@ -1,6 +1,6 @@
 Szerver:
 - csak akkor elfogadni a confirm-ot ha jó játékos küldi :ok:
-- 20-ak 40-ek bemondása, beleszámolása partiba
+- 20-ak 40-ek bemondása, beleszámolása partiba :ok:
 - több játék megvalósítása
 - tomcat https konfig
 - kontrázás
