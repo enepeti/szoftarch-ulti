@@ -766,25 +766,23 @@ public class UltiGame {
 		if (playerWithSaying.getType() != PlayerType.GUEST) {
 			savePoints(playerWithSaying);
 		}
-		incrementLastPlayerWithConcreteGameType();
 
-		final Player player1 = activePlayerSayer.getPlayer();
-		player1.addPoint(sumForOpponent1);
-		if (player1.getType() != PlayerType.GUEST) {
-			savePoints(player1);
+		final Player playerOpponent1 = activePlayerOpponent1.getPlayer();
+		playerOpponent1.addPoint(sumForOpponent1);
+		if (playerOpponent1.getType() != PlayerType.GUEST) {
+			savePoints(playerOpponent1);
 		}
-		incrementLastPlayerWithConcreteGameType();
 
-		final Player player2 = activePlayerSayer.getPlayer();
-		player2.addPoint(sumForOpponent2);
-		if (player2.getType() != PlayerType.GUEST) {
-			savePoints(player2);
+		final Player playerOpponent2 = activePlayerOpponent2.getPlayer();
+		playerOpponent2.addPoint(sumForOpponent2);
+		if (playerOpponent2.getType() != PlayerType.GUEST) {
+			savePoints(playerOpponent2);
 		}
 
 		final HashMap<String, Integer> points = new HashMap<String, Integer>();
 		points.put(playerWithSaying.getName(), sumForPlayerWithSaying);
-		points.put(player1.getName(), sumForOpponent1);
-		points.put(player2.getName(), sumForOpponent2);
+		points.put(playerOpponent1.getName(), sumForOpponent1);
+		points.put(playerOpponent2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
 		.sendShowResultMessageToAll(messageHandler, points);
 
