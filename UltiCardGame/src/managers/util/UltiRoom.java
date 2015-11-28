@@ -11,6 +11,7 @@ import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
 import messagers.util.ulti.ShowPartyResultAnswer;
 import messagers.util.ulti.ShowResultAnswer;
+import messagers.util.ulti.SomeoneLeftGameAnswer;
 import messagers.util.ulti.StartUltiAnswer;
 import messagers.util.ulti.StartUltiGameAnswer;
 import messagers.util.ulti.TakeCardsAnswer;
@@ -108,6 +109,13 @@ public class UltiRoom extends Room {
 			final HashMap<String, Integer> partyPoints) {
 		final ShowPartyResultAnswer answer = new ShowPartyResultAnswer(
 				partyPoints);
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendSomeoneLeftMessageToAllOthers(
+			final IMessageHandler messageHandler, final String name,
+			final ActivePlayer activePlayer) {
+		final SomeoneLeftGameAnswer answer = new SomeoneLeftGameAnswer(name);
 		super.sendToAll(messageHandler, answer);
 	}
 }

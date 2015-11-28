@@ -42,6 +42,7 @@
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
+- Ulti szobából valaki kilépett játék közben: `{"type":"someoneleftgame", "name":<string>}`
 - Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}` :ok:
 - Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}` :ok:

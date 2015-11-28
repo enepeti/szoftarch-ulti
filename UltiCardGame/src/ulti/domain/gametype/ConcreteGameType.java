@@ -30,6 +30,10 @@ public class ConcreteGameType {
 		this.isThereTrump = isThereTrump;
 		this.isItRed = isItRed;
 		this.isThereParty = isThereParty;
+
+		if (isItRed) {
+			trump = Suit.HEART;
+		}
 	}
 
 	public List<GameType> getGameTypeList() {
