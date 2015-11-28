@@ -1,5 +1,5 @@
 Szerver:
-- csak akkor elfogadni a confirm-ot ha jó játékos küldi
+- csak akkor elfogadni a confirm-ot ha jó játékos küldi :ok:
 - több játék megvalósítása
 - tomcat https konfig
 - kontrázás
