@@ -1,5 +1,5 @@
 Szerver:
-- csak akkor elfogadni a confirm-ot ha jó játékos küldi
+- csak akkor elfogadni a confirm-ot ha jó játékos küldi :ok:
 - több játék megvalósítása
 - tomcat https konfig
 - kontrázás
@@ -7,6 +7,7 @@ Szerver:
 Kliens:
 - letett lapok középen megjelenítése :ok:
 - annak jelzése, hogy ki vitte el a lapokat
+- adu választás
 - végén jelezni ha volt parti h kinek mennyi 10-e lett
 - illetve kiírni, h ki hány pontot kapott
 - megjeleníteni mindig, hogy ki jön éppen és hogy ki és mit mondott be utoljára, mi a játék és adu

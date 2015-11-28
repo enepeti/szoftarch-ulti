@@ -240,12 +240,24 @@ public class UltiGame {
 		remainingCard2 = null;
 	}
 
-	public void confirm(final Suit trumpSuit) {
-		if (concreteGameType.isThereParty() && (trumpSuit != null)) {
-			concreteGameType.setTrump(trumpSuit);
-		}
+	public void confirm(final Suit trumpSuit, final ActivePlayer activePlayer) {
+		if (activePlayer == activePlayerList
+				.get(lastPlayerWithConcreteGameType)) {
+			if (concreteGameType.isThereParty() && (trumpSuit != null)) {
+				if (!concreteGameType.isItRed()) {
+					if (trumpSuit.compareTo(Suit.HEART) != 0) {
+						concreteGameType.setTrump(trumpSuit);
+					}
+				}
+			}
 
-		startGame();
+			startGame();
+		} else {
+			messageHandler
+			.send(new ErrorAnswer(
+					"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
+					activePlayer);
+		}
 	}
 
 	public void nextPlayerTurn() {

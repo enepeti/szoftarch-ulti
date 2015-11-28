@@ -126,7 +126,8 @@ public class MessageHandler implements IMessageHandler {
 					activePlayer.getUltiRoom().getUltiGame().pickUpCards();
 				} else if (upperCaseType.equals(Type.CONFIRMGAME.toString())) {
 					// TODO: felcserélni ezeket
-					activePlayer.getUltiRoom().getUltiGame().confirm(null);
+					activePlayer.getUltiRoom().getUltiGame()
+					.confirm(null, activePlayer);
 					// confirmMessage(jsonObject, activePlayer);
 				} else if (upperCaseType.equals(Type.PLAYCARD.toString())) {
 					playCardMessage(jsonObject, activePlayer);
@@ -339,7 +340,8 @@ public class MessageHandler implements IMessageHandler {
 			trumpSuitString = jsonElementName.getAsString();
 			final Suit trumpSuit = CardConverter
 					.convertStringToSuit(trumpSuitString);
-			activePlayer.getUltiRoom().getUltiGame().confirm(trumpSuit);
+			activePlayer.getUltiRoom().getUltiGame()
+					.confirm(trumpSuit, activePlayer);
 		}
 	}
 
