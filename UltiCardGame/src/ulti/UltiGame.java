@@ -149,6 +149,14 @@ public class UltiGame {
 		}
 	}
 
+	private void incrementLastPlayerWithConcreteGameType() {
+		if (lastPlayerWithConcreteGameType == 2) {
+			lastPlayerWithConcreteGameType = 0;
+		} else {
+			lastPlayerWithConcreteGameType++;
+		}
+	}
+
 	private int incrementTakeCards(int takeCards) {
 		if (takeCards == 2) {
 			takeCards = 0;
@@ -232,7 +240,11 @@ public class UltiGame {
 		remainingCard2 = null;
 	}
 
-	public void confirm() {
+	public void confirm(final Suit trumpSuit) {
+		if (concreteGameType.isThereParty() && (trumpSuit != null)) {
+			concreteGameType.setTrump(trumpSuit);
+		}
+
 		startGame();
 	}
 
@@ -481,10 +493,9 @@ public class UltiGame {
 		remainingCard1 = null;
 		remainingCard2 = null;
 		cardsOnTable = null;
-		concreteGameType = null;
 		deckOfCards = new DeckOfCards();
-		deal();
 		activePlayerOnTurn = starterActivePlayer;
+		deal();
 	}
 
 	public void evaluateTurn() {
@@ -505,7 +516,7 @@ public class UltiGame {
 		cardsOnTable = new ArrayList<Card>();
 
 		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
-			evaluateGame();
+			evaluateGame(activePlayer);
 		} else {
 			activePlayerOnTurn = takeCards;
 			nextPlayerTurnAfterEvaluation();
@@ -595,52 +606,95 @@ public class UltiGame {
 		return orderMap;
 	}
 
-	private void evaluateGame() {
+	private void evaluateGame(final ActivePlayer activePlayer) {
 		// TODO: játék pontok számolása
-		int sumForPlayer0 = 0;
-		int sumForPlayer1 = 0;
-		int sumForPlayer2 = 0;
+		int sumForPlayerWithSaying = 0;
+		int sumForOpponent1 = 0;
+		int sumForOpponent2 = 0;
+
+		incrementLastPlayerWithConcreteGameType();
+		final int indexOfOpponent1 = lastPlayerWithConcreteGameType;
+		incrementLastPlayerWithConcreteGameType();
+		final int indexOfOpponent2 = lastPlayerWithConcreteGameType;
+		incrementLastPlayerWithConcreteGameType();
 
 		if (concreteGameType.isThereParty()) {
 			int sumForPlayer = 0;
-			int sumForOpponents = 0;
+			int sumForOpponent1Party = 0;
+			int sumForOpponent2Party = 0;
 			for (int i = 0; i < 3; i++) {
 				final int sum = activePlayerList.get(i).getUltiPlayer()
 						.calculateParty();
 				if (i == lastPlayerWithConcreteGameType) {
 					sumForPlayer += sum;
-				} else {
-					sumForOpponents += sum;
+				} else if (i == indexOfOpponent1) {
+					sumForOpponent1Party += sum;
+				} else if (i == indexOfOpponent2) {
+					sumForOpponent2Party += sum;
 				}
 			}
 
-			sumForPlayer0 += sumForPlayer;
-			sumForPlayer1 += sumForOpponents;
-			sumForPlayer2 += sumForOpponents;
+			if (activePlayer == activePlayerList
+					.get(lastPlayerWithConcreteGameType)) {
+				sumForPlayer += 10;
+			} else if (activePlayer == activePlayerList.get(indexOfOpponent1)) {
+				sumForOpponent1Party += 10;
+			} else if (activePlayer == activePlayerList.get(indexOfOpponent2)) {
+				sumForOpponent2Party += 10;
+			}
+
+			final HashMap<String, Integer> partyPoints = new HashMap<String, Integer>();
+			partyPoints.put(activePlayerList
+					.get(lastPlayerWithConcreteGameType).getPlayer().getName(),
+					sumForPlayer);
+			partyPoints.put(activePlayerList.get(indexOfOpponent1).getPlayer()
+					.getName(), sumForOpponent1Party);
+			partyPoints.put(activePlayerList.get(indexOfOpponent2).getPlayer()
+					.getName(), sumForOpponent2Party);
+			activePlayerList
+					.get(0)
+					.getUltiRoom()
+			.sendShowPartyResultMessageToAll(messageHandler,
+							partyPoints);
+
+			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayer) {
+				sumForPlayerWithSaying += 2;
+				sumForOpponent1 -= 1;
+				sumForOpponent2 -= 1;
+			} else {
+				sumForPlayerWithSaying -= 2;
+				sumForOpponent1 += 1;
+				sumForOpponent2 += 1;
+			}
 		}
 
-		final Player player0 = activePlayerList.get(0).getPlayer();
-		player0.addPoint(sumForPlayer0);
-		if (player0.getType() != PlayerType.GUEST) {
-			savePoints(player0);
+		final Player playerWithSaying = activePlayerList.get(
+				lastPlayerWithConcreteGameType).getPlayer();
+		playerWithSaying.addPoint(sumForPlayerWithSaying);
+		if (playerWithSaying.getType() != PlayerType.GUEST) {
+			savePoints(playerWithSaying);
 		}
+		incrementLastPlayerWithConcreteGameType();
 
-		final Player player1 = activePlayerList.get(1).getPlayer();
-		player1.addPoint(sumForPlayer1);
+		final Player player1 = activePlayerList.get(
+				lastPlayerWithConcreteGameType).getPlayer();
+		player1.addPoint(sumForOpponent1);
 		if (player1.getType() != PlayerType.GUEST) {
 			savePoints(player1);
 		}
+		incrementLastPlayerWithConcreteGameType();
 
-		final Player player2 = activePlayerList.get(2).getPlayer();
-		player2.addPoint(sumForPlayer2);
+		final Player player2 = activePlayerList.get(
+				lastPlayerWithConcreteGameType).getPlayer();
+		player2.addPoint(sumForOpponent2);
 		if (player2.getType() != PlayerType.GUEST) {
 			savePoints(player2);
 		}
 
 		final HashMap<String, Integer> points = new HashMap<String, Integer>();
-		points.put(player0.getName(), sumForPlayer0);
-		points.put(player1.getName(), sumForPlayer1);
-		points.put(player2.getName(), sumForPlayer2);
+		points.put(playerWithSaying.getName(), sumForPlayerWithSaying);
+		points.put(player1.getName(), sumForOpponent1);
+		points.put(player2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
 		.sendShowResultMessageToAll(messageHandler, points);
 

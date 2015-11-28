@@ -10,8 +10,15 @@ public class CardConverter {
 		Suit suit = null;
 		Value value = null;
 
+		suit = convertStringToSuit(cardSuit);
+		value = convertStringToValue(cardValue);
+
+		return new Card(suit, value);
+	}
+
+	public static Suit convertStringToSuit(final String cardSuit) {
+		Suit suit = null;
 		final String cardSuitUpper = cardSuit.toUpperCase();
-		final String cardValueUpper = cardValue.toUpperCase();
 
 		if (Suit.ACORN.toString().equals(cardSuitUpper)) {
 			suit = Suit.ACORN;
@@ -22,6 +29,13 @@ public class CardConverter {
 		} else if (Suit.LEAF.toString().equals(cardSuitUpper)) {
 			suit = Suit.LEAF;
 		}
+
+		return suit;
+	}
+
+	private static Value convertStringToValue(final String cardValue) {
+		Value value = null;
+		final String cardValueUpper = cardValue.toUpperCase();
 
 		if (Value.ACE.toString().equals(cardValueUpper)) {
 			value = Value.ACE;
@@ -41,7 +55,7 @@ public class CardConverter {
 			value = Value.UNDER_KNAVE;
 		}
 
-		return new Card(suit, value);
+		return value;
 	}
 
 }

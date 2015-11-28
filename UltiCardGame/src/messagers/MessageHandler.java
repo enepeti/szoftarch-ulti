@@ -24,6 +24,7 @@ import messagers.util.ulti.PlayersInUltiRoom;
 import messagers.util.ulti.room.AllUltiAnswer;
 import ulti.domain.Card;
 import ulti.domain.CardConverter;
+import ulti.domain.SuitType.Suit;
 import ulti.domain.gametype.ConcreteGameType;
 import ulti.domain.gametype.GameTypeConverter;
 
@@ -124,7 +125,9 @@ public class MessageHandler implements IMessageHandler {
 				} else if (upperCaseType.equals(Type.PICKUPCARDS.toString())) {
 					activePlayer.getUltiRoom().getUltiGame().pickUpCards();
 				} else if (upperCaseType.equals(Type.CONFIRMGAME.toString())) {
-					activePlayer.getUltiRoom().getUltiGame().confirm();
+					// TODO: felcserélni ezeket
+					activePlayer.getUltiRoom().getUltiGame().confirm(null);
+					// confirmMessage(jsonObject, activePlayer);
 				} else if (upperCaseType.equals(Type.PLAYCARD.toString())) {
 					playCardMessage(jsonObject, activePlayer);
 				}
@@ -324,6 +327,19 @@ public class MessageHandler implements IMessageHandler {
 				activePlayer.getUltiRoom().getUltiGame()
 						.say(concreteGameType, card1, card2);
 			}
+		}
+	}
+
+	private void confirmMessage(final JsonObject jsonObject,
+			final ActivePlayer activePlayer) {
+		String trumpSuitString = "";
+
+		final JsonElement jsonElementName = jsonObject.get("trumpsuit");
+		if ((jsonElementName != null) && !jsonElementName.isJsonNull()) {
+			trumpSuitString = jsonElementName.getAsString();
+			final Suit trumpSuit = CardConverter
+					.convertStringToSuit(trumpSuitString);
+			activePlayer.getUltiRoom().getUltiGame().confirm(trumpSuit);
 		}
 	}
 

@@ -6,6 +6,7 @@ eldönteni, hogy ki viszi a lapokat :ok:
 validálni, h rakhatja-e azt a lapot
 ha rossz felhasználóval próbálkozunk ne szálljon el :ok:
 ne lehessen ugyanazzal a felhasználóval kétszer belépni :ok:
+utolsó ütés a partihoz :ok:
 ha valaki feláll az asztaltól kéne intézni
 
 kliens:

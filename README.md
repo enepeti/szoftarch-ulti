@@ -22,7 +22,7 @@
 - Játék bemondás: `{"type":"gameselection", "gameType":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Passzolás: `{"type":"pass"}` :ok:
 - Lapfelvétel: `{"type":"pickupcards"}` :ok:
-- Játék jóváhagyása: `{"type":"confirmgame"}` :ok:
+- Játék jóváhagyása: `{"type":"confirmgame", "trumpsuit":<String>}` :ok:
 - Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 
 #### Szerver - Kliens
@@ -49,5 +49,6 @@
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
 - Játék kezdődik: `{"type":"startgame"}` :ok:
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
+- Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
