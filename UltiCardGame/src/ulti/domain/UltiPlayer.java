@@ -125,4 +125,24 @@ public class UltiPlayer {
 		return sumForTwentysAndFortys;
 	}
 
+	public boolean isThereForty(final Suit trump) {
+		boolean isThereOverKnave = false;
+		boolean isThereKing = false;
+		for (final Card cardInHand : hand) {
+			if (cardInHand.getSuit().compareTo(trump) == 0) {
+				if (cardInHand.getValue().compareTo(Value.OVER_KNAVE) == 0) {
+					isThereOverKnave = true;
+				} else if (cardInHand.getValue().compareTo(Value.KING) == 0) {
+					isThereKing = true;
+				}
+			}
+		}
+
+		if (isThereKing && isThereOverKnave) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

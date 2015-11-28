@@ -48,8 +48,9 @@
 - Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}` :ok:
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
-- Játék kezdődik: `{"type":"startgame", "points":[{<string>: <int>}]}` :ok:
+- Játék kezdődik: `{"type":"startgame", "points":[{<string>: <int>}]}` // ha nincs 20-40 bemondás, pl 40-100-nál, akkor ez egy üres map
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
 - Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
+- 40-100 játéknál nincs 40 a bemondónál: `{"type":"doesnothaveforty"}`

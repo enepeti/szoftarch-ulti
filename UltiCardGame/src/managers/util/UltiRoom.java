@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import messagers.util.ulti.DoesNotHaveFortyAnswer;
 import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
@@ -116,6 +117,12 @@ public class UltiRoom extends Room {
 			final IMessageHandler messageHandler, final String name,
 			final ActivePlayer activePlayer) {
 		final SomeoneLeftGameAnswer answer = new SomeoneLeftGameAnswer(name);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
+	}
+
+	public void sendDoesNotHaveFortyMessageToAll(
+			final IMessageHandler messageHandler) {
+		final DoesNotHaveFortyAnswer answer = new DoesNotHaveFortyAnswer();
 		super.sendToAll(messageHandler, answer);
 	}
 }
