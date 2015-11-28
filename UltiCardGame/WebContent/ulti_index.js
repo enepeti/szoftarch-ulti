@@ -14,6 +14,8 @@ var issayingphase = true;
 var isayrule = false;
 var markedcards = [];
 var hastoconfirm = false;
+var cardsontable = [];
+var redSuit = false;
 
 var chat = {};
 
@@ -130,7 +132,7 @@ function handleMessage (msg) {
 			handlePlayedCard(msg);
 			break;
 		case "playeronturn":
-				startTurn(msg.isItMe);
+			startTurn(msg.isItMe);
 			break;
 		case "gameselected":
 			chat.newLine("Passz", msg.name);
@@ -140,7 +142,7 @@ function handleMessage (msg) {
 			handleCardPickup(msg.card1, msg.card2);
 			break;
 		case "hastoconfirm":
-			hastoconfirm = true;
+			handleHasToConfirm();
 			break;
 		case "startgame":
 			sayPhaseOver()
@@ -579,12 +581,15 @@ function handleDeal (mydeal) {
 	var saybar = $('#saying');
 	var sayother = $('#saying_other');
 	var sayme = $('#saying_me');
+	var saytrump = $('#saying_trump');
 
 	mycards = mydeal.cards;
 	myturn = mydeal.isStarter;
 	isayrule = mydeal.isStarter;
 
 	saybar.css('display', 'block');
+	saytrump.css('display', 'none');
+
 	if(isayrule) {
 		sayother.css('display', 'none');
 		sayme.css('display', 'block');
@@ -592,6 +597,7 @@ function handleDeal (mydeal) {
 		sayother.css('display', 'none');
 		sayme.css('display', 'none');
 	}
+	
 	issayingphase = true;
 	showCards();
 }
@@ -623,12 +629,35 @@ function startTurn (isMyTurn) {
 	}
 }
 
+function handleHasToConfirm () {
+	hastoconfirm = true;
+	if(!redSuit) {
+		var saytrump = $('#saying_trump');
+		saytrump.css('display', 'block');
+	}
+}
+
 function sayPass () {
 	if(myturn) {
 		if (hastoconfirm) {
 			confirmgamemsg = {};
 			confirmgamemsg.type = "confirmgame";
-			send(confirmgamemsg);
+			
+			var trump;
+			
+			if(redSuit) {
+				trump = "HEART";
+			} else {
+				trumpselect = $('#trump_selector');
+				trump = trumpselect.val();
+			}
+
+			if(trump != 0) {
+				confirmgamemsg.suit = trump;
+				send(confirmgamemsg);
+			} else {
+				showError("Nem választottál adu színt!");
+			}
 		} else {
 			passmsg = {};
 			passmsg.type = "pass";
@@ -675,6 +704,7 @@ function sayPhaseOver () {
 	sayBar.css('display', 'none');
 
 	issayingphase = false;
+	hastoconfirm = false;
 }
 
 function removeMarkedCardsFromHand () {
@@ -714,13 +744,42 @@ function playCard(index) {
 	}
 }
 
+function showCardsOnTable() {
+	var playedcards = $('#playedcards');
+
+	playedcards.html('');
+
+	for (var i = 0; i < cardsontable.length; i++) {
+		var card = $('<div>');
+		var suit = cardsontable[i].suit;
+		var value = cardsontable[i].value;
+		
+		card.hover(function(){this.style.zIndex=1;}, function(){this.style.zIndex=0;})
+		card.addClass('cardontable');
+		card.css('top', ((i * 2 % 3)*20) + '%'); 
+		card.css('left', (i*20) + '%');
+
+		var cardtext = $('<p>');
+		var hunCard = toHunCard(suit, value);
+		
+		cardtext.html(hunCard.suit + "<br>" + hunCard.value);
+		cardtext.addClass('font');
+		card.append(cardtext);
+		playedcards.append(card);
+	};
+}
+
 function handlePlayedCard (data) {
 	if(playedcard && data.isItMe) {
 		var index = mycards.indexOf(playedcard);
-		mycards.splice(index, 1);
+		if(index != -1) {
+			mycards.splice(index, 1);
+		}
 		showCards();
 		playedcard = null;
 	}
+	cardsontable.push(data.card);
+	showCardsOnTable();
 	var hunCard = toHunCard(data.card.suit, data.card.value);
 	chat.newLine("Kijátszottam: " + hunCard.suit + " " + hunCard.value, data.name);
 }
@@ -888,4 +947,8 @@ function __debug_game__ () {
 	};
 	showCards();
 	myturn = true;
+}
+
+function __debug_card__ () {
+	return {"suit":"HEART", "value":"ACE"};
 }

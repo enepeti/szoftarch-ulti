@@ -5,7 +5,7 @@ Szerver:
 - kontrázás
 
 Kliens:
-- letett lapok középen megjelenítése
+- letett lapok középen megjelenítése :ok:
 - annak jelzése, hogy ki vitte el a lapokat
 - végén jelezni ha volt parti h kinek mennyi 10-e lett
 - illetve kiírni, h ki hány pontot kapott

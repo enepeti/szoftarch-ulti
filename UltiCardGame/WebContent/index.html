@@ -69,7 +69,7 @@
 				<div id="ultiroomrows"></div>
 			</div>
 			<div id="ultigamepage" class="ulticontainer">
-				<div id="saying">
+				<div id="saying" class="screen-center">
 					<div id="saying_other">
 						<button class="btn btn-primary" onclick="sayPass()">Passz</button>
 						<button class="btn btn-primary" onclick="pickUpCards()">Talon felvevés</button>
@@ -77,13 +77,23 @@
 					<div id="saying_me">
 						<select id="rule_selector">
 							<option value="1">Passz</option>
+							<option value="kaka" disabled>Kaka</option>
 						</select>
 						<button class="btn btn-success" onclick="sayRule()">Rendben</button>
 					</div>
+					<div id="saying_trump">
+						<select id="trump_selector">
+							<option value="0">Válassz adut!</option>
+							<option value="LEAF">Zöld</option>
+							<option value="BELL">Tök</option>
+							<option value="ACORN">Makk</option>
+						</select>
+					</div>
+					<div class="clear"></div>
 				</div>
-				<div id="playedcards" class="screen-center">
+				<div id="playedcards">
 				</div>
-				<div id="myhand" class="vertical-center"></div>
+				<div id="myhand" class=""></div>
 			</div>
 			<div id="statpage" class="ulticontainer">
 				<table id="staticticstable" class="table-striped"></table>

@@ -51,6 +51,7 @@
 	height: 100%;
 	width: 90%;
 	display: none;
+	position: relative;
 }
 
 #ultibuttoncontainer {
@@ -144,13 +145,13 @@
 
 .ubtn {
 	white-space: normal;
-	width: 120px;
+	width: 100%;
 	margin-top: 5px;
 	margin-bottom: 10px;
 }
 
 .ulti_playername {
-	width: 80px;
+	width: 100%;
 }
 
 .ulti_joinbuttoncontainer {
@@ -159,9 +160,10 @@
 
 #myhand {
 	margin-bottom: 10px;
-	position: relative;
-	top: 37%;
-	width: 72%;
+	position: absolute;
+	top: 75%;
+	left: 20%;
+	width: 60%;
 	height: 25%;
 	overflow: hidden;
 	nopbackground: red;
@@ -169,16 +171,34 @@
 
 .card {
 	position: relative;
+	width: 12%;
+	top: 25%;
+	height: 75%;
+	margin-left: -4%;
+	float: left;
+	cursor: pointer;
+}
+
+#playedcards {
+	position: absolute;
+	left: 42.8%;
+	top: 30%;
+	height: 37.5%;
+	width: 14.4%;
+	nopbackground: red;
+}
+
+.cardontable {
+	position: absolute;
+	width: 50%;
+	height: 50%
+}
+
+.cardontable, .card {
 	border-radius: 10px;
 	border :2px solid black;
-	width: 12.9%;
-	top:25%;
-	height: 75%;
-	margin-left: -5%;
-	float: left;
-	background: white;
-	cursor: pointer;
 	z-index: 0;
+	background: white;
 }
 
 .admin, .game, .stat {
@@ -189,15 +209,12 @@
 	display: block;
 }
 
-#saying, #saying_other, #saying_me {
+#saying, #saying_other, #saying_me, #saying_trump {
 	display: none;
 }
 
-#playedcards {
+#saying {
 	position: relative;
-	height: 40%;
-	width: 12%;
-	nopbackground: red;
 }
 
 html {
