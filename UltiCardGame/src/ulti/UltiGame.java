@@ -255,7 +255,7 @@ public class UltiGame {
 	public void confirm(final Suit trumpSuit, final ActivePlayer activePlayer) {
 		if (activePlayer == activePlayerList
 				.get(lastPlayerWithConcreteGameType)) {
-			if (concreteGameType.isThereParty() && (trumpSuit != null)) {
+			if (concreteGameType.isThereTrump() && (trumpSuit != null)) {
 				if (!concreteGameType.isItRed()) {
 					if (trumpSuit.compareTo(Suit.HEART) != 0) {
 						concreteGameType.setTrump(trumpSuit);
@@ -705,7 +705,7 @@ public class UltiGame {
 			}
 		}
 
-		if (concreteGameType.isThereParty()) {
+		if (concreteGameType.isThereTrump()) {
 			int sumForPlayerParty = 0;
 			int sumForOpponent1Party = 0;
 			int sumForOpponent2Party = 0;
