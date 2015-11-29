@@ -73,12 +73,13 @@ public class UltiPlayer {
 
 	}
 
-	public void playCard(final Card card, final Suit trumpSuit) {
+	public void playCard(final Card card, final Suit trumpSuit,
+			final boolean IsThereUlti) {
 		for (final Card cardInHand : hand) {
 			if ((cardInHand.getSuit().compareTo(card.getSuit()) == 0)
 					&& (cardInHand.getValue().compareTo(card.getValue()) == 0)) {
 				hand.remove(cardInHand);
-				if (hand.isEmpty()) {
+				if (IsThereUlti && hand.isEmpty()) {
 					if ((card.getSuit().compareTo(trumpSuit) == 0)
 							&& (card.getValue().compareTo(Value.SEVEN) == 0)) {
 						setLastCardTrumpSeven(true);

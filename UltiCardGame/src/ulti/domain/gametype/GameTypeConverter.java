@@ -28,7 +28,12 @@ public class GameTypeConverter {
 		final ConcreteGameType concreteGameTypeUlti = new ConcreteGameType(
 				"Ulti", 4, 1, true, true, false, true);
 		concreteGameTypeUlti.getGameTypeList().add(new GameTypeUlti());
-		gameTypeMap.put(4, concreteGameTypeUlti);
+		gameTypeMap.put(5, concreteGameTypeUlti);
+
+		final ConcreteGameType concreteGameTypeBetli = new ConcreteGameType(
+				"Betli", 5, 0, false, false, false, false);
+		concreteGameTypeBetli.getGameTypeList().add(new GameTypeBetli());
+		gameTypeMap.put(6, concreteGameTypeBetli);
 	}
 
 	public static Map<Integer, ConcreteGameType> getGametypemap() {

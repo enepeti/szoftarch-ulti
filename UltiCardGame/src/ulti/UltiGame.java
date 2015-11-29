@@ -45,6 +45,7 @@ public class UltiGame {
 
 	private boolean didPlayerHaveFortyInFortyHundredGame = true;
 	private boolean didPlayerHaveTrumpSevenInUltiGame = true;
+	private boolean didPlayerTakeCardInBetliGame = false;
 
 	private static GameTypeConverter gameTypeConverter = new GameTypeConverter();
 
@@ -306,7 +307,7 @@ public class UltiGame {
 					evaluateGame(activePlayerWhoIsOnTurn);
 				}
 			}
-		} else {
+		} else if (!concreteGameType.isThereActualGameType("Betli")) {
 			for (final ActivePlayer activePlayer : activePlayerList) {
 				final int sum = activePlayer.getUltiPlayer()
 						.countTwentysAndFortys(concreteGameType.getTrump());
@@ -345,7 +346,8 @@ public class UltiGame {
 					final ActivePlayer activePlayer = activePlayerList
 							.get(activePlayerOnTurn);
 					activePlayer.getUltiPlayer().playCard(card,
-							concreteGameType.getTrump());
+							concreteGameType.getTrump(),
+							concreteGameType.isThereActualGameType("Ulti"));
 					final String name = activePlayer.getPlayer().getName();
 					messageHandler.send(new PlayedCardAnswer(name, true, card),
 							activePlayer);
@@ -375,6 +377,7 @@ public class UltiGame {
 	private boolean validateCard(final Card card,
 			final ActivePlayer senderActivePlayer) {
 		final UltiPlayer ultiPlayer = senderActivePlayer.getUltiPlayer();
+		final boolean isThereTrump = concreteGameType.isThereTrump();
 		if (cardsOnTable.isEmpty()) {
 			return true;
 		} else {
@@ -388,20 +391,29 @@ public class UltiGame {
 				final Suit trumpSuit = concreteGameType.getTrump();
 
 				if (cardSuit.compareTo(cardOnTableSuit) == 0) {
-					if (cardValue.ordinal() < cardOnTableValue.ordinal()) {
+					if (cardValue.getVal(concreteGameType.isTenUp()) < cardOnTableValue
+							.getVal(concreteGameType.isTenUp())) {
 						return true;
 					} else {
 						return hasNoBiggerCard(ultiPlayer, cardOnTableSuit,
 								cardOnTableValue);
 					}
-				} else if (cardSuit.compareTo(trumpSuit) == 0) {
-					return hasNoSuchSuit(ultiPlayer, cardOnTableSuit);
 				} else {
-					if (hasNoSuchSuit(ultiPlayer, cardOnTableSuit)
-							&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
-						return true;
+					if (isThereTrump && (cardSuit.compareTo(trumpSuit) == 0)) {
+						return hasNoSuchSuit(ultiPlayer, cardOnTableSuit);
+					} else if (isThereTrump) {
+						if (hasNoSuchSuit(ultiPlayer, cardOnTableSuit)
+								&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
+							return true;
+						} else {
+							return false;
+						}
 					} else {
-						return false;
+						if (hasNoSuchSuit(ultiPlayer, cardOnTableSuit)) {
+							return true;
+						} else {
+							return false;
+						}
 					}
 				}
 			} else {
@@ -421,11 +433,12 @@ public class UltiGame {
 					final Suit trumpSuit = concreteGameType.getTrump();
 
 					if (cardSuit.compareTo(firstCardOnTableSuit) == 0) {
-						if (cardValue.ordinal() < firstCardOnTableValue
-								.ordinal()) {
+						if (cardValue.getVal(concreteGameType.isTenUp()) < firstCardOnTableValue
+								.getVal(concreteGameType.isTenUp())) {
 							if (cardSuit.compareTo(secondCardOnTableSuit) == 0) {
-								if (cardValue.ordinal() < secondCardOnTableValue
-										.ordinal()) {
+								if (cardValue
+										.getVal(concreteGameType.isTenUp()) < secondCardOnTableValue
+										.getVal(concreteGameType.isTenUp())) {
 									return true;
 								} else {
 									return hasNoBiggerCard(ultiPlayer,
@@ -437,14 +450,16 @@ public class UltiGame {
 							}
 						} else {
 							if (cardSuit.compareTo(secondCardOnTableSuit) == 0) {
-								if (firstCardOnTableValue.ordinal() < secondCardOnTableValue
-										.ordinal()) {
+								if (firstCardOnTableValue
+										.getVal(concreteGameType.isTenUp()) < secondCardOnTableValue
+										.getVal(concreteGameType.isTenUp())) {
 									return hasNoBiggerCard(ultiPlayer,
 											firstCardOnTableSuit,
 											firstCardOnTableValue);
 								} else {
-									if (cardValue.ordinal() < secondCardOnTableValue
-											.ordinal()) {
+									if (cardValue.getVal(concreteGameType
+											.isTenUp()) < secondCardOnTableValue
+											.getVal(concreteGameType.isTenUp())) {
 										return true;
 									} else {
 										return hasNoBiggerCard(ultiPlayer,
@@ -453,8 +468,15 @@ public class UltiGame {
 									}
 								}
 							} else {
-								if (secondCardOnTableSuit.compareTo(trumpSuit) == 0) {
-									return true;
+								if (isThereTrump) {
+									if (secondCardOnTableSuit
+											.compareTo(trumpSuit) == 0) {
+										return true;
+									} else {
+										return hasNoBiggerCard(ultiPlayer,
+												firstCardOnTableSuit,
+												firstCardOnTableValue);
+									}
 								} else {
 									return hasNoBiggerCard(ultiPlayer,
 											firstCardOnTableSuit,
@@ -462,11 +484,13 @@ public class UltiGame {
 								}
 							}
 						}
-					} else if (cardSuit.compareTo(trumpSuit) == 0) {
+					} else if (isThereTrump
+							&& (cardSuit.compareTo(trumpSuit) == 0)) {
 						if (secondCardOnTableSuit.compareTo(trumpSuit) == 0) {
 							if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)) {
-								if (cardValue.ordinal() < secondCardOnTableValue
-										.ordinal()) {
+								if (cardValue
+										.getVal(concreteGameType.isTenUp()) < secondCardOnTableValue
+										.getVal(concreteGameType.isTenUp())) {
 									return true;
 								} else {
 									return hasNoBiggerCard(ultiPlayer,
@@ -481,11 +505,19 @@ public class UltiGame {
 									firstCardOnTableSuit);
 						}
 					} else {
-						if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)
-								&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
-							return true;
+						if (isThereTrump) {
+							if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)
+									&& hasNoSuchSuit(ultiPlayer, trumpSuit)) {
+								return true;
+							} else {
+								return false;
+							}
 						} else {
-							return false;
+							if (hasNoSuchSuit(ultiPlayer, firstCardOnTableSuit)) {
+								return true;
+							} else {
+								return false;
+							}
 						}
 					}
 				} else {
@@ -500,8 +532,8 @@ public class UltiGame {
 			final Suit cardOnTableSuit, final Value cardOnTableValue) {
 		for (final Card cardInHand : ultiPlayer.getHand()) {
 			if (cardInHand.getSuit().compareTo(cardOnTableSuit) == 0) {
-				if (cardInHand.getValue().ordinal() < cardOnTableValue
-						.ordinal()) {
+				if (cardInHand.getValue().getVal(concreteGameType.isTenUp()) < cardOnTableValue
+						.getVal(concreteGameType.isTenUp())) {
 					return false;
 				}
 			}
@@ -558,6 +590,7 @@ public class UltiGame {
 		activePlayerOnTurn = starterActivePlayer;
 		didPlayerHaveFortyInFortyHundredGame = true;
 		didPlayerHaveTrumpSevenInUltiGame = true;
+		didPlayerTakeCardInBetliGame = false;
 		deal();
 	}
 
@@ -570,21 +603,34 @@ public class UltiGame {
 			takeCards = incrementTakeCards(takeCards);
 		}
 
-		final ActivePlayer activePlayer = activePlayerList.get(takeCards);
-		activePlayer.getUltiPlayer().addCardsToTaken(cardsOnTable);
-		final String name = activePlayer.getPlayer().getName();
+		final ActivePlayer activePlayerWhoTookCards = activePlayerList
+				.get(takeCards);
+		activePlayerWhoTookCards.getUltiPlayer().addCardsToTaken(cardsOnTable);
+		final String name = activePlayerWhoTookCards.getPlayer().getName();
 		messageHandler.send(new TakeCardsAnswer(name, true, cardsOnTable),
-				activePlayer);
-		activePlayer.getUltiRoom().sendTakenCardsMessageToAllOthers(
-				messageHandler, name, cardsOnTable, activePlayer);
+				activePlayerWhoTookCards);
+		activePlayerWhoTookCards.getUltiRoom()
+				.sendTakenCardsMessageToAllOthers(messageHandler, name,
+						cardsOnTable, activePlayerWhoTookCards);
 		cardsOnTable = new ArrayList<Card>();
 
-		if (activePlayer.getUltiPlayer().getHand().isEmpty()) {
-			activePlayerOnTurn = takeCards;
-			evaluateGame(activePlayer);
-		} else {
-			activePlayerOnTurn = takeCards;
-			nextPlayerTurnAfterEvaluation();
+		boolean continuePlaying = true;
+		if (concreteGameType.isThereActualGameType("Betli")) {
+			if (activePlayerWhoTookCards == activePlayerList
+					.get(lastPlayerWithConcreteGameType)) {
+				didPlayerTakeCardInBetliGame = true;
+				evaluateGame(activePlayerWhoTookCards);
+				continuePlaying = false;
+			}
+		}
+
+		if (continuePlaying) {
+			if (activePlayerWhoTookCards.getUltiPlayer().getHand().isEmpty()) {
+				evaluateGame(activePlayerWhoTookCards);
+			} else {
+				activePlayerOnTurn = takeCards;
+				nextPlayerTurnAfterEvaluation();
+			}
 		}
 	}
 
@@ -645,25 +691,41 @@ public class UltiGame {
 
 	private HashMap<Card, Integer> createCardOrder(final Suit trumpSuit) {
 		final HashMap<Card, Integer> orderMap = new HashMap<Card, Integer>();
-
-		int orderNumber = 1;
-		for (final Value value : Value.values()) {
-			orderMap.put(new Card(trumpSuit, value), orderNumber++);
-		}
-
 		final Suit firstCardSuit = cardsOnTable.get(0).getSuit();
-		if (firstCardSuit.compareTo(trumpSuit) != 0) {
+		int orderNumber = 1;
+		final boolean tenUp = concreteGameType.isTenUp();
+
+		if (tenUp) {
 			for (final Value value : Value.values()) {
+				orderMap.put(new Card(trumpSuit, value), orderNumber++);
+			}
+
+			if (firstCardSuit.compareTo(trumpSuit) != 0) {
+				for (final Value value : Value.values()) {
+					orderMap.put(new Card(firstCardSuit, value), orderNumber++);
+				}
+			}
+
+			orderNumber++;
+			for (final Suit suit : Suit.values()) {
+				if ((suit.compareTo(firstCardSuit) != 0)
+						&& (suit.compareTo(trumpSuit) != 0)) {
+					for (final Value value : Value.values()) {
+						orderMap.put(new Card(suit, value), orderNumber);
+					}
+				}
+			}
+		} else {
+			for (final Value value : Value.ACE.getValues(tenUp)) {
 				orderMap.put(new Card(firstCardSuit, value), orderNumber++);
 			}
-		}
 
-		orderNumber++;
-		for (final Suit suit : Suit.values()) {
-			if ((suit.compareTo(firstCardSuit) != 0)
-					&& (suit.compareTo(trumpSuit) != 0)) {
-				for (final Value value : Value.values()) {
-					orderMap.put(new Card(suit, value), orderNumber);
+			orderNumber++;
+			for (final Suit suit : Suit.values()) {
+				if ((suit.compareTo(firstCardSuit) != 0)) {
+					for (final Value value : Value.values()) {
+						orderMap.put(new Card(suit, value), orderNumber);
+					}
 				}
 			}
 		}
@@ -745,6 +807,18 @@ public class UltiGame {
 			}
 		}
 
+		if (concreteGameType.isThereActualGameType("Betli")) {
+			if (didPlayerTakeCardInBetliGame) {
+				sumForPlayerWithSaying -= 2 * 5;
+				sumForOpponent1 += 5;
+				sumForOpponent2 += 5;
+			} else {
+				sumForPlayerWithSaying += 2 * 5;
+				sumForOpponent1 -= 5;
+				sumForOpponent2 -= 5;
+			}
+		}
+
 		if (concreteGameType.isThereTrump()) {
 			int sumForPlayerParty = 0;
 			int sumForOpponent1Party = 0;
@@ -784,10 +858,10 @@ public class UltiGame {
 			partyPoints.put(activePlayerOpponent2.getPlayer().getName(),
 					sumForOpponent2Party);
 			activePlayerList
-			.get(0)
-			.getUltiRoom()
-			.sendShowPartyResultMessageToAll(messageHandler,
-					partyPoints);
+					.get(0)
+					.getUltiRoom()
+					.sendShowPartyResultMessageToAll(messageHandler,
+							partyPoints);
 
 			final int partyValue = concreteGameType.getPartyValue();
 			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayerParty) {
@@ -824,7 +898,7 @@ public class UltiGame {
 		points.put(playerOpponent1.getName(), sumForOpponent1);
 		points.put(playerOpponent2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
-		.sendShowResultMessageToAll(messageHandler, points);
+				.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}
