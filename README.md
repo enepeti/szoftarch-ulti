@@ -48,7 +48,7 @@
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
 - Játék kezdődik: `{"type":"startgame"}` :ok:
-- Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
+- Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}` :ok:
 - Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:

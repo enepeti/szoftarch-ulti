@@ -147,6 +147,10 @@ function handleMessage (msg) {
 		case "startgame":
 			sayPhaseOver()
 			break;
+		case "takecards":
+		//`{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
+			handleTakeCards(msg.name, msg.isItMe);
+			break;
 		case "error":
 			showError(msg.message);
 			log("Error: " + msg.message);
@@ -813,6 +817,13 @@ function createCard (cardInfo, num) {
 	return card;
 }
 
+function handleTake (name, isitme) {
+	var playedcards = $('#playedcards');
+	if(isitme) {
+		playedcards.addClass('itakecards');
+	}
+}
+
 function admin_getAllPlayers () {
 	if(admin_checkAdmin()) {
 		listactiveplayersmsg = {};
@@ -914,6 +925,12 @@ $(document).ready(function () {
 	onpage = $('#' + onpagename);
 	onpage.css("display", "block");
 	var ultiroomrefreshinterval = setInterval(autoGetUltiRooms, 5000);
+	var playedcards = $('#playedcards');
+	playedcards.bind('animationend', function() {
+		$(this).removeClass('itakecards');
+		cardsontable = [];
+		showCardsOnTable();
+	});
 });
 
 function __debug_game__ () {

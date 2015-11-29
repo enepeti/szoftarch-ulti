@@ -163,7 +163,7 @@
 	position: absolute;
 	top: 75%;
 	left: 20%;
-	width: 60%;
+	width: 62%;
 	height: 25%;
 	overflow: hidden;
 	nopbackground: red;
@@ -186,6 +186,11 @@
 	height: 37.5%;
 	width: 14.4%;
 	nopbackground: red;
+}
+
+.itakecards {
+	animation-name: anim-itakecards;
+	animation-duration: 2s;
 }
 
 .cardontable {
@@ -256,6 +261,11 @@ input[type=text] {
 @keyframes anim-pagecomein {
 	0% {left: 0%; opacity: 0}
 	100% {left:50%; opacity: 100}
+}
+
+@keyframes anim-itakecards {
+	from {top: 30%;}
+	to {top: 100%;}
 }
 
 .disabled {
