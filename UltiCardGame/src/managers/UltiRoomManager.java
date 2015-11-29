@@ -55,7 +55,8 @@ public class UltiRoomManager extends RoomManager implements IUltiRoomManager {
 				messageHandler.send(new ToUltiAnswer(toRoomName, true),
 						activePlayer);
 				if (room.isFull()) {
-					room.sendStartMessageToAll(messageHandler);
+					room.sendStartMessageToAll(messageHandler,
+							room.getActivePlayerNamesInRoom());
 					ultiGame = new UltiGame(room.getAllPlayers());
 					room.setUltiGame(ultiGame);
 				}

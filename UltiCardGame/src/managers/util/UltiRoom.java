@@ -58,8 +58,9 @@ public class UltiRoom extends Room {
 		return new ArrayList<ActivePlayer>(getActivePlayersInRoom());
 	}
 
-	public void sendStartMessageToAll(final IMessageHandler messageHandler) {
-		final StartUltiAnswer answer = new StartUltiAnswer();
+	public void sendStartMessageToAll(final IMessageHandler messageHandler,
+			final List<String> list) {
+		final StartUltiAnswer answer = new StartUltiAnswer(list);
 		super.sendToAll(messageHandler, answer);
 	}
 
