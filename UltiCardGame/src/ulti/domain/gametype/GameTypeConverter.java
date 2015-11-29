@@ -84,6 +84,102 @@ public class GameTypeConverter {
 		concreteGameTypeUltiDurchmars.getGameTypeList().add(ulti);
 		concreteGameTypeUltiDurchmars.getGameTypeList().add(durchmars);
 		gameTypeMap.put(18, concreteGameTypeUltiDurchmars);
+
+		final ConcreteGameType concreteGameTypeTwentyHundredUlti = new ConcreteGameType(
+				"20-100 Ulti", 12, 0, true, true, false, false);
+		concreteGameTypeTwentyHundredUlti.getGameTypeList().add(twentyHundred);
+		concreteGameTypeTwentyHundredUlti.getGameTypeList().add(ulti);
+		gameTypeMap.put(20, concreteGameTypeTwentyHundredUlti);
+
+		final ConcreteGameType concreteGameTypeRedDurchmars = new ConcreteGameType(
+				"Piros Durchmars", 12, 0, true, true, true, false);
+		concreteGameTypeRedDurchmars.getGameTypeList().add(durchmars);
+		gameTypeMap.put(22, concreteGameTypeRedDurchmars);
+
+		final ConcreteGameType concreteGameTypeFortyHundredUltiDurchmars = new ConcreteGameType(
+				"40-100 Ulti Durchmars", 14, 0, true, true, false, false);
+		concreteGameTypeFortyHundredUltiDurchmars.getGameTypeList().add(
+				fortyHundred);
+		concreteGameTypeFortyHundredUltiDurchmars.getGameTypeList().add(ulti);
+		concreteGameTypeFortyHundredUltiDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(24, concreteGameTypeFortyHundredUltiDurchmars);
+
+		final ConcreteGameType concreteGameTypeTwentyHundredDurchmars = new ConcreteGameType(
+				"20-100 Durchmars", 14, 0, true, true, false, false);
+		concreteGameTypeTwentyHundredDurchmars.getGameTypeList().add(
+				twentyHundred);
+		concreteGameTypeTwentyHundredDurchmars.getGameTypeList().add(durchmars);
+		gameTypeMap.put(25, concreteGameTypeTwentyHundredDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedFortyHundredUlti = new ConcreteGameType(
+				"Piros 40-100 Ulti", 16, 0, true, true, true, false);
+		concreteGameTypeRedFortyHundredUlti.getGameTypeList().add(fortyHundred);
+		concreteGameTypeRedFortyHundredUlti.getGameTypeList().add(ulti);
+		gameTypeMap.put(26, concreteGameTypeRedFortyHundredUlti);
+
+		final ConcreteGameType concreteGameTypeRedTwentyHundred = new ConcreteGameType(
+				"Piros 20-100", 16, 0, true, true, true, false);
+		concreteGameTypeRedTwentyHundred.getGameTypeList().add(twentyHundred);
+		gameTypeMap.put(27, concreteGameTypeRedTwentyHundred);
+
+		final ConcreteGameType concreteGameTypeTwentyHundredUltiDurchmars = new ConcreteGameType(
+				"20-100 Ulti Durchmars", 18, 0, true, true, false, false);
+		concreteGameTypeTwentyHundredUltiDurchmars.getGameTypeList().add(
+				twentyHundred);
+		concreteGameTypeTwentyHundredUltiDurchmars.getGameTypeList().add(ulti);
+		concreteGameTypeTwentyHundredUltiDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(31, concreteGameTypeTwentyHundredUltiDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedFortyHundredDurchmars = new ConcreteGameType(
+				"Piros 40-100 Durchmars", 20, 0, true, true, true, false);
+		concreteGameTypeRedFortyHundredDurchmars.getGameTypeList().add(
+				fortyHundred);
+		concreteGameTypeRedFortyHundredDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(33, concreteGameTypeRedFortyHundredDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedUltiDurchmars = new ConcreteGameType(
+				"Piros Ulti Durchmars", 20, 0, true, true, true, false);
+		concreteGameTypeRedUltiDurchmars.getGameTypeList().add(ulti);
+		concreteGameTypeRedUltiDurchmars.getGameTypeList().add(durchmars);
+		gameTypeMap.put(34, concreteGameTypeRedUltiDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedTwentyHundredUlti = new ConcreteGameType(
+				"Piros 20-100 Ulti", 24, 0, true, true, true, false);
+		concreteGameTypeRedTwentyHundredUlti.getGameTypeList().add(
+				twentyHundred);
+		concreteGameTypeRedTwentyHundredUlti.getGameTypeList().add(ulti);
+		gameTypeMap.put(39, concreteGameTypeRedTwentyHundredUlti);
+
+		final ConcreteGameType concreteGameTypeRedFortyHundredUltiDurchmars = new ConcreteGameType(
+				"Piros 40-100 Ulti Durchmars", 28, 0, true, true, true, false);
+		concreteGameTypeRedFortyHundredUltiDurchmars.getGameTypeList().add(
+				fortyHundred);
+		concreteGameTypeRedFortyHundredUltiDurchmars.getGameTypeList()
+				.add(ulti);
+		concreteGameTypeRedFortyHundredUltiDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(41, concreteGameTypeRedFortyHundredUltiDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedTwentyHundredDurchmars = new ConcreteGameType(
+				"Piros 20-100 Durchmars", 28, 0, true, true, true, false);
+		concreteGameTypeRedTwentyHundredDurchmars.getGameTypeList().add(
+				twentyHundred);
+		concreteGameTypeRedTwentyHundredDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(42, concreteGameTypeRedTwentyHundredDurchmars);
+
+		final ConcreteGameType concreteGameTypeRedTwentyHundredUltiDurchmars = new ConcreteGameType(
+				"Piros 20-100 Ulti Durchmars", 36, 0, true, true, true, false);
+		concreteGameTypeRedTwentyHundredUltiDurchmars.getGameTypeList().add(
+				twentyHundred);
+		concreteGameTypeRedTwentyHundredUltiDurchmars.getGameTypeList().add(
+				ulti);
+		concreteGameTypeRedTwentyHundredUltiDurchmars.getGameTypeList().add(
+				durchmars);
+		gameTypeMap.put(45, concreteGameTypeRedTwentyHundredUltiDurchmars);
 	}
 
 	public static Map<Integer, ConcreteGameType> getGametypemap() {
