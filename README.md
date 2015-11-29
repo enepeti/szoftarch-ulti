@@ -54,4 +54,5 @@
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
 - 40-100 játéknál nincs 40 a bemondónál: `{"type":"doesnothaveforty"}`
+- 20-100 játéknál nincs 20 a bemondónál: `{"type":"doesnothavetwenty"}`
 - Ulti játéknál nincs adu 7 a bemondónál: `{"type":"doesnothavetrumpseven"}`

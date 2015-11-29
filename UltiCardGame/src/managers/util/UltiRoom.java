@@ -8,6 +8,7 @@ import java.util.List;
 
 import messagers.util.ulti.DoesNotHaveFortyAnswer;
 import messagers.util.ulti.DoesNotHaveTrumpSevenAnswer;
+import messagers.util.ulti.DoesNotHaveTwentyAnswer;
 import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
@@ -130,6 +131,12 @@ public class UltiRoom extends Room {
 	public void sendDoesNotHaveTrumpSevenMessageToAll(
 			final IMessageHandler messageHandler) {
 		final DoesNotHaveTrumpSevenAnswer answer = new DoesNotHaveTrumpSevenAnswer();
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendDoesNotHaveTwentyMessageToAll(
+			final IMessageHandler messageHandler) {
+		final DoesNotHaveTwentyAnswer answer = new DoesNotHaveTwentyAnswer();
 		super.sendToAll(messageHandler, answer);
 	}
 }

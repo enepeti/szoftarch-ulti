@@ -174,4 +174,28 @@ public class UltiPlayer {
 		return false;
 	}
 
+	public boolean isThereTwenty(final Suit trump) {
+		for (final Suit suit : Suit.values()) {
+			if (suit.compareTo(trump) != 0) {
+				boolean isThereOverKnave = false;
+				boolean isThereKing = false;
+				for (final Card cardInHand : hand) {
+					if (cardInHand.getSuit().compareTo(suit) == 0) {
+						if (cardInHand.getValue().compareTo(Value.OVER_KNAVE) == 0) {
+							isThereOverKnave = true;
+						} else if (cardInHand.getValue().compareTo(Value.KING) == 0) {
+							isThereKing = true;
+						}
+					}
+				}
+
+				if (isThereKing && isThereOverKnave) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 }

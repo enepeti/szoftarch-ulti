@@ -44,6 +44,7 @@ public class UltiGame {
 	private DeckOfCards deckOfCards;
 
 	private boolean didPlayerHaveFortyInFortyHundredGame = true;
+	private boolean didPlayerHaveTwentyInTwentyHundredGame = true;
 	private boolean didPlayerHaveTrumpSevenInUltiGame = true;
 	private boolean didPlayerTakeCardInBetliGame = false;
 	private boolean didPlayerNotTakeCardInDurchmarsGame = false;
@@ -269,9 +270,9 @@ public class UltiGame {
 			startGame();
 		} else {
 			messageHandler
-			.send(new ErrorAnswer(
-					"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
-					activePlayer);
+					.send(new ErrorAnswer(
+							"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
+							activePlayer);
 		}
 	}
 
@@ -293,50 +294,75 @@ public class UltiGame {
 
 	public void startGame() {
 		boolean startGame = true;
+		boolean countTwentiesAndForty = true;
 		final ActivePlayer activePlayerWhoIsOnTurn = activePlayerList
 				.get(activePlayerOnTurn);
 		final HashMap<String, Integer> points = new HashMap<String, Integer>();
 
 		if (concreteGameType.isThereActualGameType("40-100")) {
+			countTwentiesAndForty = false;
 			if (!activePlayerWhoIsOnTurn.getUltiPlayer().isThereForty(
 					concreteGameType.getTrump())) {
 				didPlayerHaveFortyInFortyHundredGame = false;
 				activePlayerWhoIsOnTurn.getUltiRoom()
-				.sendDoesNotHaveFortyMessageToAll(messageHandler);
+						.sendDoesNotHaveFortyMessageToAll(messageHandler);
 				if (concreteGameType.getGameTypeList().size() == 1) {
 					startGame = false;
 					evaluateGame(activePlayerWhoIsOnTurn);
 				}
 			}
-		} else if (!concreteGameType.isThereActualGameType("Betli")
-				&& !concreteGameType.isThereActualGameType("Durchmars")) {
-			for (final ActivePlayer activePlayer : activePlayerList) {
-				final int sum = activePlayer.getUltiPlayer()
-						.countTwentysAndFortys(concreteGameType.getTrump());
-				points.put(activePlayer.getPlayer().getName(), sum);
-			}
 		}
 
-		if (concreteGameType.isThereActualGameType("Ulti")) {
-			if (!activePlayerWhoIsOnTurn.getUltiPlayer().isThereTrumpSeven(
-					concreteGameType.getTrump())) {
-				didPlayerHaveTrumpSevenInUltiGame = false;
-				activePlayerWhoIsOnTurn.getUltiRoom()
-				.sendDoesNotHaveTrumpSevenMessageToAll(messageHandler);
+		if (startGame) {
+			if (concreteGameType.isThereActualGameType("20-100")) {
+				countTwentiesAndForty = false;
+				if (!activePlayerWhoIsOnTurn.getUltiPlayer().isThereTwenty(
+						concreteGameType.getTrump())) {
+					didPlayerHaveTwentyInTwentyHundredGame = false;
+					activePlayerWhoIsOnTurn.getUltiRoom()
+							.sendDoesNotHaveTwentyMessageToAll(messageHandler);
+					if (concreteGameType.getGameTypeList().size() == 1) {
+						startGame = false;
+						evaluateGame(activePlayerWhoIsOnTurn);
+					}
+				}
 			}
 		}
 
 		if (startGame) {
+			if (concreteGameType.isThereActualGameType("Betli")
+					|| concreteGameType.isThereActualGameType("Durchmars")) {
+				countTwentiesAndForty = false;
+			}
+
+			if (countTwentiesAndForty) {
+				for (final ActivePlayer activePlayer : activePlayerList) {
+					final int sum = activePlayer.getUltiPlayer()
+							.countTwentysAndFortys(concreteGameType.getTrump());
+					points.put(activePlayer.getPlayer().getName(), sum);
+				}
+			}
+
+			if (concreteGameType.isThereActualGameType("Ulti")) {
+				if (!activePlayerWhoIsOnTurn.getUltiPlayer().isThereTrumpSeven(
+						concreteGameType.getTrump())) {
+					didPlayerHaveTrumpSevenInUltiGame = false;
+					activePlayerWhoIsOnTurn.getUltiRoom()
+							.sendDoesNotHaveTrumpSevenMessageToAll(
+									messageHandler);
+				}
+			}
+
 			activePlayerList.get(0).getUltiRoom()
-			.sendStartGameMessageToAll(messageHandler, points);
+					.sendStartGameMessageToAll(messageHandler, points);
 			isGameStarted = true;
 
 			final String name = activePlayerWhoIsOnTurn.getPlayer().getName();
 			messageHandler.send(new PlayerOnTurnAnswer(name, true),
 					activePlayerWhoIsOnTurn);
 			activePlayerWhoIsOnTurn.getUltiRoom()
-			.sendNextPlayerOnTurnMessageToAllOthers(messageHandler,
-					name, activePlayerWhoIsOnTurn);
+					.sendNextPlayerOnTurnMessageToAllOthers(messageHandler,
+							name, activePlayerWhoIsOnTurn);
 		}
 	}
 
@@ -354,8 +380,8 @@ public class UltiGame {
 					messageHandler.send(new PlayedCardAnswer(name, true, card),
 							activePlayer);
 					activePlayer.getUltiRoom()
-					.sendPlayedCardMessageToAllOthers(messageHandler,
-							name, card, activePlayer);
+							.sendPlayedCardMessageToAllOthers(messageHandler,
+									name, card, activePlayer);
 					if (cardsOnTable.size() == 3) {
 						evaluateTurn();
 					} else {
@@ -591,6 +617,7 @@ public class UltiGame {
 		deckOfCards = new DeckOfCards();
 		activePlayerOnTurn = starterActivePlayer;
 		didPlayerHaveFortyInFortyHundredGame = true;
+		didPlayerHaveTwentyInTwentyHundredGame = true;
 		didPlayerHaveTrumpSevenInUltiGame = true;
 		didPlayerTakeCardInBetliGame = false;
 		didPlayerNotTakeCardInDurchmarsGame = false;
@@ -613,8 +640,8 @@ public class UltiGame {
 		messageHandler.send(new TakeCardsAnswer(name, true, cardsOnTable),
 				activePlayerWhoTookCards);
 		activePlayerWhoTookCards.getUltiRoom()
-		.sendTakenCardsMessageToAllOthers(messageHandler, name,
-				cardsOnTable, activePlayerWhoTookCards);
+				.sendTakenCardsMessageToAllOthers(messageHandler, name,
+						cardsOnTable, activePlayerWhoTookCards);
 		cardsOnTable = new ArrayList<Card>();
 
 		boolean continuePlaying = true;
@@ -781,14 +808,51 @@ public class UltiGame {
 				}
 			}
 
+			int red = 1;
+			if (concreteGameType.isItRed()) {
+				red = 2;
+			}
 			if (winSayer) {
-				sumForPlayerWithSaying += 2 * 4;
-				sumForOpponent1 -= 4;
-				sumForOpponent2 -= 4;
+				sumForPlayerWithSaying += red * 2 * 4;
+				sumForOpponent1 -= red * 4;
+				sumForOpponent2 -= red * 4;
 			} else {
-				sumForPlayerWithSaying -= 2 * 4;
-				sumForOpponent1 += 4;
-				sumForOpponent2 += 4;
+				sumForPlayerWithSaying -= red * 2 * 4;
+				sumForOpponent1 += red * 4;
+				sumForOpponent2 += red * 4;
+			}
+		}
+
+		if (concreteGameType.isThereActualGameType("20-100")) {
+			boolean winSayer;
+			if (!didPlayerHaveTwentyInTwentyHundredGame) {
+				winSayer = false;
+			} else {
+				int sum = 0;
+				if (activePlayerWhoTookCards == activePlayerSayer) {
+					sum += 10;
+				}
+				if ((activePlayerList.get(lastPlayerWithConcreteGameType)
+						.getUltiPlayer().calculateParty()
+						+ sum + 20) >= 100) {
+					winSayer = true;
+				} else {
+					winSayer = false;
+				}
+			}
+
+			int red = 1;
+			if (concreteGameType.isItRed()) {
+				red = 2;
+			}
+			if (winSayer) {
+				sumForPlayerWithSaying += red * 2 * 8;
+				sumForOpponent1 -= red * 8;
+				sumForOpponent2 -= red * 8;
+			} else {
+				sumForPlayerWithSaying -= red * 2 * 8;
+				sumForOpponent1 += red * 8;
+				sumForOpponent2 += red * 8;
 			}
 		}
 
@@ -807,14 +871,18 @@ public class UltiGame {
 				}
 			}
 
+			int red = 1;
+			if (concreteGameType.isItRed()) {
+				red = 2;
+			}
 			if (winSayer) {
-				sumForPlayerWithSaying += 2 * 4;
-				sumForOpponent1 -= 4;
-				sumForOpponent2 -= 4;
+				sumForPlayerWithSaying += red * 2 * 4;
+				sumForOpponent1 -= red * 4;
+				sumForOpponent2 -= red * 4;
 			} else {
-				sumForPlayerWithSaying -= 4 * 4;
-				sumForOpponent1 += 2 * 4;
-				sumForOpponent2 += 2 * 4;
+				sumForPlayerWithSaying -= red * 4 * 4;
+				sumForOpponent1 += red * 2 * 4;
+				sumForOpponent2 += red * 2 * 4;
 			}
 		}
 
@@ -830,20 +898,37 @@ public class UltiGame {
 			}
 		}
 
-		if (concreteGameType.isThereActualGameType("Durchmars")) {
-			if (didPlayerNotTakeCardInDurchmarsGame) {
-				sumForPlayerWithSaying -= 2 * 6;
-				sumForOpponent1 += 6;
-				sumForOpponent2 += 6;
+		if (concreteGameType.isThereActualGameType("Rebetli")) {
+			if (didPlayerTakeCardInBetliGame) {
+				sumForPlayerWithSaying -= 2 * 10;
+				sumForOpponent1 += 10;
+				sumForOpponent2 += 10;
 			} else {
-				sumForPlayerWithSaying += 2 * 6;
-				sumForOpponent1 -= 6;
-				sumForOpponent2 -= 6;
+				sumForPlayerWithSaying += 2 * 10;
+				sumForOpponent1 -= 10;
+				sumForOpponent2 -= 10;
 			}
 		}
 
-		if (concreteGameType.isThereTrump()
-				&& !concreteGameType.isThereActualGameType("Durchmars")) {
+		if (concreteGameType.isThereActualGameType("Durchmars")) {
+			int red = 1;
+			if (concreteGameType.isItRed()) {
+				red = 2;
+			}
+			if (didPlayerNotTakeCardInDurchmarsGame) {
+				sumForPlayerWithSaying -= red * 2 * 6;
+				sumForOpponent1 += red * 6;
+				sumForOpponent2 += red * 6;
+			} else {
+				sumForPlayerWithSaying += red * 2 * 6;
+				sumForOpponent1 -= red * 6;
+				sumForOpponent2 -= red * 6;
+			}
+		}
+
+		if (concreteGameType.isThereParty()
+				|| concreteGameType.isThereActualGameType("40-100")
+				|| concreteGameType.isThereActualGameType("20-100")) {
 			int sumForPlayerParty = 0;
 			int sumForOpponent1Party = 0;
 			int sumForOpponent2Party = 0;
@@ -882,10 +967,10 @@ public class UltiGame {
 			partyPoints.put(activePlayerOpponent2.getPlayer().getName(),
 					sumForOpponent2Party);
 			activePlayerList
-					.get(0)
-					.getUltiRoom()
-					.sendShowPartyResultMessageToAll(messageHandler,
-							partyPoints);
+			.get(0)
+			.getUltiRoom()
+			.sendShowPartyResultMessageToAll(messageHandler,
+					partyPoints);
 
 			final int partyValue = concreteGameType.getPartyValue();
 			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayerParty) {
@@ -922,7 +1007,7 @@ public class UltiGame {
 		points.put(playerOpponent1.getName(), sumForOpponent1);
 		points.put(playerOpponent2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}
