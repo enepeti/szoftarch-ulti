@@ -77,7 +77,20 @@ public class UltiRoomManager extends RoomManager implements IUltiRoomManager {
 
 		if (room != null) {
 			room.remove(activePlayer);
+			room.setUltiGame(null);
 		}
 	}
 
+	@Override
+	public void someoneLeavesRoom(final ActivePlayer activePlayer) {
+		final UltiRoom ultiRoom = activePlayer.getUltiRoom();
+		deletePlayerFromRoom(activePlayer);
+
+		ultiRoom.sendSomeoneLeftMessageToAllOthers(messageHandler, activePlayer
+				.getPlayer().getName(), activePlayer);
+
+		for (final ActivePlayer activePlayerInRoom : ultiRoom.getAllPlayers()) {
+			deletePlayerFromRoom(activePlayerInRoom);
+		}
+	}
 }

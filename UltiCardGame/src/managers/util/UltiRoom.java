@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import messagers.util.ulti.DoesNotHaveFortyAnswer;
 import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
 import messagers.util.ulti.ShowPartyResultAnswer;
 import messagers.util.ulti.ShowResultAnswer;
+import messagers.util.ulti.SomeoneLeftGameAnswer;
 import messagers.util.ulti.StartUltiAnswer;
 import messagers.util.ulti.StartUltiGameAnswer;
 import messagers.util.ulti.TakeCardsAnswer;
@@ -66,8 +68,9 @@ public class UltiRoom extends Room {
 		super.sendToAllOthers(messageHandler, answer, activePlayer);
 	}
 
-	public void sendStartGameMessageToAll(final IMessageHandler messageHandler) {
-		final StartUltiGameAnswer answer = new StartUltiGameAnswer();
+	public void sendStartGameMessageToAll(final IMessageHandler messageHandler,
+			final HashMap<String, Integer> points) {
+		final StartUltiGameAnswer answer = new StartUltiGameAnswer(points);
 		super.sendToAll(messageHandler, answer);
 	}
 
@@ -107,6 +110,19 @@ public class UltiRoom extends Room {
 			final HashMap<String, Integer> partyPoints) {
 		final ShowPartyResultAnswer answer = new ShowPartyResultAnswer(
 				partyPoints);
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendSomeoneLeftMessageToAllOthers(
+			final IMessageHandler messageHandler, final String name,
+			final ActivePlayer activePlayer) {
+		final SomeoneLeftGameAnswer answer = new SomeoneLeftGameAnswer(name);
+		super.sendToAllOthers(messageHandler, answer, activePlayer);
+	}
+
+	public void sendDoesNotHaveFortyMessageToAll(
+			final IMessageHandler messageHandler) {
+		final DoesNotHaveFortyAnswer answer = new DoesNotHaveFortyAnswer();
 		super.sendToAll(messageHandler, answer);
 	}
 }

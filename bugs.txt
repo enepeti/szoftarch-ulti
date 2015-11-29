@@ -3,11 +3,11 @@ szûrni ha még nem játék fázisban akar lapot kijátszani Jani :ok:
 szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt :ok:
 startgame-nél is elküldeni, h ki jön :ok:
 eldönteni, hogy ki viszi a lapokat :ok:
-validálni, h rakhatja-e azt a lapot
+validálni, h rakhatja-e azt a lapot :ok:
 ha rossz felhasználóval próbálkozunk ne szálljon el :ok:
 ne lehessen ugyanazzal a felhasználóval kétszer belépni :ok:
 utolsó ütés a partihoz :ok:
-ha valaki feláll az asztaltól kéne intézni
+ha valaki feláll az asztaltól kéne intézni :ok:
 
 kliens:
 mikor lead a kezdõ játékos 2 lapot, a másik két játékosnál is eltûnik két lap :hankey:

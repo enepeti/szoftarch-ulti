@@ -22,7 +22,7 @@
 - Játék bemondás: `{"type":"gameselection", "gameType":<int>, "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Passzolás: `{"type":"pass"}` :ok:
 - Lapfelvétel: `{"type":"pickupcards"}` :ok:
-- Játék jóváhagyása: `{"type":"confirmgame", "trumpsuit":<String>}` :ok:
+- Játék jóváhagyása: `{"type":"confirmgame", "suit":<String>}` :ok:
 - Lap lerakás: `{"type":"playcard", "card":{"suit":<String>, "value":<String>}}` :ok:
 
 #### Szerver - Kliens
@@ -42,13 +42,15 @@
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti"}` :ok:
+- Ulti szobából valaki kilépett játék közben: `{"type":"someoneleftgame", "name":<string>}`
 - Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}` :ok:
 - Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}` :ok:
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
-- Játék kezdődik: `{"type":"startgame"}` :ok:
+- Játék kezdődik: `{"type":"startgame", "points":[{<string>: <int>}]}` // ha nincs 20-40 bemondás, pl 40-100-nál, akkor ez egy üres map
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}` :ok:
 - Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
+- 40-100 játéknál nincs 40 a bemondónál: `{"type":"doesnothaveforty"}`

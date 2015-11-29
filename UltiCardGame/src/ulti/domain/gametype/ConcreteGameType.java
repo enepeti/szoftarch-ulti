@@ -30,6 +30,10 @@ public class ConcreteGameType {
 		this.isThereTrump = isThereTrump;
 		this.isItRed = isItRed;
 		this.isThereParty = isThereParty;
+
+		if (isItRed) {
+			trump = Suit.HEART;
+		}
 	}
 
 	public List<GameType> getGameTypeList() {
@@ -68,8 +72,18 @@ public class ConcreteGameType {
 		return trump;
 	}
 
-	public void setTrump(Suit trump) {
+	public void setTrump(final Suit trump) {
 		this.trump = trump;
+	}
+
+	public boolean isThereFortyHundred() {
+		for (final GameType gameType : gameTypeList) {
+			if ("40-100".equals(gameType.getName())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
