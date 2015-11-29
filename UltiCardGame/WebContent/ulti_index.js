@@ -545,7 +545,7 @@ function showToplist(toplist) {
 		sortlist.push({name:key, point:value});
 	});
 
-	sortlist.sort(function(a,b) {return a.point - b.point});
+	sortlist.sort(function(a,b) {return b.point - a.point});
 
 	$.each(sortlist, function(index,value) { 
 		var row = $('<tr>');
@@ -579,7 +579,7 @@ function showMyHand () {
 	var cardnuminhand = mycards.length;
 
 	myhand.html('');
-	myhand.css('left', (20 + (4 * (12 - cardnuminhand))) + '%' );
+	myhand.css('left', (20 + (3 * (12 - cardnuminhand))) + '%' );
 
 	for (var i = 0; i < cardnuminhand; i++) {
 		var card = createCardInHand(mycards[i], i);
@@ -616,12 +616,17 @@ function handleDeal (mydeal) {
 
 function handleGameSelected (name, isitme, gametype) {
 	if (isitme) {
-		if(gametype in notrumpchooserules) {
+		isayrule = false;
+
+		if(notrumpchooserules.indexOf(gametype) !== -1) {
 			redSuit = true;
 		}
-		chat.newLine(gametype, name);
+
 		removeMarkedCardsFromHand()
 	}
+
+	chat.newLine(gametype, name);
+	setValidRules(gametype);
 }
 
 function startTurn (isMyTurn) {
@@ -704,17 +709,18 @@ function sayRule() {
 			if(markedcards.length < 2) {
 				showError("Meg kell jelölnöd két kártyát amit a talonba teszel!");
 			} else {
-				isayrule = false;
-
 				var ruleselect = $('#rule_selector');
 				var rule = ruleselect.val();
-
-				gameselectionmsg = {};
-				gameselectionmsg.type = "gameselection";
-				gameselectionmsg.gameType = rule;
-				gameselectionmsg.card1 = markedcards[0];
-				gameselectionmsg.card2 = markedcards[1];
-				send(gameselectionmsg);
+				if(rule !== "0") {
+					gameselectionmsg = {};
+					gameselectionmsg.type = "gameselection";
+					gameselectionmsg.gameType = rule;
+					gameselectionmsg.card1 = markedcards[0];
+					gameselectionmsg.card2 = markedcards[1];
+					send(gameselectionmsg);
+				} else {
+					showMessage("Nem választottál szabályt!");
+				}
 			}
 		}
 	}
@@ -730,6 +736,14 @@ function handleCardPickup (card1, card2) {
 	mycards.push(card1, card2);
 	isayrule = true;
 	redSuit = false;
+	
+	var sayme = $('#saying_me');
+	var sayother = $('#saying_other');
+
+	sayme.css('display', 'block');
+	sayother.css('display', 'none');
+
+	showMyHand();
 }
 
 function sayPhaseOver () {
