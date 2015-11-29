@@ -34,6 +34,12 @@ public class GameTypeConverter {
 				"Betli", 5, 0, false, false, false, false);
 		concreteGameTypeBetli.getGameTypeList().add(new GameTypeBetli());
 		gameTypeMap.put(6, concreteGameTypeBetli);
+
+		final ConcreteGameType concreteGameTypeDurchmars = new ConcreteGameType(
+				"Durchmars", 6, 0, true, true, false, false);
+		concreteGameTypeDurchmars.getGameTypeList().add(
+				new GameTypeDurchmarsch());
+		gameTypeMap.put(7, concreteGameTypeDurchmars);
 	}
 
 	public static Map<Integer, ConcreteGameType> getGametypemap() {
