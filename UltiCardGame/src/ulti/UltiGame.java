@@ -206,10 +206,15 @@ public class UltiGame {
 			final Card card2) {
 		final ActivePlayer activePlayer = activePlayerList
 				.get(activePlayerOnTurn);
-		if ((gameTypeConverter
-				.convertConcreteGameTypeToInt(this.concreteGameType) >= gameTypeConverter
-				.convertConcreteGameTypeToInt(concreteGameType))
-				|| (this.concreteGameType == null)) {
+		if ((this.concreteGameType == null)
+				|| (gameTypeConverter
+						.convertConcreteGameTypeToInt(this.concreteGameType) < gameTypeConverter
+						.convertConcreteGameTypeToInt(concreteGameType))
+				|| ((gameTypeConverter
+						.convertConcreteGameTypeToInt(this.concreteGameType) == gameTypeConverter
+						.convertConcreteGameTypeToInt(concreteGameType)) && (concreteGameType
+										.getGameTypeList().size() < this.concreteGameType
+										.getGameTypeList().size()))) {
 			activePlayer.getUltiPlayer().say(card1, card2);
 			remainingCard1 = card1;
 			remainingCard2 = card2;
