@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Ulti</title>
+	<link rel="stylesheet" href="bootstrap.min.css" />
+	<link rel="stylesheet" href="ulti_index.css" />
+	<script src="jquery.min.js"></script>
+	<script src="ulti_index.js"></script>
+</head>
+<body>
+	<!--Bejelentkezés-->
+	<div id="loginpage" class="screen-center">
+		<form id="loginform" action="javascript:login();">
+			<input id="login_name" type="text" class="form-control hor-sep" placeholder="Neved" required/>
+			<input id="login_password" type="password" class="form-control hor-sep" placeholder="Jelszavad" required/>
+			<input id="login_button" type="submit" class="btn btn-success vertical-center hor-sep" value="Bejelentkezés"/>
+		</form>
+		<p class="font">
+			Még nem <a href="javascript:showPage('registrationpage')">regisztráltál</a>?<br>
+			<a href="javascript:loginGuest()">Lépj be vendégként!</a>
+		</p>
+	</div>
+	<!--Regisztráció-->
+	<div id="registrationpage" class="screen-center">
+		<form id="registrationform" action="javascript:register();">
+			<input id="register_name" type="text" class="form-control hor-sep" placeholder="Név" required/>
+			<input id="email" type="email" class="form-control hor-sep" placeholder="e-mail" required/>
+			<input id="register_password" type="password" class="form-control hor-sep" placeholder="Jelszó"
+				required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="validatePw()"
+				title="A jelszó legalább 6 karakter hosszú kell legyen, szerepelnie kell benne kis és nagybetűnek és számnak is kell benne lenni!"/>
+			<input id="confirmpw" type="password" class="form-control hor-sep" placeholder="Jelszó még egyszer"
+				required pattern="" title="Meg kell egyezzen a felette beírt jelszóval!"/>
+			<input id="register_button" type="submit" class="btn btn-success vertical-center hor-sep" value="Regisztrálok!"/>
+		</form>
+		<p class="font">
+			Már regisztráltál? <a href="javascript:showPage('loginpage')">Lépj be!</a><br>
+			Nem szeretnél regisztálni? <a href="javascript:loginGuest()">Lépj be vendégként!</a>
+		</p>
+	</div>
+	<!--Fő oldal-->
+	<div id="mainpage">
+		<!--Ulti-->
+		<div id="ultipage">
+			<div id="ultibuttoncontainer" class="ulticontainer">
+				<div>
+					<p>Üdv <span id="name"></span>!</p>
+				</div>
+				<div class="room">
+					<a href="#opennewultiroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Asztal készítése</button></a>
+				</div>
+				<div class="room">
+					<button class="btn btn-primary ubtn" onclick="showStatistics()">Statisztikák</button>
+				</div>
+				<div class="stat">
+					<button class="btn btn-primary ubtn" onclick="showRooms()">Vissza az asztalokhoz</button>
+				</div>
+				<div class="admin">
+					<a href="#openadminmodal"><button class="btn btn-primary ubtn" onclick="admin_getAllPlayers()">Admin felület</button></a>
+				</div>
+				<div class="room stat">
+					<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
+				</div>
+				<div class="game">
+					<button class="btn btn-danger ubtn" onclick="standUp()">Asztal elhagyása</button>
+				</div>
+			</div>
+			<div id="ultiroomspage" class="ulticontainer">
+				<div id="ultiroomrows"></div>
+			</div>
+			<div id="ultigamepage" class="ulticontainer">
+				<div id="saying" class="screen-center">
+					<div id="saying_other">
+						<button class="btn btn-primary" onclick="sayPass()">Passz</button>
+						<button class="btn btn-primary" onclick="pickUpCards()">Talon felvevés</button>
+					</div>
+					<div id="saying_me">
+						<select id="rule_selector">
+							<option value="0">Válassz mondást!</option>
+							<option value="1">Passz (parti)</option>
+							<option value="2">Piros Passz (piros passz)</option>
+							<option value="3">40-100</option>
+<<<<<<< HEAD
+							<option value="4">Négy Ász</option>
+							<option value="5">Ulti</option>
+							<option value="6">Betli</option>
+							<option value="7">Durchmars</option>
+							<option value="8">Színtelen Durchmars</option>
+							<option value="9">40-100 Négy Ász</option>
+							<option value="10">40-100 Ulti</option>
+							<option value="11">Piros 40-100</option>
+							<option value="12">20-100</option>
+							<option value="13">Ulti Négy Ász</option>
+							<option value="14">Piros Négy Ász</option>
+							<option value="15">20-100</option>
+							<option value="16">Piros Betli (rebetli)</option>
+=======
+							<option value="5">Ulti</option>
+							<option value="6">Betli</option>
+							<option value="7">Durchmars</option>
+							<option value="10">Ulti 40-100</option>
+							<option value="11">Piros 40-100</option>
+							<option value="12">20-100</option>
+							<option value="15">Piros Ulti</option>
+							<option value="16">Rebetli</option>
+							<option value="17">40-100 Durchmars</option>
+							<option value="18">Ulti Durchmars</option>
+							<option value="20">20-100 Ulti</option>
+							<option value="22">Piros Durchmars</option>
+							<option value="24">40-100 Ulti Durchmars</option>
+							<option value="25">20-100 Durchmars</option>
+							<option value="26">Piros 40-100 Ulti</option>
+							<option value="27">Piros 20-100</option>
+							<option value="31">20-100 Ulti Durchmars</option>
+							<option value="33">Piros 40-100 Durchmars</option>
+							<option value="34">Piros Ulti Durchmars</option>
+							<option value="39">Piros 20-100 Ulti</option>
+							<option value="41">Piros 40-100 Ulti Durchmars</option>
+							<option value="42">Piros 20-100 Durchmars</option>
+							<option value="45">Piros 20-100 Ulti Durchmars</option>							
+>>>>>>> 5ca7319eee1e311df7136b6b001a3d16952fa608
+						</select>
+						<button class="btn btn-success" onclick="sayRule()">Rendben</button>
+					</div>
+					<div id="saying_trump">
+						<select id="trump_selector">
+							<option value="0">Válassz adut!</option>
+							<option value="LEAF">Zöld</option>
+							<option value="BELL">Tök</option>
+							<option value="ACORN">Makk</option>
+						</select>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div id="playedcards">
+				</div>
+				<div id="myhand" class=""></div>
+			</div>
+			<div id="statpage" class="ulticontainer">
+				<table id="staticticstable" class="table-striped"></table>
+			</div>
+		</div>
+		<!--Chat-->
+		<div id="chatpage">
+			<div id="chat_buttoncontainer" class="ulticontainer">
+				<div>
+					<a href="#opennewchatroommodal" class="nonguest"><button class="btn btn-primary ubtn nonguest">Szoba készítése</button></a>
+				</div>
+				<div>
+					<a href="#openswitchchatroommodal"><button class="btn btn-warning ubtn" onclick="getAllChatRoom()">Szobába csatlakozás</button></a>
+				</div>
+				<div>
+					<button class="btn btn-danger ubtn" onclick="leaveChatRoom()">Szoba elhagyása</button>
+				</div>
+			</div>
+			<div id="chat_container" class="ulticontainer">
+				<div id="chat_historycontainer" class="scrollable-text hor-sep vertical-center">
+					<p id="chat_history">
+					</p>
+				</div>
+				<form id="chatform" action="javascript:sendChat()">
+					<div id="chat_formcontainer">
+						<div id="chat_msgcontainer">
+							<input id="chat_msg" type="text" class="form-control hor-sep" placeholder="Írd ide az üzenetedet" autocomplete="off"/>
+						</div>
+						<div id="chat_sendcontainer">
+							<input id="chat_send" type="submit" class="btn btn-success hor-sep" value="Küldés"/>
+						</div>
+					</div>
+				</form>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<!--Felugró ablakok-->
+	<div id="opennewultiroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Ulti asztal készítése</h2>
+			<form id="ulti_newroomform" action="javascript:newUltiRoom()">
+				<p id="ulti_newroomerror"></p>
+				<input id="ulti_roomname" type="text" class="form-control hor-sep" placeholder="Asztal neve" autocomplete="off" required/>
+				<input id="ulti_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Szoba létrehozása"/>
+			</form>
+		</div>
+	</div>
+	<div id="opennewchatroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Chat szoba készítése</h2>
+			<form id="chat_newroomform" action="javascript:newChatRoom()">
+				<p id="chat_newroomerror"></p>
+				<input id="chat_roomname" type="text" class="form-control hor-sep" placeholder="Szoba neve" autocomplete="off" required/>
+				<input id="chat_playernumber" type="number" class="hor-sep"placeholder="Szoba létszáma" autocomplete="off" min="1" required/>
+				<input id="chat_infiniteplayer" type="checkbox" onchange="togglechatplayernumber(this.checked)"/> Végtelen.
+				<input id="chat_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Szoba létrehozása"/>
+			</form>
+		</div>
+	</div>
+	<div id="openswitchchatroommodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Chat szoba váltása</h2>
+			<form id="chat_newroomform" action="javascript:joinChatRoom()">
+				<div>
+					<select id="chat_roomselector" class="hor-sep"><option value="0">Válassz szobát</option></select>
+				</div>
+				<div>
+					<button type="button" class="btn btn-primary hor-sep" onclick="getAllChatRoom()">Frissítés</button>
+				</div>
+				<input id="chat_newroom_submit" type="submit" class="btn btn-success hor-sep vertical-center" value="Belépés"/>
+			</form>
+		</div>
+	</div>
+	<div id="openadminmodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Admin</h2>
+			<p id="admin_info"></p>
+			<select id="admin_playerselector" class="hor-sep"><option value="0">Összes aktív játékos</option></select><br>
+			<button type="button" class="btn btn-primary hor-sep" onclick="admin_getAllPlayers()">Frissítés</button>
+			<button type="button" class="btn btn-danger hor-sep" onclick="admin_kickPlayer()">Kirúgás</button>
+			<a href="#close"><button class="btn btn-success vertical-center">Rendben</button></a>
+		</div>
+	</div>
+</body>
+</html>

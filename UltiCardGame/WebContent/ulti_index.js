@@ -615,7 +615,7 @@ function handleDeal (mydeal) {
 }
 
 function handleGameSelected (name, isitme, gametype) {
-	if (isitme)
+	if (isitme) {
 		if(gametype in notrumpchooserules) {
 			redSuit = true;
 		}
