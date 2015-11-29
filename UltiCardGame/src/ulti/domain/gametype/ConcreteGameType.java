@@ -76,9 +76,9 @@ public class ConcreteGameType {
 		this.trump = trump;
 	}
 
-	public boolean isThereFortyHundred() {
+	public boolean isThereActualGameType(final String gameTypeName) {
 		for (final GameType gameType : gameTypeList) {
-			if ("40-100".equals(gameType.getName())) {
+			if (gameTypeName.equals(gameType.getName())) {
 				return true;
 			}
 		}

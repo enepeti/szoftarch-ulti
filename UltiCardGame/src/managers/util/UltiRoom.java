@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import messagers.util.ulti.DoesNotHaveFortyAnswer;
+import messagers.util.ulti.DoesNotHaveTrumpSevenAnswer;
 import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
@@ -123,6 +124,12 @@ public class UltiRoom extends Room {
 	public void sendDoesNotHaveFortyMessageToAll(
 			final IMessageHandler messageHandler) {
 		final DoesNotHaveFortyAnswer answer = new DoesNotHaveFortyAnswer();
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendDoesNotHaveTrumpSevenMessageToAll(
+			final IMessageHandler messageHandler) {
+		final DoesNotHaveTrumpSevenAnswer answer = new DoesNotHaveTrumpSevenAnswer();
 		super.sendToAll(messageHandler, answer);
 	}
 }

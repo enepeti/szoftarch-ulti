@@ -12,6 +12,7 @@ public class UltiPlayer {
 	private int pointsInGamesInActualRoom = 0;
 	private final List<Card> taken = new ArrayList<Card>();
 	private int sumForTwentysAndFortys = 0;
+	private boolean isLastCardTrumpSeven = false;;
 
 	public List<Card> getHand() {
 		return hand;
@@ -31,6 +32,14 @@ public class UltiPlayer {
 
 	public void setSumForTwentysAndFortys(final int sumForTwentysAndFortys) {
 		this.sumForTwentysAndFortys = sumForTwentysAndFortys;
+	}
+
+	public boolean isLastCardTrumpSeven() {
+		return isLastCardTrumpSeven;
+	}
+
+	public void setLastCardTrumpSeven(final boolean isLastCardTrumpSeven) {
+		this.isLastCardTrumpSeven = isLastCardTrumpSeven;
 	}
 
 	public void addCardsToHand(final List<Card> cardsToHand) {
@@ -64,11 +73,18 @@ public class UltiPlayer {
 
 	}
 
-	public void playCard(final Card card) {
+	public void playCard(final Card card, final Suit trumpSuit) {
 		for (final Card cardInHand : hand) {
 			if ((cardInHand.getSuit().compareTo(card.getSuit()) == 0)
 					&& (cardInHand.getValue().compareTo(card.getValue()) == 0)) {
 				hand.remove(cardInHand);
+				if (hand.isEmpty()) {
+					if ((card.getSuit().compareTo(trumpSuit) == 0)
+							&& (card.getValue().compareTo(Value.SEVEN) == 0)) {
+						setLastCardTrumpSeven(true);
+					}
+				}
+
 				return;
 			}
 		}
@@ -143,6 +159,18 @@ public class UltiPlayer {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isThereTrumpSeven(final Suit trump) {
+		for (final Card cardInHand : hand) {
+			if (cardInHand.getSuit().compareTo(trump) == 0) {
+				if (cardInHand.getValue().compareTo(Value.SEVEN) == 0) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
