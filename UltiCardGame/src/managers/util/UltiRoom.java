@@ -8,6 +8,7 @@ import java.util.List;
 
 import messagers.util.ulti.DoesNotHaveFortyAnswer;
 import messagers.util.ulti.DoesNotHaveTrumpSevenAnswer;
+import messagers.util.ulti.DoesNotHaveTwentyAnswer;
 import messagers.util.ulti.GameSelectedAnswer;
 import messagers.util.ulti.PlayedCardAnswer;
 import messagers.util.ulti.PlayerOnTurnAnswer;
@@ -57,8 +58,9 @@ public class UltiRoom extends Room {
 		return new ArrayList<ActivePlayer>(getActivePlayersInRoom());
 	}
 
-	public void sendStartMessageToAll(final IMessageHandler messageHandler) {
-		final StartUltiAnswer answer = new StartUltiAnswer();
+	public void sendStartMessageToAll(final IMessageHandler messageHandler,
+			final List<String> list) {
+		final StartUltiAnswer answer = new StartUltiAnswer(list);
 		super.sendToAll(messageHandler, answer);
 	}
 
@@ -130,6 +132,12 @@ public class UltiRoom extends Room {
 	public void sendDoesNotHaveTrumpSevenMessageToAll(
 			final IMessageHandler messageHandler) {
 		final DoesNotHaveTrumpSevenAnswer answer = new DoesNotHaveTrumpSevenAnswer();
+		super.sendToAll(messageHandler, answer);
+	}
+
+	public void sendDoesNotHaveTwentyMessageToAll(
+			final IMessageHandler messageHandler) {
+		final DoesNotHaveTwentyAnswer answer = new DoesNotHaveTwentyAnswer();
 		super.sendToAll(messageHandler, answer);
 	}
 }

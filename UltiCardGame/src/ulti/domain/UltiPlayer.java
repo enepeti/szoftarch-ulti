@@ -73,12 +73,13 @@ public class UltiPlayer {
 
 	}
 
-	public void playCard(final Card card, final Suit trumpSuit) {
+	public void playCard(final Card card, final Suit trumpSuit,
+			final boolean IsThereUlti) {
 		for (final Card cardInHand : hand) {
 			if ((cardInHand.getSuit().compareTo(card.getSuit()) == 0)
 					&& (cardInHand.getValue().compareTo(card.getValue()) == 0)) {
 				hand.remove(cardInHand);
-				if (hand.isEmpty()) {
+				if (IsThereUlti && hand.isEmpty()) {
 					if ((card.getSuit().compareTo(trumpSuit) == 0)
 							&& (card.getValue().compareTo(Value.SEVEN) == 0)) {
 						setLastCardTrumpSeven(true);
@@ -165,6 +166,30 @@ public class UltiPlayer {
 		for (final Card cardInHand : hand) {
 			if (cardInHand.getSuit().compareTo(trump) == 0) {
 				if (cardInHand.getValue().compareTo(Value.SEVEN) == 0) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isThereTwenty(final Suit trump) {
+		for (final Suit suit : Suit.values()) {
+			if (suit.compareTo(trump) != 0) {
+				boolean isThereOverKnave = false;
+				boolean isThereKing = false;
+				for (final Card cardInHand : hand) {
+					if (cardInHand.getSuit().compareTo(suit) == 0) {
+						if (cardInHand.getValue().compareTo(Value.OVER_KNAVE) == 0) {
+							isThereOverKnave = true;
+						} else if (cardInHand.getValue().compareTo(Value.KING) == 0) {
+							isThereKing = true;
+						}
+					}
+				}
+
+				if (isThereKing && isThereOverKnave) {
 					return true;
 				}
 			}

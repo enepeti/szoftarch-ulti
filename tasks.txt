@@ -1,8 +1,20 @@
 Szerver:
 - csak akkor elfogadni a confirm-ot ha jó játékos küldi :ok:
 - 20-ak 40-ek bemondása, beleszámolása partiba :ok:
-- több játék megvalósítása
-- tomcat https konfig
+- Betli: :ok:
+	- 20-40-eket ne mondjuk
+	- mire mit lehet tenni
+	- ki viszi a lapokat
+	- ha egyszer is elviszi a bemondó vesztett
+	- ha az uccsót sem, akkor a végén nyert
+- 20-100: :ok:
+	- elején vizsgálni van-e 20-100
+	- új körnél true-ra álítani
+	- végén kiértékelni
+- több játék megvalósítása :ok:
+- tomcat https konfig :ok:
+- több szabályrendszer
+- 4ász, színtelen durchmars, terített játékok
 - kontrázás
 - csendes játékok
 
