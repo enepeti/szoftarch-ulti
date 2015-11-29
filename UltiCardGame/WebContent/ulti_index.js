@@ -6,6 +6,7 @@ var dorefresh = false;
 var inultiroom = null;
 
 var isadmin = false;
+var myname = "";
 
 var mycards = [];
 var playedcard = null;
@@ -127,7 +128,7 @@ function handleMessage (msg) {
 			doLogout("Egy admin kirúgott!");
 			break;
 		case "startulti":
-			handleStartUlti();
+			handleStartUlti(msg.names);
 			break;
 		case "deal":
 			handleDeal(msg);
@@ -220,7 +221,9 @@ function loginSuccess (loginData) {
 	var playertype = loginData.playerType;
 	var namespan = $('#name');
 	
-	namespan.html(loginData.name);
+	myname = loginData.name;
+
+	namespan.html(myname);
 	changeNonGuestFeatures(true);
 	changeAdminFeatures(false);
 	showRooms();
@@ -477,7 +480,7 @@ function createUltiRoom (roomData) {
 	return room;
 }
 
-function handleStartUlti () {
+function handleStartUlti (names) {
 	var ultiroomspage = $('#ultiroomspage');
 	var ultigamepage = $('#ultigamepage');
 	var roombuttons = $('.room');
@@ -489,6 +492,10 @@ function handleStartUlti () {
 	gamebuttons.css('display', 'block');
 
 	dorefresh = false;
+
+	var myindex = names.indexOf(myname);
+	right = names[(myindex + 1) % 3]
+	left = names[(myindex + 2) % 3]
 
 }
 
@@ -616,13 +623,13 @@ function handleDeal (mydeal) {
 function handleGameSelected (name, isitme, gametype) {
 	if (isitme) {
 		isayrule = false;
-		markedcards = [];
 
 		if(notrumpchooserules.indexOf(gametype) !== -1) {
 			redSuit = true;
 		}
 
 		removeMarkedCardsFromHand()
+		markedcards = [];
 	}
 
 	chat.newLine(gametype, name);
@@ -711,6 +718,7 @@ function sayRule() {
 			} else {
 				var ruleselect = $('#rule_selector');
 				var rule = ruleselect.val();
+				ruleselect.val('0');
 				if(rule !== "0") {
 					gameselectionmsg = {};
 					gameselectionmsg.type = "gameselection";
@@ -739,9 +747,11 @@ function handleCardPickup (card1, card2) {
 	
 	var sayme = $('#saying_me');
 	var sayother = $('#saying_other');
+	var saytrump = $('#saying_trump');
 
 	sayme.css('display', 'block');
 	sayother.css('display', 'none');
+	saytrump.css('display', 'none');
 
 	showMyHand();
 }
@@ -758,6 +768,7 @@ function removeMarkedCardsFromHand () {
 	for (var i = 0; (i < 2) && (i < markedcards.length); i++) {
 		var card = markedcards[i];
 		var index = mycards.indexOf(card);
+		console.log(index);
 		if(index !== -1) {
 			mycards.splice(index, 1);
 		}
@@ -821,7 +832,7 @@ function showCardsOnTable() {
 function handlePlayedCard (data) {
 	if(playedcard && data.isItMe) {
 		var index = mycards.indexOf(playedcard);
-		if(index != -1) {
+		if(index !== -1) {
 			mycards.splice(index, 1);
 		}
 		showMyHand();
