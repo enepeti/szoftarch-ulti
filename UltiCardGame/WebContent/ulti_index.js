@@ -768,7 +768,7 @@ function removeMarkedCardsFromHand () {
 	for (var i = 0; (i < 2) && (i < markedcards.length); i++) {
 		var card = markedcards[i];
 		var index = mycards.indexOf(card);
-		console.log(index);
+
 		if(index !== -1) {
 			mycards.splice(index, 1);
 		}
@@ -878,6 +878,14 @@ function handleTakeCards (name, isitme) {
 	cardsontable = [];
 	if(isitme) {
 		playedcards.addClass('itakecards');
+	} else {
+		if(name === left) {
+			playedcards.addClass('lefttakecards');
+		} else if(name === right) {
+			playedcards.addClass('righttakecards');
+		} else {
+			alert('anyád csipája!!!4');
+		}
 	}
 }
 
