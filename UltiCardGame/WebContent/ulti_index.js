@@ -817,7 +817,7 @@ function createCard (cardInfo, num) {
 	return card;
 }
 
-function handleTake (name, isitme) {
+function handleTakeCards (name, isitme) {
 	var playedcards = $('#playedcards');
 	if(isitme) {
 		playedcards.addClass('itakecards');
