@@ -16,6 +16,10 @@ var markedcards = [];
 var hastoconfirm = false;
 var cardsontable = [];
 var redSuit = false;
+var left = "";
+var right = "";
+
+var notrumpchooserules = [2,6,8,11,14,15,16];
 
 var chat = {};
 
@@ -135,8 +139,7 @@ function handleMessage (msg) {
 			startTurn(msg.isItMe);
 			break;
 		case "gameselected":
-			chat.newLine("Passz", msg.name);
-			removeMarkedCardsFromHand();
+			handleGameSelected(msg.name, msg.isItMe, msg.gameType);
 			break;
 		case "pickedupcards":
 			handleCardPickup(msg.card1, msg.card2);
@@ -570,13 +573,16 @@ function showRooms() {
 	roombuttons.css('display', 'block');
 }
 
-function showCards () {
+function showMyHand () {
 	var myhand = $('#myhand');
 
-	myhand.html('');
+	var cardnuminhand = mycards.length;
 
-	for (var i = 0; i < mycards.length; i++) {
-		var card = createCard(mycards[i], i);
+	myhand.html('');
+	myhand.css('left', (20 + (4 * (12 - cardnuminhand))) + '%' );
+
+	for (var i = 0; i < cardnuminhand; i++) {
+		var card = createCardInHand(mycards[i], i);
 		myhand.append(card);
 	};
 }
@@ -601,9 +607,21 @@ function handleDeal (mydeal) {
 		sayother.css('display', 'none');
 		sayme.css('display', 'none');
 	}
+
+	setValidRules(0);
 	
 	issayingphase = true;
-	showCards();
+	showMyHand();
+}
+
+function handleGameSelected (name, isitme, gametype) {
+	if (isitme)
+		if(gametype in notrumpchooserules) {
+			redSuit = true;
+		}
+		chat.newLine(gameType, name);
+		removeMarkedCardsFromHand()
+	}
 }
 
 function startTurn (isMyTurn) {
@@ -624,10 +642,8 @@ function startTurn (isMyTurn) {
 	} else {
 		var cards = $('.card');
 		if(myturn) {
-			//alert("te jössz")
 			cards.css('background', 'lightblue');
 		} else {
-			//log("nem te jössz");
 			cards.css('background', 'red');
 		}
 	}
@@ -656,7 +672,7 @@ function sayPass () {
 				trump = trumpselect.val();
 			}
 
-			if(trump != 0) {
+			if(trump !== "0") {
 				confirmgamemsg.suit = trump;
 				send(confirmgamemsg);
 			} else {
@@ -670,6 +686,18 @@ function sayPass () {
 	}
 }
 
+function setValidRules(from) {
+	var ruleselect = $('#rule_selector');
+	var options = ruleselect.children();
+	$.each(options, function (num, option) {
+		if((parseInt(option.value) !== 0) && (parseInt(option.value) <= from)) {
+			option.disabled = true;
+		} else {
+			option.disabled = false;
+		}
+	});
+}
+
 function sayRule() {
 	if(myturn) {
 		if(isayrule) {
@@ -678,8 +706,8 @@ function sayRule() {
 			} else {
 				isayrule = false;
 
-				var ruleSelect = $('#rule_selector');
-				var rule = ruleSelect.val();
+				var ruleselect = $('#rule_selector');
+				var rule = ruleselect.val();
 
 				gameselectionmsg = {};
 				gameselectionmsg.type = "gameselection";
@@ -693,14 +721,15 @@ function sayRule() {
 }
 
 function pickUpCards() {
-	pickupcardmsg = {};
-	pickupcardmsg.type = "pickupcards";
+	pickupcardsmsg = {};
+	pickupcardsmsg.type = "pickupcards";
 	send(pickupcardsmsg);
 }
 
 function handleCardPickup (card1, card2) {
 	mycards.push(card1, card2);
 	isayrule = true;
+	redSuit = false;
 }
 
 function sayPhaseOver () {
@@ -717,7 +746,7 @@ function removeMarkedCardsFromHand () {
 		var index = mycards.indexOf(card);
 		mycards.splice(index, 1);
 	}
-	showCards();
+	showMyHand();
 }
 
 function playCard(index) {
@@ -779,7 +808,7 @@ function handlePlayedCard (data) {
 		if(index != -1) {
 			mycards.splice(index, 1);
 		}
-		showCards();
+		showMyHand();
 		playedcard = null;
 	}
 	cardsontable.push(data.card);
@@ -794,7 +823,7 @@ function toHunCard (suit, value) {
 	return {suit:hunSuit[suit], value:hunValue[value]};
 }
 
-function createCard (cardInfo, num) {
+function createCardInHand (cardInfo, num) {
 	var card = $('<div>');
 	var suit = cardInfo.suit;
 	var value = cardInfo.value;
@@ -819,6 +848,7 @@ function createCard (cardInfo, num) {
 
 function handleTakeCards (name, isitme) {
 	var playedcards = $('#playedcards');
+	cardsontable = [];
 	if(isitme) {
 		playedcards.addClass('itakecards');
 	}
@@ -928,7 +958,8 @@ $(document).ready(function () {
 	var playedcards = $('#playedcards');
 	playedcards.bind('animationend', function() {
 		$(this).removeClass('itakecards');
-		cardsontable = [];
+		$(this).removeClass('lefttakecards');
+		$(this).removeClass('righttakecards');
 		showCardsOnTable();
 	});
 });
@@ -962,7 +993,7 @@ function __debug_game__ () {
 		}
 			mycards.push({"suit":suit, "value":value});
 	};
-	showCards();
+	showMyHand();
 	myturn = true;
 }
 

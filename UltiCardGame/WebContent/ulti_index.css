@@ -189,8 +189,33 @@
 }
 
 .itakecards {
-	animation-name: anim-itakecards;
+	animation-name: anim-bottomtakecards;
 	animation-duration: 2s;
+}
+
+@keyframes anim-bottomtakecards {
+	from {top: 30%;}
+	to {top: 100%;}
+}
+
+.lefttakecards {
+	animation-name: anim-lefttakecards;
+	animation-duration: 2s;	
+}
+
+@keyframes anim-lefttakecards {
+	from {left: 42.8%;}
+	to {left: 0%;}
+}
+
+.righttakecards {
+	animation-name: anim-righttakecards;
+	animation-duration: 2s;	
+}
+
+@keyframes anim-righttakecards {
+	from {left: 42.8%;}
+	to {left: 100%;}
 }
 
 .cardontable {
@@ -261,11 +286,6 @@ input[type=text] {
 @keyframes anim-pagecomein {
 	0% {left: 0%; opacity: 0}
 	100% {left:50%; opacity: 100}
-}
-
-@keyframes anim-itakecards {
-	from {top: 30%;}
-	to {top: 100%;}
 }
 
 .disabled {
