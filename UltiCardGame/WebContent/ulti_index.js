@@ -619,7 +619,7 @@ function handleGameSelected (name, isitme, gametype) {
 		if(gametype in notrumpchooserules) {
 			redSuit = true;
 		}
-		chat.newLine(gameType, name);
+		chat.newLine(gametype, name);
 		removeMarkedCardsFromHand()
 	}
 }
