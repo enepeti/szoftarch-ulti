@@ -127,7 +127,7 @@ function handleMessage (msg) {
 			doLogout("Egy admin kirúgott!");
 			break;
 		case "startulti":
-			startUlti();
+			handleStartUlti();
 			break;
 		case "deal":
 			handleDeal(msg);
@@ -477,7 +477,7 @@ function createUltiRoom (roomData) {
 	return room;
 }
 
-function startUlti () {
+function handleStartUlti () {
 	var ultiroomspage = $('#ultiroomspage');
 	var ultigamepage = $('#ultigamepage');
 	var roombuttons = $('.room');
@@ -599,12 +599,11 @@ function handleDeal (mydeal) {
 
 	saybar.css('display', 'block');
 	saytrump.css('display', 'none');
+	sayother.css('display', 'none');
 
 	if(isayrule) {
-		sayother.css('display', 'none');
 		sayme.css('display', 'block');
 	} else {
-		sayother.css('display', 'none');
 		sayme.css('display', 'none');
 	}
 
@@ -617,6 +616,7 @@ function handleDeal (mydeal) {
 function handleGameSelected (name, isitme, gametype) {
 	if (isitme) {
 		isayrule = false;
+		markedcards = [];
 
 		if(notrumpchooserules.indexOf(gametype) !== -1) {
 			redSuit = true;
@@ -758,7 +758,9 @@ function removeMarkedCardsFromHand () {
 	for (var i = 0; (i < 2) && (i < markedcards.length); i++) {
 		var card = markedcards[i];
 		var index = mycards.indexOf(card);
-		mycards.splice(index, 1);
+		if(index !== -1) {
+			mycards.splice(index, 1);
+		}
 	}
 	showMyHand();
 }
@@ -980,7 +982,7 @@ $(document).ready(function () {
 
 function __debug_game__ () {
 	showPage("mainpage");
-	startUlti();
+	handleStartUlti();
 	for (var i = 0; i < 12; i++) {
 		var suit;
 		var value;
