@@ -618,8 +618,8 @@ public class UltiGame {
 		lastPlayerWithConcreteGameType = -1;
 		remainingCard1 = null;
 		remainingCard2 = null;
-		cardsOnTable = null;
 		deckOfCards = new DeckOfCards();
+		cardsOnTable = new ArrayList<Card>();
 		activePlayerOnTurn = starterActivePlayer;
 		didPlayerHaveFortyInFortyHundredGame = true;
 		didPlayerHaveTwentyInTwentyHundredGame = true;
