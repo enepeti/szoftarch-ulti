@@ -188,6 +188,24 @@
 	nopbackground: red;
 }
 
+#leftname, #rightname {
+	position: absolute;
+	top: 0;
+	margin: 5px;
+	max-width: 5%;
+	nopbackground: red;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#leftname {	
+	left: 0;
+}
+
+#rightname {
+	right: 0;
+}
+
 .itakecards {
 	animation-name: anim-bottomtakecards;
 	animation-duration: 2s;

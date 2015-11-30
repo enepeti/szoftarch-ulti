@@ -77,7 +77,7 @@ function handleMessage (msg) {
 			if(msg.success) {
 				loginSuccess(msg);
 			} else {
-				showError("Hibás bejelentkezési adatok!");
+				showMessage("Hibás bejelentkezési adatok!");
 			}
 			break;
 		case "logout":
@@ -88,7 +88,7 @@ function handleMessage (msg) {
 				showPage("loginpage");
 				showMessage("Sikeres regisztráció, most már beléphetsz!");
 			} else {
-				showError("Sikertelen regisztráció " + msg.fault);
+				showMessage("Sikertelen regisztráció " + msg.fault);
 			}
 			break;
 		case "chat":
@@ -130,6 +130,11 @@ function handleMessage (msg) {
 		case "startulti":
 			handleStartUlti(msg.names);
 			break;
+		case "someoneleftgame":
+			//`{"type":"someoneleftgame", "name":<string>}`
+			showMessage("Játék véget ért, " + name + "elhagyta az asztalt");
+			standUp();
+			break;
 		case "deal":
 			handleDeal(msg);
 			break;
@@ -149,10 +154,10 @@ function handleMessage (msg) {
 			handleHasToConfirm();
 			break;
 		case "startgame":
+			show420(msg.points);
 			sayPhaseOver()
 			break;
 		case "takecards":
-		//`{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}`
 			handleTakeCards(msg.name, msg.isItMe);
 			break;
 		case "error":
@@ -166,11 +171,16 @@ function handleMessage (msg) {
 }
 
 function showError (errormsg) {
-	alert(errormsg);
+	var errorp = $('#errormessage');
+	errorp.html(errormsg);
+	window.location.href = '#openerrormodal';
+
 }
 
 function showMessage (msg) {
-	alert(msg);
+	var errorp = $('#showmessage');
+	errorp.html(msg);
+	window.location.href = '#openmessagemodal';
 }
 
 function send(data) {
@@ -247,18 +257,22 @@ function register() {
 	var emailtb = $('#email');
 	var passwordtb = $('#register_password');
 	var confirmtb = $("#confirmpw");
+	
 	var name = nametb.val();
 	var email = emailtb.val();
 	var password = passwordtb.val();
+
 	nametb.val('');
 	emailtb.val('');
 	passwordtb.val('');
 	confirmtb.val('');
+	
 	var registermsg = {};
 	registermsg.type = "register";
 	registermsg.name = name;
 	registermsg.email = email;
 	registermsg.password = password;
+	
 	send(registermsg);
 }
 
@@ -323,7 +337,7 @@ function newChat(isDone) {
 	var playernumbertb = $('#chat_playernumber');
 	
 	if(isDone) {
-		window.location.href = '#close'
+		window.location.href = '#close';
 		newroomerror.html('');
 		roomnametb.val('');
 		playernumbertb.val('');
@@ -368,7 +382,7 @@ function joinChatRoom () {
 		joinchatroommsg.name = selectedRoom;
 		send(joinchatroommsg);
 	} else {
-		showError("Nem választottál szobát!");
+		showMessage("Nem választottál szobát!");
 	}
 }
 
@@ -494,8 +508,14 @@ function handleStartUlti (names) {
 	dorefresh = false;
 
 	var myindex = names.indexOf(myname);
-	right = names[(myindex + 1) % 3]
-	left = names[(myindex + 2) % 3]
+	right = names[(myindex + 1) % 3];
+	left = names[(myindex + 2) % 3];
+
+	var leftnameplace = $('#leftname');
+	var rightnameplace = $('#rightname');
+
+	leftnameplace.html(left);
+	rightnameplace.html(right);
 
 }
 
@@ -617,6 +637,7 @@ function handleDeal (mydeal) {
 	setValidRules(0);
 	
 	issayingphase = true;
+	hastoconfirm = false;
 	showMyHand();
 }
 
@@ -632,7 +653,9 @@ function handleGameSelected (name, isitme, gametype) {
 		markedcards = [];
 	}
 
-	chat.newLine(gametype, name);
+	//chat.newLine(gametype, name);
+	var ruleselect = $('#rule_selector');
+	showMessage(name + ": " + ruleselect.children().eq(gametype).html());
 	setValidRules(gametype);
 }
 
@@ -688,7 +711,7 @@ function sayPass () {
 				confirmgamemsg.suit = trump;
 				send(confirmgamemsg);
 			} else {
-				showError("Nem választottál adu színt!");
+				showMessage("Nem választottál adu színt!");
 			}
 		} else {
 			passmsg = {};
@@ -714,7 +737,7 @@ function sayRule() {
 	if(myturn) {
 		if(isayrule) {
 			if(markedcards.length < 2) {
-				showError("Meg kell jelölnöd két kártyát amit a talonba teszel!");
+				showMessage("Meg kell jelölnöd két kártyát amit a talonba teszel!");
 			} else {
 				var ruleselect = $('#rule_selector');
 				var rule = ruleselect.val();
@@ -756,6 +779,18 @@ function handleCardPickup (card1, card2) {
 	showMyHand();
 }
 
+function show420 (points) {
+	var message = "";
+	$.each(points, function(name, point) {
+		if(point > 0) {
+			message = message + name + ": " + point + " van a kezemben";
+		}
+	});
+	if(message !== "") {
+		showMessage(message);
+	}
+}
+
 function sayPhaseOver () {
 	var sayBar = $('#saying');
 	sayBar.css('display', 'none');
@@ -779,18 +814,20 @@ function removeMarkedCardsFromHand () {
 function playCard(index) {
 	if(myturn) {
 		var card = mycards[index];
-		if(issayingphase && isayrule) {
-			var mi = markedcards.indexOf(card)
-			var cardView = $('#' + card.suit + '_' + card.value);
-			if(mi !== -1) {
-				markedcards.splice(mi, 1);
+		if(issayingphase) {
+			if(isayrule) {
+				var mi = markedcards.indexOf(card)
+				var cardView = $('#' + card.suit + '_' + card.value);
+				if(mi !== -1) {
+					markedcards.splice(mi, 1);
 
-				cardView.css('margin-top', '0');
-			} else {
-				if(markedcards.length < 2) {
-					cardView.css('margin-top', '-1.5%');
+					cardView.css('margin-top', '0');
+				} else {
+					if(markedcards.length < 2) {
+						cardView.css('margin-top', '-1.5%');
 
-					markedcards.push(card);
+						markedcards.push(card);
+					}
 				}
 			}
 		} else {
@@ -840,8 +877,8 @@ function handlePlayedCard (data) {
 	}
 	cardsontable.push(data.card);
 	showCardsOnTable();
-	var hunCard = toHunCard(data.card.suit, data.card.value);
-	chat.newLine("Kijátszottam: " + hunCard.suit + " " + hunCard.value, data.name);
+	//var hunCard = toHunCard(data.card.suit, data.card.value);
+	//chat.newLine("Kijátszottam: " + hunCard.suit + " " + hunCard.value, data.name);
 }
 
 function toHunCard (suit, value) {
@@ -927,10 +964,12 @@ function admin_checkAdmin() {
 function admin_refreshPlayerNames (names) {
 	var playerselector = $('#admin_playerselector');
 	playerselector.html("");
+	
 	var newoption = $('<option>');
 	newoption.val(0);
 	newoption.html("Összes aktív játékos");
 	playerselector.append(newoption);
+	
 	for (var i = 0; i < names.length; i++) {
 		newoption = $('<option>');
 		newoption.val(names[i]);

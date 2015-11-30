@@ -69,6 +69,8 @@
 				<div id="ultiroomrows"></div>
 			</div>
 			<div id="ultigamepage" class="ulticontainer">
+				<div id="leftname"></div>
+				<div id="rightname"></div>
 				<div id="saying" class="screen-center">
 					<div id="saying_other">
 						<button class="btn btn-primary" onclick="sayPass()">Passz</button>
@@ -205,6 +207,22 @@
 			<select id="admin_playerselector" class="hor-sep"><option value="0">Összes aktív játékos</option></select><br>
 			<button type="button" class="btn btn-primary hor-sep" onclick="admin_getAllPlayers()">Frissítés</button>
 			<button type="button" class="btn btn-danger hor-sep" onclick="admin_kickPlayer()">Kirúgás</button>
+			<a href="#close"><button class="btn btn-success vertical-center">Rendben</button></a>
+		</div>
+	</div>
+	<div id="openmessagemodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Üzenet:</h2>
+			<p id="showmessage"></p>
+			<a href="#close"><button class="btn btn-success vertical-center">Rendben</button></a>
+		</div>
+	</div>
+	<div id="openerrormodal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h2>Hiba!</h2>
+			<p id="errormessage"></p>
 			<a href="#close"><button class="btn btn-success vertical-center">Rendben</button></a>
 		</div>
 	</div>

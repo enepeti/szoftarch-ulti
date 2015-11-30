@@ -42,13 +42,13 @@
 - Kidobás válasz adminnak: `{"type":"kick", "success":<boolean>}` :ok:
 - Toplista válasz: `{"type":"toplist", "toplist":{<string>: <int>}}` :ok:
 - Ulti szobába 3. ember belépett: `{"type":"startulti", "names":[<string>]}` :ok:
-- Ulti szobából valaki kilépett játék közben: `{"type":"someoneleftgame", "name":<string>}`
-- Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>}` :ok:
+- Ulti szobából valaki kilépett játék közben: `{"type":"someoneleftgame", "name":<string>}` :ok:
+- Osztás válasz: `{"type":"deal", "cards":[{"suit":<String>, "value":<String>}], "isstarter":<boolean>, "starterName":<String>}` :ok: :new:
 - Következő játékos jön: `{"type":"playeronturn", "name":<string>, "isItMe":<bool>}` :ok:
 - Játék bemondás válasz: `{"type":"gameselected", "name":<String>, "isItMe":<bool>, "gameType":<int>}` :ok:
 - Felvett lapok válasz: `{"type":"pickedupcards", "card1":{"suit":<String>, "value":<String>}, "card2":{"suit":<String>, "value":<String>}}` :ok:
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
-- Játék kezdődik: `{"type":"startgame", "points":[{<string>: <int>}]}` // ha nincs 20-40 bemondás, pl 40-100-nál, akkor ez egy üres map
+- Játék kezdődik: `{"type":"startgame", "trump":<String>, "points":[{<string>: <int>}]}` // ha nincs 20-40 bemondás, pl 40-100-nál, akkor ez egy üres map :ok: :new:
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}` :ok:
 - Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
 - Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`

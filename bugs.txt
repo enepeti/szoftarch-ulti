@@ -1,13 +1,14 @@
 szerver:
-szûrni ha még nem játék fázisban akar lapot kijátszani Jani :ok:
-szerveroldalon ellenõrizni, h nagyobb e a játék, mint ami eddig volt :ok:
-startgame-nél is elküldeni, h ki jön :ok:
-eldönteni, hogy ki viszi a lapokat :ok:
-validálni, h rakhatja-e azt a lapot :ok:
-ha rossz felhasználóval próbálkozunk ne szálljon el :ok:
-ne lehessen ugyanazzal a felhasználóval kétszer belépni :ok:
-utolsó ütés a partihoz :ok:
-ha valaki feláll az asztaltól kéne intézni :ok:
+szÃ»rni ha mÃ©g nem jÃ¡tÃ©k fÃ¡zisban akar lapot kijÃ¡tszani Jani :ok:
+szerveroldalon ellenÃµrizni, h nagyobb e a jÃ¡tÃ©k, mint ami eddig volt :ok:
+startgame-nÃ©l is elkÃ¼ldeni, h ki jÃ¶n :ok:
+eldÃ¶nteni, hogy ki viszi a lapokat :ok:
+validÃ¡lni, h rakhatja-e azt a lapot :ok:
+ha rossz felhasznÃ¡lÃ³val prÃ³bÃ¡lkozunk ne szÃ¡lljon el :ok:
+ne lehessen ugyanazzal a felhasznÃ¡lÃ³val kÃ©tszer belÃ©pni :ok:
+utolsÃ³ Ã¼tÃ©s a partihoz :ok:
+ha valaki felÃ¡ll az asztaltÃ³l kÃ©ne intÃ©zni :ok:
 
 kliens:
-mikor lead a kezdõ játékos 2 lapot, a másik két játékosnál is eltûnik két lap :hankey:
+mikor lead a kezdÃµ jÃ¡tÃ©kos 2 lapot, a mÃ¡sik kÃ©t jÃ¡tÃ©kosnÃ¡l is eltÃ»nik kÃ©t lap :ok:
+kliensen is ellenÅ‘rizni hogy licit kÃ¶zben nem rakhat lapot :ok:
