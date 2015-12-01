@@ -34,6 +34,7 @@ public class GameTypeConverter {
 		final ConcreteGameType concreteGameTypeUlti = new ConcreteGameType(
 				"Ulti", 4, 1, true, true, false, true);
 		concreteGameTypeUlti.getGameTypeList().add(ulti);
+		concreteGameTypeUlti.getGameTypeList().add(party);
 		gameTypeMap.put(5, concreteGameTypeUlti);
 
 		final ConcreteGameType concreteGameTypeBetli = new ConcreteGameType(
@@ -65,6 +66,7 @@ public class GameTypeConverter {
 		final ConcreteGameType concreteGameTypeRedUlti = new ConcreteGameType(
 				"Piros Ulti", 8, 2, true, true, true, true);
 		concreteGameTypeRedUlti.getGameTypeList().add(ulti);
+		concreteGameTypeRedUlti.getGameTypeList().add(party);
 		gameTypeMap.put(15, concreteGameTypeRedUlti);
 
 		final ConcreteGameType concreteGameTypeReBetli = new ConcreteGameType(

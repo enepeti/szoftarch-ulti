@@ -76,6 +76,10 @@ public class ConcreteGameType {
 		this.trump = trump;
 	}
 
+	public int getWholeValue() {
+		return value + partyValue;
+	}
+
 	public boolean isThereActualGameType(final String gameTypeName) {
 		for (final GameType gameType : gameTypeList) {
 			if (gameTypeName.equals(gameType.getName())) {
