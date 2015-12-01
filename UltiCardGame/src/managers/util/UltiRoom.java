@@ -72,8 +72,9 @@ public class UltiRoom extends Room {
 	}
 
 	public void sendStartGameMessageToAll(final IMessageHandler messageHandler,
-			final HashMap<String, Integer> points) {
-		final StartUltiGameAnswer answer = new StartUltiGameAnswer(points);
+			final HashMap<String, Integer> points, final String trump) {
+		final StartUltiGameAnswer answer = new StartUltiGameAnswer(points,
+				trump);
 		super.sendToAll(messageHandler, answer);
 	}
 

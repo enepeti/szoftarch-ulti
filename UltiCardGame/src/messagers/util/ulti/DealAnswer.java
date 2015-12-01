@@ -9,11 +9,14 @@ public class DealAnswer extends AnswerMessage {
 
 	private List<Card> cards;
 	private boolean isStarter;
+	private final String starterName;
 
-	public DealAnswer(final List<Card> cards, final boolean isStarter) {
+	public DealAnswer(final List<Card> cards, final boolean isStarter,
+			final String starterName) {
 		super("deal");
 		this.cards = cards;
 		this.isStarter = isStarter;
+		this.starterName = starterName;
 	}
 
 	public List<Card> getCards() {
@@ -30,6 +33,10 @@ public class DealAnswer extends AnswerMessage {
 
 	public void setStarter(final boolean isStarter) {
 		this.isStarter = isStarter;
+	}
+
+	public String getStarterName() {
+		return starterName;
 	}
 
 }
