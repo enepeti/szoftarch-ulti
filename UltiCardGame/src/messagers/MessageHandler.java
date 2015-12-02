@@ -94,10 +94,12 @@ public class MessageHandler implements IMessageHandler {
 				} else if (upperCaseType.equals(Type.TOULTI.toString())) {
 					toUltiMessage(jsonObject, activePlayer);
 				} else if (upperCaseType.equals(Type.LEAVEULTI.toString())) {
-					if (activePlayer.getUltiRoom().isFull()) {
-						ultiRoomManager.someoneLeavesRoom(activePlayer);
-					} else {
-						ultiRoomManager.deletePlayerFromRoom(activePlayer);
+					if (activePlayer.getUltiRoom() != null) {
+						if (activePlayer.getUltiRoom().isFull()) {
+							ultiRoomManager.someoneLeavesRoom(activePlayer);
+						} else {
+							ultiRoomManager.deletePlayerFromRoom(activePlayer);
+						}
 					}
 				} else if (upperCaseType.equals(Type.GETALLULTI.toString())) {
 					allUltiMessage(activePlayer);
@@ -128,7 +130,7 @@ public class MessageHandler implements IMessageHandler {
 					activePlayer.getUltiRoom().getUltiGame().pass();
 				} else if (upperCaseType.equals(Type.PICKUPCARDS.toString())) {
 					activePlayer.getUltiRoom().getUltiGame()
-					.pickUpCards(activePlayer);
+							.pickUpCards(activePlayer);
 				} else if (upperCaseType.equals(Type.CONFIRMGAME.toString())) {
 					confirmMessage(jsonObject, activePlayer);
 				} else if (upperCaseType.equals(Type.PLAYCARD.toString())) {
@@ -329,7 +331,7 @@ public class MessageHandler implements IMessageHandler {
 
 				if (concreteGameType != null) {
 					activePlayer.getUltiRoom().getUltiGame()
-							.say(concreteGameType, card1, card2);
+					.say(concreteGameType, card1, card2);
 				} else {
 					send(new ErrorAnswer("Nem valid bemondás!"), activePlayer);
 				}
@@ -347,7 +349,7 @@ public class MessageHandler implements IMessageHandler {
 			final Suit trumpSuit = CardConverter
 					.convertStringToSuit(trumpSuitString);
 			activePlayer.getUltiRoom().getUltiGame()
-					.confirm(trumpSuit, activePlayer);
+			.confirm(trumpSuit, activePlayer);
 		}
 	}
 
@@ -373,7 +375,7 @@ public class MessageHandler implements IMessageHandler {
 						cardValue);
 
 				activePlayer.getUltiRoom().getUltiGame()
-						.playCard(card, activePlayer);
+				.playCard(card, activePlayer);
 			}
 		}
 	}
