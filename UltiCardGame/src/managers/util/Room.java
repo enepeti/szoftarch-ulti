@@ -63,6 +63,10 @@ public abstract class Room {
 		return (getActivePlayersInRoom().size() >= maxSize) && (maxSize != -1);
 	}
 
+	public boolean isEmpty() {
+		return activePlayersInRoom.isEmpty();
+	}
+
 	public String getName() {
 		return name;
 	}
