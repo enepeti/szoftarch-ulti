@@ -21,12 +21,12 @@ Szerver:
 Kliens:
 - letett lapok középen megjelenítése :ok:
 - adu választás :ok:
-- annak jelzése, hogy ki vitte el a lapokat
-- 20-ak, 40-ek megjelenítése
-- végén jelezni ha volt parti h kinek mennyi 10-e lett
-- illetve kiírni, h ki hány pontot kapott
-- megjeleníteni mindig, hogy ki jön éppen és hogy ki és mit mondott be utoljára, mi a játék és adu
-- lekezelni, ha someoneleftgame típusú üzenet jön
-- felületre jobb meg bal fentre legalább játékos neveket kiírni mondjuk, hogy látszódjon merre megy kör
-- lapokon képek
-- letett két lap esetleg lefordítva középen
+- annak jelzése, hogy ki vitte el a lapokat :ok:
+- 20-ak, 40-ek megjelenítése :ok:
+- végén jelezni ha volt parti h kinek mennyi 10-e lett :ok:
+- illetve kiírni, h ki hány pontot kapott :ok:
+- megjeleníteni mindig, hogy ki jön éppen és hogy ki és mit mondott be utoljára, mi a játék és adu 
+- lekezelni, ha someoneleftgame típusú üzenet jön :ok:
+- felületre jobb meg bal fentre legalább játékos neveket kiírni mondjuk, hogy látszódjon merre megy kör :ok:
+- lapokon képek :ok:
+- letett két lap esetleg lefordítva középen :hankey:

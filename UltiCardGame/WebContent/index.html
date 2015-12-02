@@ -62,15 +62,15 @@
 					<button class="btn btn-danger ubtn" onclick="logout()">Kijelenetkezés</button>
 				</div>
 				<div class="game">
-					<button class="btn btn-danger ubtn" onclick="standUp()">Asztal elhagyása</button>
+					<button class="btn btn-danger ubtn" onclick="standUp(true)">Asztal elhagyása</button>
 				</div>
 			</div>
 			<div id="ultiroomspage" class="ulticontainer">
 				<div id="ultiroomrows"></div>
 			</div>
 			<div id="ultigamepage" class="ulticontainer">
-				<div id="leftname"></div>
-				<div id="rightname"></div>
+				<div id="leftname"><h3 id="leftnameplace"></h3></div>
+				<div id="rightname"><h3 id="rightnameplace"></h3></div>
 				<div id="saying" class="screen-center">
 					<div id="saying_other">
 						<button class="btn btn-primary" onclick="sayPass()">Passz</button>

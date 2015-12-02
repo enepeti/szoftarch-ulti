@@ -19,6 +19,7 @@ var cardsontable = [];
 var redSuit = false;
 var left = "";
 var right = "";
+var partyresult = "";
 
 var notrumpchooserules = [2,6,8,11,14,15,16];
 
@@ -132,8 +133,8 @@ function handleMessage (msg) {
 			break;
 		case "someoneleftgame":
 			//`{"type":"someoneleftgame", "name":<string>}`
-			showMessage("Játék véget ért, " + name + "elhagyta az asztalt");
-			standUp();
+			showMessage("Játék véget ért, " + msg.name + " elhagyta az asztalt");
+			standUp(false);
 			break;
 		case "deal":
 			handleDeal(msg);
@@ -142,7 +143,7 @@ function handleMessage (msg) {
 			handlePlayedCard(msg);
 			break;
 		case "playeronturn":
-			startTurn(msg.isItMe);
+			startTurn(msg.isItMe, msg.name);
 			break;
 		case "gameselected":
 			handleGameSelected(msg.name, msg.isItMe, msg.gameType);
@@ -154,11 +155,18 @@ function handleMessage (msg) {
 			handleHasToConfirm();
 			break;
 		case "startgame":
-			show420(msg.points);
+			show420andTrump(msg.points, msg.trump);
 			sayPhaseOver()
 			break;
 		case "takecards":
 			handleTakeCards(msg.name, msg.isItMe);
+			break;
+		case "showpartyresult":
+		//`{"type":"showpartyresult", "points":[{<string>: <int>}]}`
+			partyresult = handlePartyResult(msg.points);
+			break;
+		case "showresult":
+			showResult(msg.points)
 			break;
 		case "error":
 			showError(msg.message);
@@ -511,15 +519,18 @@ function handleStartUlti (names) {
 	right = names[(myindex + 1) % 3];
 	left = names[(myindex + 2) % 3];
 
-	var leftnameplace = $('#leftname');
-	var rightnameplace = $('#rightname');
+	var leftnameplace = $('#leftnameplace');
+	var rightnameplace = $('#rightnameplace');
 
 	leftnameplace.html(left);
 	rightnameplace.html(right);
 
+	cardsontable = [];
+	showCardsOnTable();
+
 }
 
-function standUp () {
+function standUp (doleaveroom) {
 	var ultiroomspage = $('#ultiroomspage');
 	var ultigamepage = $('#ultigamepage');
 	var roombuttons = $('.room');
@@ -530,7 +541,9 @@ function standUp () {
 	gamebuttons.css('display', 'none');
 	roombuttons.css('display', 'block');
 
-	leaveUltiRoom();
+	if(doleaveroom) {
+		leaveUltiRoom();
+	}
 
 	dorefresh = true;
 }
@@ -600,7 +613,16 @@ function showRooms() {
 	roombuttons.css('display', 'block');
 }
 
+function sortMyHand () {
+	var sortValue = {SEVEN:1, EIGHT:2, NINE:3, TEN:7, UNDER_KNAVE:4, OVER_KNAVE:5, KING:6, ACE:8};
+	var sortSuit = {BELL:2, ACORN:3, HEART:4, LEAF:1};
+
+	mycards.sort(function(a,b) {return (sortSuit[a.suit] * 10 + sortValue[a.value]) - (sortSuit[b.suit] * 10 + sortValue[b.value])});
+}
+
 function showMyHand () {
+	sortMyHand();
+
 	var myhand = $('#myhand');
 
 	var cardnuminhand = mycards.length;
@@ -623,6 +645,9 @@ function handleDeal (mydeal) {
 	mycards = mydeal.cards;
 	myturn = mydeal.isStarter;
 	isayrule = mydeal.isStarter;
+	var startername = mydeal.starterName;
+		
+	showWhoOnTurn(startername, myturn);
 
 	saybar.css('display', 'block');
 	saytrump.css('display', 'none');
@@ -651,16 +676,33 @@ function handleGameSelected (name, isitme, gametype) {
 
 		removeMarkedCardsFromHand()
 		markedcards = [];
+	} else {
+		var rule = $('#rule_selector option[value=' + gametype + ']').html();
+		showMessage(name + ": " + rule);
 	}
-
-	//chat.newLine(gametype, name);
-	var ruleselect = $('#rule_selector');
-	showMessage(name + ": " + ruleselect.children().eq(gametype).html());
 	setValidRules(gametype);
 }
 
-function startTurn (isMyTurn) {
-	myturn = isMyTurn;
+function showWhoOnTurn(onturnname, isme) {
+	var leftnameplace = $('#leftnameplace');
+	var rightnameplace = $('#rightnameplace');
+	leftnameplace.css('color', 'black');
+	rightnameplace.css('color', 'black');
+	if(!isme) {
+		if(onturnname === left) {
+			leftnameplace.css('color', 'blue');
+		} else if (onturnname === right) {
+			rightnameplace.css('color', 'blue');
+		} else {
+			alert("öreganyád térgye kalácsa!");
+		}
+	}
+}
+
+function startTurn (ismyturn, onturnname) {
+	myturn = ismyturn;
+
+	showWhoOnTurn(onturnname, myturn);
 
 	if(issayingphase) {
 		if(myturn) {
@@ -677,9 +719,9 @@ function startTurn (isMyTurn) {
 	} else {
 		var cards = $('.card');
 		if(myturn) {
-			cards.css('background', 'lightblue');
+			//cards.css('background', 'lightblue');
 		} else {
-			cards.css('background', 'red');
+			//cards.css('background', 'red');
 		}
 	}
 }
@@ -779,11 +821,15 @@ function handleCardPickup (card1, card2) {
 	showMyHand();
 }
 
-function show420 (points) {
+function show420andTrump (points, trumpsuit) {
 	var message = "";
+	if(trumpsuit) {
+		var hunTrump = toHunSuit(trumpsuit);
+		message += "Az adu színe: " + hunTrump + "<br>";
+	}
 	$.each(points, function(name, point) {
 		if(point > 0) {
-			message = message + name + ": " + point + " van a kezemben";
+			message += name + ": " + point + " van a kezemben<br>";
 		}
 	});
 	if(message !== "") {
@@ -851,17 +897,12 @@ function showCardsOnTable() {
 		var suit = cardsontable[i].suit;
 		var value = cardsontable[i].value;
 		
+		setCardImg(card, suit, value);
 		card.hover(function(){this.style.zIndex=1;}, function(){this.style.zIndex=0;})
 		card.addClass('cardontable');
 		card.css('top', ((i * 2 % 3)*20) + '%'); 
 		card.css('left', (i*20) + '%');
 
-		var cardtext = $('<p>');
-		var hunCard = toHunCard(suit, value);
-		
-		cardtext.html(hunCard.suit + "<br>" + hunCard.value);
-		cardtext.addClass('font');
-		card.append(cardtext);
 		playedcards.append(card);
 	};
 }
@@ -877,14 +918,24 @@ function handlePlayedCard (data) {
 	}
 	cardsontable.push(data.card);
 	showCardsOnTable();
-	//var hunCard = toHunCard(data.card.suit, data.card.value);
-	//chat.newLine("Kijátszottam: " + hunCard.suit + " " + hunCard.value, data.name);
+}
+
+function setCardImg (card, suit, value) {
+	card.css('background-image', "url('card_imgs/"+ suit + "_" + value + ".gif')");
+}
+
+function toHunSuit (suit) {
+	var hunSuit = {BELL:"tök", ACORN:"makk", HEART:"piros", LEAF:"zöld"};
+	return hunSuit[suit];
+}
+
+function toHunValue (value) {
+	var hunValue = {SEVEN:"VII", EIGHT:"VIII", NINE:"IX", TEN:"X", UNDER_KNAVE:"alsó", OVER_KNAVE:"felső", KING:"király", ACE:"ász"};
+	return hunValue[value];
 }
 
 function toHunCard (suit, value) {
-	var hunSuit = {BELL:"tök", ACORN:"makk", HEART:"piros", LEAF:"zöld"};
-	var hunValue = {SEVEN:"VII", EIGHT:"VIII", NINE:"IX", TEN:"X", UNDER_KNAVE:"alsó", OVER_KNAVE:"felső", KING:"király", ACE:"ász"};
-	return {suit:hunSuit[suit], value:hunValue[value]};
+	return {suit:toHunSuit(suit), value:toHunValue(value)};
 }
 
 function createCardInHand (cardInfo, num) {
@@ -893,19 +944,13 @@ function createCardInHand (cardInfo, num) {
 	var value = cardInfo.value;
 
 	card.addClass('card');
+	setCardImg(card, suit, value);
 	card.attr('id', suit + '_' + value);
 	card.click(function() {playCard(num)});
 	card.hover(function(){this.style.zIndex=1;}, function(){this.style.zIndex=0;})
 	if(num === 0) {
 		card.css('margin-left', '0');
 	}
-	
-	var cardtext = $('<p>');
-	
-	var hunCard = toHunCard(suit, value);
-	cardtext.html(hunCard.suit + "<br>" + hunCard.value);
-	cardtext.addClass('font');
-	card.append(cardtext);
 
 	return card;
 }
@@ -924,6 +969,27 @@ function handleTakeCards (name, isitme) {
 			alert('anyád csipája!!!4');
 		}
 	}
+}
+
+function handlePartyResult (points) {
+	var result = "";
+	$.each(points, function(name, point) {
+		result += name + ": " + point + "pont<br>";
+	});
+
+	return result;
+}
+
+function showResult (points) {
+	var message = "<h3>A kör eredménye</h3><br>"
+	if(partyresult !== "") {
+		message += "A parti eredménye:<br>" + partyresult + "<br>";
+		partyresult = "";
+	}
+	$.each(points, function(name, point) {
+		message += name + ": " + point + "pont<br>";
+	});
+	showMessage(message);
 }
 
 function admin_getAllPlayers () {
@@ -1026,6 +1092,7 @@ function validatePw() {
 }
 
 $(document).ready(function () {
+	window.location.href = '#close';
 	onpage = $('#' + onpagename);
 	onpage.css("display", "block");
 	var ultiroomrefreshinterval = setInterval(autoGetUltiRooms, 5000);

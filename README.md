@@ -50,8 +50,8 @@
 - Fel kell venni vagy le kell játszani válasz: `{"type":"hastoconfirm"}` :ok:
 - Játék kezdődik: `{"type":"startgame", "trump":<String>, "points":[{<string>: <int>}]}` // ha nincs 20-40 bemondás, pl 40-100-nál, akkor ez egy üres map, ha nincs adu, akkor nincs trump tag :ok:
 - Lap elvitel: `{"type":"takecards", "name":<String>, "isItMe":<bool>, "cards":[{"suit":<String>, "value":<String>}]}` :ok:
-- Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}`
-- Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}`
+- Parti eredmények mutatása: `{"type":"showpartyresult", "points":[{<string>: <int>}]}` :ok:
+- Eredmények mutatása: `{"type":"showresult", "points":[{<string>: <int>}]}` :ok:
 - Lap lerakás válasz: `{"type":"playedcard", "name":<String>, "isItMe":<bool>, "card":{"suit":<String>, "value":<String>}}` :ok:
 - 40-100 játéknál nincs 40 a bemondónál: `{"type":"doesnothaveforty"}`
 - 20-100 játéknál nincs 20 a bemondónál: `{"type":"doesnothavetwenty"}`
