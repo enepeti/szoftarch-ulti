@@ -18,6 +18,7 @@ import managers.util.Room;
 import messagers.util.AnswerMessage;
 import messagers.util.admin.ActivePlayerListAnswer;
 import messagers.util.chat.room.AllChatAnswer;
+import messagers.util.chat.room.ChatRoomSizeShower;
 import messagers.util.error.ErrorAnswer;
 import messagers.util.messagetype.MessageType.Type;
 import messagers.util.ulti.PlayersInUltiRoom;
@@ -228,8 +229,9 @@ public class MessageHandler implements IMessageHandler {
 	}
 
 	private void allChatMessage(final ActivePlayer activePlayer) {
-		final List<String> allRoomNames = chatRoomManager.getAllRoomNames();
-		send(new AllChatAnswer(allRoomNames), activePlayer);
+		final List<ChatRoomSizeShower> chatRoomSizeShower = chatRoomManager
+				.getAllChatRooms();
+		send(new AllChatAnswer(chatRoomSizeShower), activePlayer);
 	}
 
 	private void newUltiMessage(final JsonObject jsonObject,

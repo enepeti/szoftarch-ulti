@@ -10,6 +10,7 @@ import java.util.List;
 import managers.util.ChatRoom;
 import managers.util.Room;
 import messagers.MessageHandler;
+import messagers.util.chat.room.ChatRoomSizeShower;
 import messagers.util.chat.room.NewChatAnswer;
 import messagers.util.chat.room.ToChatAnswer;
 import messagers.util.error.ErrorAnswer;
@@ -25,15 +26,20 @@ public class ChatRoomManager extends RoomManager implements IChatRoomManager {
 	}
 
 	@Override
-	public List<String> getAllRoomNames() {
-		final ArrayList<String> roomNames = new ArrayList<String>();
+	public List<ChatRoomSizeShower> getAllChatRooms() {
+		final ArrayList<ChatRoomSizeShower> chatRoomSizeShowers = new ArrayList<ChatRoomSizeShower>();
 		for (final Room room : roomMap.values()) {
 			if (room instanceof ChatRoom) {
-				roomNames.add(room.getName());
+				final ChatRoomSizeShower chatRoomSizeShower = new ChatRoomSizeShower();
+				chatRoomSizeShower.setName(room.getName());
+				chatRoomSizeShower.setActual(room.getActualSize());
+				chatRoomSizeShower.setMax(room.getMaxSize());
+
+				chatRoomSizeShowers.add(chatRoomSizeShower);
 			}
 		}
 
-		return roomNames;
+		return chatRoomSizeShowers;
 	}
 
 	@Override

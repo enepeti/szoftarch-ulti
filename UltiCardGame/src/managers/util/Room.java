@@ -24,6 +24,14 @@ public abstract class Room {
 		this.active = true;
 	}
 
+	public int getMaxSize() {
+		return maxSize;
+	}
+
+	public int getActualSize() {
+		return activePlayersInRoom.size();
+	}
+
 	public boolean add(final ActivePlayer activePlayer) {
 		if (!isFull()) {
 			getActivePlayersInRoom().add(activePlayer);
@@ -60,7 +68,8 @@ public abstract class Room {
 	}
 
 	public boolean isFull() {
-		return (getActivePlayersInRoom().size() >= maxSize) && (maxSize != -1);
+		return (getActivePlayersInRoom().size() >= getMaxSize())
+				&& (getMaxSize() != -1);
 	}
 
 	public boolean isEmpty() {

@@ -6,18 +6,19 @@ import messagers.util.AnswerMessage;
 
 public class AllChatAnswer extends AnswerMessage {
 
-	private List<String> rooms;
+	private List<ChatRoomSizeShower> rooms;
 
-	public AllChatAnswer(final List<String> allRoomNames) {
+	public AllChatAnswer(final List<ChatRoomSizeShower> rooms) {
 		super("allchat");
-		this.setAllRoomNames(allRoomNames);
+		this.rooms = rooms;
 	}
 
-	public List<String> getAllRoomNames() {
+	public List<ChatRoomSizeShower> getRooms() {
 		return rooms;
 	}
 
-	public void setAllRoomNames(List<String> allRoomNames) {
-		this.rooms = allRoomNames;
+	public void setRooms(final List<ChatRoomSizeShower> rooms) {
+		this.rooms = rooms;
 	}
+
 }
