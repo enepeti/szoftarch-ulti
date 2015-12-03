@@ -1,6 +1,7 @@
 package messagers;
 
 import interfaces.managers.ISessionManager;
+import interfaces.managers.IUltiRoomManager;
 import interfaces.messagers.IMessageHandler;
 import interfaces.messagers.IMessageReceiver;
 
@@ -12,16 +13,19 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import managers.SessionManager;
+import managers.UltiRoomManager;
 import domain.ActivePlayer;
 
 @ServerEndpoint("/websocket/ulti")
 public class MessageReceiver implements IMessageReceiver {
 
 	private final ISessionManager sessionManager;
+	private static IUltiRoomManager ultiRoomManager;
 	private final IMessageHandler messageHandler = new MessageHandler();
 
 	public MessageReceiver() {
 		sessionManager = new SessionManager();
+		ultiRoomManager = new UltiRoomManager();
 	}
 
 	@Override
@@ -34,6 +38,16 @@ public class MessageReceiver implements IMessageReceiver {
 	@Override
 	@OnClose
 	public void close(final Session session) {
+		final ActivePlayer activePlayer = sessionManager
+				.getActivePlayer(session);
+		if (activePlayer.getUltiRoom() != null) {
+			if (activePlayer.getUltiRoom().isFull()) {
+				ultiRoomManager.someoneLeavesRoom(activePlayer);
+			} else {
+				ultiRoomManager.deletePlayerFromRoom(activePlayer);
+			}
+		}
+
 		sessionManager.remove(session);
 	}
 
