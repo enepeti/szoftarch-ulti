@@ -215,10 +215,10 @@ public class UltiGame {
 		if ((this.concreteGameType == null)
 				|| (this.concreteGameType.getWholeValue() < concreteGameType
 						.getWholeValue())
-				|| ((this.concreteGameType.getWholeValue() == concreteGameType
+						|| ((this.concreteGameType.getWholeValue() == concreteGameType
 						.getWholeValue()) && (concreteGameType
-								.getGameTypeList().size() < this.concreteGameType
-								.getGameTypeList().size()))) {
+						.getGameTypeList().size() < this.concreteGameType
+						.getGameTypeList().size()))) {
 			activePlayer.getUltiPlayer().say(card1, card2);
 			remainingCard1 = card1;
 			remainingCard2 = card2;
@@ -279,9 +279,9 @@ public class UltiGame {
 			startGame();
 		} else {
 			messageHandler
-					.send(new ErrorAnswer(
-							"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
-							activePlayer);
+			.send(new ErrorAnswer(
+					"Nem tudsz játékot jóváhagyni, mert nem te mondtál be utoljára!"),
+					activePlayer);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class UltiGame {
 					concreteGameType.getTrump())) {
 				didPlayerHaveFortyInFortyHundredGame = false;
 				activePlayerWhoIsOnTurn.getUltiRoom()
-						.sendDoesNotHaveFortyMessageToAll(messageHandler);
+				.sendDoesNotHaveFortyMessageToAll(messageHandler);
 				if (concreteGameType.getGameTypeList().size() == 1) {
 					startGame = false;
 					evaluateGame(activePlayerWhoIsOnTurn);
@@ -329,7 +329,7 @@ public class UltiGame {
 						concreteGameType.getTrump())) {
 					didPlayerHaveTwentyInTwentyHundredGame = false;
 					activePlayerWhoIsOnTurn.getUltiRoom()
-							.sendDoesNotHaveTwentyMessageToAll(messageHandler);
+					.sendDoesNotHaveTwentyMessageToAll(messageHandler);
 					if (concreteGameType.getGameTypeList().size() == 1) {
 						startGame = false;
 						evaluateGame(activePlayerWhoIsOnTurn);
@@ -357,8 +357,8 @@ public class UltiGame {
 						concreteGameType.getTrump())) {
 					didPlayerHaveTrumpSevenInUltiGame = false;
 					activePlayerWhoIsOnTurn.getUltiRoom()
-							.sendDoesNotHaveTrumpSevenMessageToAll(
-									messageHandler);
+					.sendDoesNotHaveTrumpSevenMessageToAll(
+							messageHandler);
 				}
 			}
 
@@ -369,10 +369,10 @@ public class UltiGame {
 			}
 
 			activePlayerList
-					.get(0)
-					.getUltiRoom()
-					.sendStartGameMessageToAll(messageHandler, points,
-							trumpToGiveBack);
+			.get(0)
+			.getUltiRoom()
+			.sendStartGameMessageToAll(messageHandler, points,
+					trumpToGiveBack);
 
 			isGameStarted = true;
 
@@ -380,8 +380,8 @@ public class UltiGame {
 			messageHandler.send(new PlayerOnTurnAnswer(name, true),
 					activePlayerWhoIsOnTurn);
 			activePlayerWhoIsOnTurn.getUltiRoom()
-					.sendNextPlayerOnTurnMessageToAllOthers(messageHandler,
-							name, activePlayerWhoIsOnTurn);
+			.sendNextPlayerOnTurnMessageToAllOthers(messageHandler,
+					name, activePlayerWhoIsOnTurn);
 		}
 	}
 
@@ -399,8 +399,8 @@ public class UltiGame {
 					messageHandler.send(new PlayedCardAnswer(name, true, card),
 							activePlayer);
 					activePlayer.getUltiRoom()
-							.sendPlayedCardMessageToAllOthers(messageHandler,
-									name, card, activePlayer);
+					.sendPlayedCardMessageToAllOthers(messageHandler,
+							name, card, activePlayer);
 					if (cardsOnTable.size() == 3) {
 						evaluateTurn();
 					} else {
@@ -625,6 +625,7 @@ public class UltiGame {
 		for (final ActivePlayer activePlayer : activePlayerList) {
 			activePlayer.getUltiPlayer().setSumForTwentysAndFortys(0);
 			activePlayer.getUltiPlayer().setLastCardTrumpSeven(false);
+			activePlayer.getUltiPlayer().setTaken(new ArrayList<Card>());
 		}
 
 		concreteGameType = null;
@@ -660,8 +661,8 @@ public class UltiGame {
 		messageHandler.send(new TakeCardsAnswer(name, true, cardsOnTable),
 				activePlayerWhoTookCards);
 		activePlayerWhoTookCards.getUltiRoom()
-				.sendTakenCardsMessageToAllOthers(messageHandler, name,
-						cardsOnTable, activePlayerWhoTookCards);
+		.sendTakenCardsMessageToAllOthers(messageHandler, name,
+				cardsOnTable, activePlayerWhoTookCards);
 		cardsOnTable = new ArrayList<Card>();
 
 		boolean continuePlaying = true;
@@ -979,10 +980,10 @@ public class UltiGame {
 			partyPoints.put(activePlayerOpponent2.getPlayer().getName(),
 					sumForOpponent2Party);
 			activePlayerList
-					.get(0)
-					.getUltiRoom()
-					.sendShowPartyResultMessageToAll(messageHandler,
-							partyPoints);
+			.get(0)
+			.getUltiRoom()
+			.sendShowPartyResultMessageToAll(messageHandler,
+					partyPoints);
 
 			final int partyValue = concreteGameType.getPartyValue();
 			if ((sumForOpponent1Party + sumForOpponent2Party) < sumForPlayerParty) {
@@ -1019,7 +1020,7 @@ public class UltiGame {
 		points.put(playerOpponent1.getName(), sumForOpponent1);
 		points.put(playerOpponent2.getName(), sumForOpponent2);
 		activePlayerList.get(0).getUltiRoom()
-				.sendShowResultMessageToAll(messageHandler, points);
+		.sendShowResultMessageToAll(messageHandler, points);
 
 		nextGame();
 	}

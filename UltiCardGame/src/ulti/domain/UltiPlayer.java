@@ -10,12 +10,16 @@ public class UltiPlayer {
 
 	private final List<Card> hand = new ArrayList<Card>();
 	private int pointsInGamesInActualRoom = 0;
-	private final List<Card> taken = new ArrayList<Card>();
+	private List<Card> taken = new ArrayList<Card>();
 	private int sumForTwentysAndFortys = 0;
 	private boolean isLastCardTrumpSeven = false;;
 
 	public List<Card> getHand() {
 		return hand;
+	}
+
+	public void setTaken(final List<Card> taken) {
+		this.taken = taken;
 	}
 
 	public int getPointsInGamesInActualRoom() {
