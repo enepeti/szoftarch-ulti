@@ -12,6 +12,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import loging.Logger;
+import loging.StdLogger;
 import managers.SessionManager;
 import managers.UltiRoomManager;
 import domain.ActivePlayer;
@@ -22,6 +24,7 @@ public class MessageReceiver implements IMessageReceiver {
 	private final ISessionManager sessionManager;
 	private static IUltiRoomManager ultiRoomManager;
 	private final IMessageHandler messageHandler = new MessageHandler();
+	private static Logger logger = new StdLogger();
 
 	public MessageReceiver() {
 		sessionManager = new SessionManager();
@@ -32,7 +35,7 @@ public class MessageReceiver implements IMessageReceiver {
 	@OnOpen
 	public void open(final Session session) {
 		sessionManager.add(session);
-		System.out.println("open");
+		logger.log("open");
 	}
 
 	@Override
@@ -49,18 +52,20 @@ public class MessageReceiver implements IMessageReceiver {
 		}
 
 		sessionManager.remove(session);
+		logger.log("close");
 	}
 
 	@Override
 	@OnError
 	public void error(final Throwable error) {
-		System.err.println(error);
+		//System.err.println(error);
+		logger.log(error.toString());
 	}
 
 	@Override
 	@OnMessage
 	public void handleMessage(final String message, final Session session) {
-		System.out.println("got: " + message);
+		logger.log("got: " + message);
 		final ActivePlayer activePlayer = this.sessionManager
 				.getActivePlayer(session);
 		messageHandler.handle(message, activePlayer);
