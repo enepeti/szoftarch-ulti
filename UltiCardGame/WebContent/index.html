@@ -71,13 +71,14 @@
 			<div id="ultigamepage" class="ulticontainer">
 				<div id="leftname"><h3 id="leftnameplace"></h3></div>
 				<div id="rightname"><h3 id="rightnameplace"></h3></div>
+				<div id="gameinfo"><p id="gameinfotext" class="font"></p></div>
 				<div id="saying" class="screen-center">
 					<div id="saying_other">
-						<button class="btn btn-primary" onclick="sayPass()">Passz</button>
-						<button class="btn btn-primary" onclick="pickUpCards()">Talon felvevés</button>
+						<button class="btn btn-primary vertical-center hor-sep" onclick="sayPass()">Passz</button>
+						<button class="btn btn-primary vertical-center hor-sep" onclick="pickUpCards()">Talon felvevés</button>
 					</div>
 					<div id="saying_me">
-						<select id="rule_selector">
+						<select id="rule_selector" class="vertical-center hor-sep">
 							<option value="0">Válassz mondást!</option>
 							<option value="1">Passz (parti)</option>
 							<option value="2">Piros Passz (piros parti)</option>
@@ -106,17 +107,16 @@
 							<option value="42">Piros 20-100 Durchmars</option>
 							<option value="45">Piros 20-100 Ulti Durchmars</option>							
 						</select>
-						<button class="btn btn-success" onclick="sayRule()">Rendben</button>
+						<button class="btn btn-success vertical-center hor-sep" onclick="sayRule()">Rendben</button>
 					</div>
 					<div id="saying_trump">
-						<select id="trump_selector">
+						<select id="trump_selector" class="vertical-center">
 							<option value="0">Válassz adut!</option>
 							<option value="LEAF">Zöld</option>
 							<option value="BELL">Tök</option>
 							<option value="ACORN">Makk</option>
 						</select>
 					</div>
-					<div class="clear"></div>
 				</div>
 				<div id="playedcards">
 				</div>

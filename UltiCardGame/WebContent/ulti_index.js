@@ -102,7 +102,11 @@ function handleMessage (msg) {
 			newChat(msg.success);
 			break;
 		case "tochat":
-			chat.newLine("Mostantól a " + msg.message + " szobában vagy!", "Szerver üzenet");
+			if(msg.success) {
+				chat.newLine("Mostantól a " + msg.message + " szobában vagy!", "Szerver üzenet");
+			} else {
+				showMessage(msg.message);
+			}
 			break;
 		case "allulti":
 			refreshUltiRooms(msg.playersInUltiRoom);
@@ -362,7 +366,7 @@ function getAllChatRoom () {
 	send(getallchatmsg);
 }
 
-function refreshChatRoomNames (names) {
+function refreshChatRoomNames (rooms) {
 
 	var roomselector = $('#chat_roomselector');
 	roomselector.html("");
@@ -370,10 +374,11 @@ function refreshChatRoomNames (names) {
 	newoption.val(0);
 	newoption.html("Válassz szobát");
 	roomselector.append(newoption);
-	for (var i = 0; i < names.length; i++) {
+	for (var i = 0; i < rooms.length; i++) {
+		var room = rooms[i];
 		newoption = $('<option>');
-		newoption.val(names[i]);
-		newoption.html(names[i]);
+		newoption.val(room.name);
+		newoption.html(room.name + " " + room.actual + (room.max === -1 ? "" : ("/" + room.max)));
 		roomselector.append(newoption);
 	}
 }
@@ -659,6 +664,9 @@ function handleDeal (mydeal) {
 		sayme.css('display', 'none');
 	}
 
+	var gameinfo = $('#gameinfotext');
+	gameinfo.html('');
+
 	setValidRules(0);
 	
 	issayingphase = true;
@@ -667,20 +675,38 @@ function handleDeal (mydeal) {
 }
 
 function handleGameSelected (name, isitme, gametype) {
+	var rule = $('#rule_selector option[value=' + gametype + ']').html();
+	
+	if(notrumpchooserules.indexOf(gametype) !== -1) {
+		redSuit = true;
+	} else {
+		redSuit = false;
+	}
+	
 	if (isitme) {
 		isayrule = false;
-
-		if(notrumpchooserules.indexOf(gametype) !== -1) {
-			redSuit = true;
-		}
 
 		removeMarkedCardsFromHand()
 		markedcards = [];
 	} else {
-		var rule = $('#rule_selector option[value=' + gametype + ']').html();
 		showMessage(name + ": " + rule);
 	}
+	
 	setValidRules(gametype);
+	showGameRuleText(name, rule);
+}
+
+function showGameRuleText (name, rule) {
+	var gameinfo = $('#gameinfotext');
+	gameinfo.html(name + " mondta " + rule);
+}
+
+function showTrumpText (trumpsuit) {
+	var gameinfo = $('#gameinfotext');
+	var text = gameinfo.html();
+
+	text += "<br>Az adu színe: " + toHunSuit(trumpsuit);
+	gameinfo.html(text);
 }
 
 function showWhoOnTurn(onturnname, isme) {
@@ -834,6 +860,9 @@ function show420andTrump (points, trumpsuit) {
 	});
 	if(message !== "") {
 		showMessage(message);
+	}
+	if(!redSuit) {
+		showTrumpText(trumpsuit);
 	}
 }
 

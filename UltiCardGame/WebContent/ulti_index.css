@@ -171,7 +171,7 @@
 
 .card {
 	position: relative;
-	width: 12%;
+	width: 11%;
 	top: 25%;
 	height: 75%;
 	margin-left: -4%;
@@ -264,7 +264,20 @@
 }
 
 #saying {
-	position: relative;
+	position: absolute;
+	width: 20%;
+	height: 30%;
+	top: 50%;
+	left: 50%;
+	z-index: 100;
+}
+
+#saying_other {
+	display: none;
+}
+
+#saying_trump{
+
 }
 
 html {
