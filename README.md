@@ -33,7 +33,7 @@
 - Hiba üzenet: `{"type":"error", "message":<string>}` :ok:
 - Chat szoba elkészülése: `{"type":"newchat", "success":<bool>}` :ok:
 - Chat szoba váltása: `{"type":"tochat", "success":<bool>, "message":<string>}` :ok:
-- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :hankey:
+- Chat szoba nevek leküldése: `{"type":"allchat" "rooms":[{"name":<string>, "actual":<int>, "max":<int>}]}` :ok:
 - Ulti szoba elkészülése: `{"type":"newulti", "success":<bool>}` :ok:
 - Ulti szoba váltása: `{"type":"toulti", "success":<bool>, "message":<string>}` :ok:
 - Ulti szoba nevek leküldése: `{"type":"allulti", "playersinultiroom":[{"roomName":<String>, "names":[<String>]}]}` :ok:
