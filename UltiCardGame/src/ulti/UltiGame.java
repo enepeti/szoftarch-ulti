@@ -912,25 +912,13 @@ public class UltiGame {
 
 		if (concreteGameType.isThereActualGameType("Betli")) {
 			if (didPlayerTakeCardInBetliGame) {
-				sumForPlayerWithSaying -= 2 * 5;
-				sumForOpponent1 += 5;
-				sumForOpponent2 += 5;
+				sumForPlayerWithSaying -= 2 * concreteGameType.getValue();
+				sumForOpponent1 += concreteGameType.getValue();
+				sumForOpponent2 += concreteGameType.getValue();
 			} else {
-				sumForPlayerWithSaying += 2 * 5;
-				sumForOpponent1 -= 5;
-				sumForOpponent2 -= 5;
-			}
-		}
-
-		if (concreteGameType.isThereActualGameType("Rebetli")) {
-			if (didPlayerTakeCardInBetliGame) {
-				sumForPlayerWithSaying -= 2 * 10;
-				sumForOpponent1 += 10;
-				sumForOpponent2 += 10;
-			} else {
-				sumForPlayerWithSaying += 2 * 10;
-				sumForOpponent1 -= 10;
-				sumForOpponent2 -= 10;
+				sumForPlayerWithSaying += 2 * concreteGameType.getValue();
+				sumForOpponent1 -= concreteGameType.getValue();
+				sumForOpponent2 -= concreteGameType.getValue();
 			}
 		}
 
